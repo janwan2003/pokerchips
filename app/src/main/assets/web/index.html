@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>PokerChips</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="join-screen" class="screen">
+        <div class="join-container">
+            <div class="logo">&spades; PokerChips</div>
+            <p class="subtitle">Enter your name to join the game</p>
+            <input type="text" id="name-input" placeholder="Your name" maxlength="20" autocomplete="off" autofocus>
+            <button id="join-btn" class="btn btn-primary">Join Game</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+        <header class="game-header">
+            <div class="header-left">
+                <span class="player-icon">&spades;</span>
+                <span id="player-name-display"></span>
+            </div>
+            <div id="my-chips" class="my-chips"></div>
+        </header>
+
+        <section class="pot-section">
+            <div class="pot-label">POT</div>
+            <div id="pot-amount" class="pot-amount">0</div>
+        </section>
+
+        <section class="actions-section">
+            <div class="chip-input-row">
+                <button class="quick-btn" data-amount="10">10</button>
+                <button class="quick-btn" data-amount="25">25</button>
+                <button class="quick-btn" data-amount="50">50</button>
+                <button class="quick-btn" data-amount="100">100</button>
+                <button class="quick-btn" data-amount="all">All</button>
+            </div>
+            <input type="number" id="chip-amount" min="1" value="10" class="chip-input">
+            <div class="btn-row">
+                <button id="add-btn" class="btn btn-danger">Add to Pot</button>
+                <button id="take-btn" class="btn btn-success">Take from Pot</button>
+            </div>
+        </section>
+
+        <section class="players-section">
+            <h3>Players</h3>
+            <ul id="players-list"></ul>
+        </section>
+
+        <section class="log-section">
+            <h3>Recent</h3>
+            <ul id="log-list"></ul>
+        </section>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

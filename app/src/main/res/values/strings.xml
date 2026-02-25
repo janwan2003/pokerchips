@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PokerChips</string>
+    <string name="notification_channel_name">Poker Server</string>
+    <string name="notification_channel_description">Shows when the poker server is running</string>
+</resources>
