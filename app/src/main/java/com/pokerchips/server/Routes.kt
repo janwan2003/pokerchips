@@ -45,7 +45,7 @@ fun Application.configureRoutes(
                 call.respond(HttpStatusCode.BadRequest, ErrorResponse("Name cannot be empty"))
                 return@post
             }
-            if (name.length > 20) {
+            if (name.length > GameManager.MAX_NAME_LENGTH) {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponse("Name too long"))
                 return@post
             }

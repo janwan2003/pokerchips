@@ -193,13 +193,60 @@ input[type="number"] {
 }
 
 .chip-input-row {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
 }
 
+.quick-btn .sub {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.stepper-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.step-btn {
+    width: 56px;
+    flex: none;
+    border: 1.5px solid var(--bg-card);
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.step-btn:active {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.blinds-display {
+    margin-top: 6px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.join-note {
+    color: var(--gold);
+    font-size: 0.9rem;
+    text-align: center;
+    max-width: 300px;
+}
+
 .quick-btn {
-    flex: 1;
-    padding: 10px 4px;
+    padding: 8px 2px;
     border: 1.5px solid var(--bg-card);
     border-radius: 8px;
     background: var(--bg-secondary);
@@ -220,6 +267,8 @@ input[type="number"] {
 }
 
 .chip-input {
+    flex: 1;
+    min-width: 0;
     width: 100%;
     padding: 12px;
     border: 2px solid var(--bg-card);

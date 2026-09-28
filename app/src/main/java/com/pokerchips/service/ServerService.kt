@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import com.pokerchips.MainActivity
+import com.pokerchips.PokerChipsApplication
 import com.pokerchips.R
 import com.pokerchips.game.GameManager
 import com.pokerchips.server.PokerServer
@@ -35,7 +36,7 @@ class ServerService : Service() {
     private var pokerServer: PokerServer? = null
     private var serviceScope: CoroutineScope? = null
 
-    val gameManager = GameManager()
+    val gameManager: GameManager by lazy { (application as PokerChipsApplication).gameManager }
 
     private val _isRunning = MutableStateFlow(false)
     val isRunning: StateFlow<Boolean> = _isRunning.asStateFlow()

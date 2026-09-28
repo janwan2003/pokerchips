@@ -11,4 +11,6 @@
 *.aab
 *.ap_
 *.dex
-/gradle/wrapper/gradle-wrapper.jar
+
+# The installable build is committed on purpose, so it can be downloaded to a phone.
+!/release/*.apk

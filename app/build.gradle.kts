@@ -13,13 +13,29 @@ android {
         applicationId = "com.pokerchips"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
+    }
+
+    // One fixed key, checked in, so every build from any machine can install over the
+    // previous one. A different key forces an uninstall, and an uninstall deletes the
+    // saved game history - the thing this app must never lose.
+    signingConfigs {
+        create("shared") {
+            storeFile = rootProject.file("keystore/pokerchips.jks")
+            storePassword = "pokerchips"
+            keyAlias = "pokerchips"
+            keyPassword = "pokerchips"
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("shared")
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("shared")
         }
     }
 
@@ -72,4 +88,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.zxing.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

@@ -1,37 +1,58 @@
 (function () {
     'use strict';
 
+    const STORAGE_KEY = 'pokerchips.playerName';
+
     let playerName = null;
     let ws = null;
     let myChips = 0;
+    let pot = 0;
+    let smallBlind = 10;
+    let bigBlind = 20;
+    let joined = false;
 
     const $ = (sel) => document.querySelector(sel);
-    const $$ = (sel) => document.querySelectorAll(sel);
+
+    // Survives closing the tab or restarting the browser, so a player never has to
+    // remember what exact name they joined with.
+    function loadName() {
+        try { return localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem('playerName'); } catch (_) { return null; }
+    }
+    function saveName(name) {
+        try { localStorage.setItem(STORAGE_KEY, name); } catch (_) {}
+    }
 
     // --- SCREENS ---
-    function showJoin() {
+    function showJoin(note) {
+        joined = false;
         $('#join-screen').classList.remove('hidden');
         $('#game-screen').classList.add('hidden');
+        const noteEl = $('#join-note');
+        if (note) {
+            noteEl.textContent = note;
+            noteEl.classList.remove('hidden');
+        } else {
+            noteEl.classList.add('hidden');
+        }
     }
 
     function showGame() {
+        joined = true;
         $('#join-screen').classList.add('hidden');
         $('#game-screen').classList.remove('hidden');
     }
 
     // --- JOIN ---
-    $('#join-btn').addEventListener('click', join);
+    $('#join-btn').addEventListener('click', () => join($('#name-input').value.trim()));
     $('#name-input').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') join();
+        if (e.key === 'Enter') join($('#name-input').value.trim());
     });
 
-    async function join() {
-        const name = $('#name-input').value.trim();
+    async function join(name) {
         if (!name) {
             $('#name-input').focus();
-            return;
+            return false;
         }
-
         try {
             const res = await fetch('/api/join', {
                 method: 'POST',
@@ -41,20 +62,21 @@
             if (!res.ok) {
                 const err = await res.json();
                 showToast(err.error || 'Failed to join');
-                return;
+                return false;
             }
             const data = await res.json();
             playerName = data.name;
             myChips = data.chips;
-
-            sessionStorage.setItem('playerName', playerName);
+            saveName(playerName);
 
             $('#player-name-display').textContent = playerName;
-            $('#my-chips').textContent = myChips.toLocaleString() + ' chips';
+            renderMyChips();
             showGame();
             connectWS();
+            return true;
         } catch (e) {
             showToast('Connection error');
+            return false;
         }
     }
 
@@ -68,8 +90,7 @@
 
         ws.onmessage = (e) => {
             try {
-                const state = JSON.parse(e.data);
-                updateUI(state);
+                updateUI(JSON.parse(e.data));
             } catch (_) {}
         };
 
@@ -83,16 +104,34 @@
     }
 
     // --- UI UPDATE ---
-    function updateUI(state) {
-        // Pot
-        $('#pot-amount').textContent = state.pot.toLocaleString();
+    function renderMyChips() {
+        $('#my-chips').textContent = myChips.toLocaleString() + ' chips';
+    }
 
-        // My chips
-        const me = state.players[playerName];
+    function updateUI(state) {
+        pot = state.pot;
+        const blindsChanged = state.smallBlind !== smallBlind || state.bigBlind !== bigBlind;
+        smallBlind = state.smallBlind || smallBlind;
+        bigBlind = state.bigBlind || bigBlind;
+
+        $('#pot-amount').textContent = pot.toLocaleString();
+        $('#blinds-display').textContent = 'BLINDS ' + smallBlind + ' / ' + bigBlind;
+        $('#chip-amount').step = smallBlind;
+        if (blindsChanged || !$('#chip-amount').value) $('#chip-amount').value = bigBlind;
+
+        // The host may have started a new game from a typed-in state, or removed us.
+        const me = playerName && state.players[playerName];
+        if (joined && !me) {
+            $('#name-input').value = playerName || '';
+            showJoin("You are not in the current game. Join again — use the same name the host entered.");
+            return;
+        }
         if (me) {
             myChips = me.chips;
-            $('#my-chips').textContent = myChips.toLocaleString() + ' chips';
+            renderMyChips();
         }
+
+        renderQuickButtons();
 
         // Players
         const list = $('#players-list');
@@ -128,6 +167,50 @@
         }
     }
 
+    // --- QUICK BUTTONS: sized from the blinds, like a real table ---
+    function quickAmounts() {
+        return [
+            { label: 'SB', value: smallBlind },
+            { label: 'BB', value: bigBlind },
+            { label: '2 BB', value: 2 * bigBlind },
+            { label: '3 BB', value: 3 * bigBlind },
+            { label: '5 BB', value: 5 * bigBlind },
+            { label: '½ Pot', value: Math.floor(pot / 2 / smallBlind) * smallBlind },
+            { label: 'Pot', value: pot },
+            { label: 'All-in', value: myChips }
+        ];
+    }
+
+    function renderQuickButtons() {
+        const row = $('#quick-row');
+        const selected = parseInt($('#chip-amount').value, 10);
+        row.innerHTML = '';
+        for (const q of quickAmounts()) {
+            const btn = document.createElement('button');
+            btn.className = 'quick-btn' + (q.value === selected ? ' active' : '');
+            btn.innerHTML = escapeHtml(q.label) + '<span class="sub">' + q.value.toLocaleString() + '</span>';
+            btn.disabled = q.value <= 0;
+            btn.addEventListener('click', () => {
+                $('#chip-amount').value = q.value;
+                renderQuickButtons();
+            });
+            row.appendChild(btn);
+        }
+    }
+
+    function step(direction) {
+        const current = parseInt($('#chip-amount').value, 10) || 0;
+        // Snap to the small-blind grid first, then move one small blind.
+        const snapped = Math.round(current / smallBlind) * smallBlind;
+        let next = snapped === current ? current + direction * smallBlind : snapped;
+        if (next < smallBlind) next = smallBlind;
+        $('#chip-amount').value = next;
+        renderQuickButtons();
+    }
+    $('#minus-btn').addEventListener('click', () => step(-1));
+    $('#plus-btn').addEventListener('click', () => step(1));
+    $('#chip-amount').addEventListener('input', renderQuickButtons);
+
     // --- ACTIONS ---
     $('#add-btn').addEventListener('click', () => chipAction('/api/pot/add'));
     $('#take-btn').addEventListener('click', () => chipAction('/api/pot/take'));
@@ -156,21 +239,6 @@
         }
     }
 
-    // --- QUICK BUTTONS ---
-    $$('.quick-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const val = btn.dataset.amount;
-            if (val === 'all') {
-                $('#chip-amount').value = myChips;
-            } else {
-                $('#chip-amount').value = val;
-            }
-            // Highlight
-            $$('.quick-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    });
-
     // --- TOAST ---
     let toastTimeout = null;
     function showToast(msg) {
@@ -189,20 +257,10 @@
     }
 
     // --- RESTORE SESSION ---
-    const saved = sessionStorage.getItem('playerName');
+    // Re-join before listening, so the first state we see already includes us.
+    const saved = loadName();
     if (saved) {
-        playerName = saved;
-        $('#player-name-display').textContent = playerName;
-        showGame();
-        connectWS();
-        // Re-join to ensure server knows us (in case server restarted)
-        fetch('/api/join', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: playerName })
-        }).then(res => res.json()).then(data => {
-            myChips = data.chips;
-            $('#my-chips').textContent = myChips.toLocaleString() + ' chips';
-        }).catch(() => {});
+        $('#name-input').value = saved;
+        join(saved);
     }
 })();

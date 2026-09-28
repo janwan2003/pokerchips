@@ -12,6 +12,7 @@
         <div class="join-container">
             <div class="logo">&spades; PokerChips</div>
             <p class="subtitle">Enter your name to join the game</p>
+            <p id="join-note" class="join-note hidden"></p>
             <input type="text" id="name-input" placeholder="Your name" maxlength="20" autocomplete="off" autofocus>
             <button id="join-btn" class="btn btn-primary">Join Game</button>
         </div>
@@ -29,19 +30,18 @@
         <section class="pot-section">
             <div class="pot-label">POT</div>
             <div id="pot-amount" class="pot-amount">0</div>
+            <div id="blinds-display" class="blinds-display"></div>
         </section>
 
         <section class="actions-section">
-            <div class="chip-input-row">
-                <button class="quick-btn" data-amount="10">10</button>
-                <button class="quick-btn" data-amount="25">25</button>
-                <button class="quick-btn" data-amount="50">50</button>
-                <button class="quick-btn" data-amount="100">100</button>
-                <button class="quick-btn" data-amount="all">All</button>
+            <div id="quick-row" class="chip-input-row"></div>
+            <div class="stepper-row">
+                <button id="minus-btn" class="step-btn" aria-label="Less">&minus;</button>
+                <input type="number" id="chip-amount" min="1" inputmode="numeric" class="chip-input">
+                <button id="plus-btn" class="step-btn" aria-label="More">+</button>
             </div>
-            <input type="number" id="chip-amount" min="1" value="10" class="chip-input">
             <div class="btn-row">
-                <button id="add-btn" class="btn btn-danger">Add to Pot</button>
+                <button id="add-btn" class="btn btn-danger">Bet</button>
                 <button id="take-btn" class="btn btn-success">Take from Pot</button>
             </div>
         </section>

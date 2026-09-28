@@ -8,16 +8,26 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.pokerchips.service.ServerService
+import com.pokerchips.ui.screens.ActionRunner
 import com.pokerchips.ui.screens.DashboardScreen
+import com.pokerchips.ui.screens.GameDetailScreen
+import com.pokerchips.ui.screens.HistoryScreen
+import com.pokerchips.ui.screens.SetupScreen
 import com.pokerchips.ui.theme.PokerChipsTheme
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -36,6 +46,18 @@ class MainActivity : ComponentActivity() {
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
 
+    private val notRunning = MutableStateFlow(false)
+    private val noUrl = MutableStateFlow<String?>(null)
+
+    private val runAction: ActionRunner = { action, onSuccess ->
+        lifecycleScope.launch {
+            action().fold(
+                onSuccess = { onSuccess() },
+                onFailure = { Toast.makeText(this@MainActivity, it.message ?: "Failed", Toast.LENGTH_LONG).show() }
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,18 +67,55 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        val gameManager = (application as PokerChipsApplication).gameManager
+
         setContent {
             PokerChipsTheme {
                 val service = serverService
-                if (service != null) {
-                    DashboardScreen(
-                        isRunning = service.isRunning,
-                        serverUrl = service.serverUrl,
-                        gameState = service.gameManager.stateFlow,
+                val state by gameManager.stateFlow.collectAsStateWithLifecycle()
+                // "dashboard", "history", "setup" or "game:<id>"
+                var screen by rememberSaveable { mutableStateOf("dashboard") }
+                val toDashboard = { screen = "dashboard" }
+
+                if (screen != "dashboard") {
+                    BackHandler {
+                        screen = if (screen.startsWith("game:")) "history" else "dashboard"
+                    }
+                }
+
+                when {
+                    screen == "history" -> HistoryScreen(
+                        gameManager = gameManager,
+                        currentGameId = state.gameId,
+                        onBack = toDashboard,
+                        onOpenGame = { screen = "game:$it" }
+                    )
+                    screen.startsWith("game:") -> GameDetailScreen(
+                        gameManager = gameManager,
+                        gameId = screen.removePrefix("game:"),
+                        currentGameId = state.gameId,
+                        runAction = runAction,
+                        onShare = ::shareText,
+                        onBack = { screen = "history" },
+                        onRestored = toDashboard
+                    )
+                    screen == "setup" -> SetupScreen(
+                        gameManager = gameManager,
+                        current = state,
+                        runAction = runAction,
+                        onBack = toDashboard,
+                        onStarted = toDashboard
+                    )
+                    else -> DashboardScreen(
+                        isRunning = service?.isRunning ?: notRunning,
+                        serverUrl = service?.serverUrl ?: noUrl,
+                        gameState = gameManager.stateFlow,
+                        gameManager = gameManager,
+                        runAction = runAction,
                         onStartServer = { startServer() },
                         onStopServer = { stopServer() },
-                        onResetGame = { runBlocking { service.gameManager.resetGame() } },
-                        onSetStartingChips = { runBlocking { service.gameManager.setStartingChips(it) } }
+                        onOpenHistory = { screen = "history" },
+                        onOpenSetup = { screen = "setup" }
                     )
                 }
             }
@@ -73,6 +132,14 @@ class MainActivity : ComponentActivity() {
         super.onStop()
         unbindService(connection)
         serverService = null
+    }
+
+    private fun shareText(text: String) {
+        val send = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+        }
+        startActivity(Intent.createChooser(send, "Share game"))
     }
 
     private fun startServer() {

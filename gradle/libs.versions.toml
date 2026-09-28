@@ -9,6 +9,7 @@ core-ktx = "1.15.0"
 zxing = "3.5.3"
 kotlinx-serialization = "1.7.3"
 coroutines = "1.9.0"
+junit = "4.13.2"
 
 [libraries]
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -36,6 +37,9 @@ ktor-serialization-json = { group = "io.ktor", name = "ktor-serialization-kotlin
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
