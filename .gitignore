@@ -14,3 +14,4 @@
 
 # The installable build is committed on purpose, so it can be downloaded to a phone.
 !/release/*.apk
+.kotlin
