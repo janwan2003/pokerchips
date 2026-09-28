@@ -4,6 +4,8 @@ import com.pokerchips.game.GameManager
 import com.pokerchips.model.ChipAction
 import com.pokerchips.model.ErrorResponse
 import com.pokerchips.model.JoinRequest
+import com.pokerchips.model.PlayerRequest
+import com.pokerchips.model.TakePotResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
@@ -65,6 +67,14 @@ fun Application.configureRoutes(
             val action = call.receive<ChipAction>()
             gameManager.takeFromPot(action.name, action.amount).fold(
                 onSuccess = { call.respond(HttpStatusCode.OK, mapOf("ok" to true)) },
+                onFailure = { call.respond(HttpStatusCode.BadRequest, ErrorResponse(it.message ?: "Error")) }
+            )
+        }
+
+        post("/api/pot/take-all") {
+            val request = call.receive<PlayerRequest>()
+            gameManager.takeWholePot(request.name).fold(
+                onSuccess = { call.respond(HttpStatusCode.OK, TakePotResponse(it)) },
                 onFailure = { call.respond(HttpStatusCode.BadRequest, ErrorResponse(it.message ?: "Error")) }
             )
         }

@@ -115,6 +115,8 @@
         bigBlind = state.bigBlind || bigBlind;
 
         $('#pot-amount').textContent = pot.toLocaleString();
+        $('#take-all-btn').disabled = pot <= 0;
+        $('#take-all-btn').textContent = pot > 0 ? 'Take whole pot (' + pot.toLocaleString() + ')' : 'Take whole pot';
         $('#blinds-display').textContent = 'BLINDS ' + smallBlind + ' / ' + bigBlind;
         $('#chip-amount').step = smallBlind;
         if (blindsChanged || !$('#chip-amount').value) $('#chip-amount').value = bigBlind;
@@ -214,6 +216,27 @@
     // --- ACTIONS ---
     $('#add-btn').addEventListener('click', () => chipAction('/api/pot/add'));
     $('#take-btn').addEventListener('click', () => chipAction('/api/pot/take'));
+
+    // Sends no amount: the server gives whatever the pot holds when the request lands,
+    // so a bet arriving at the same moment is never left behind.
+    $('#take-all-btn').addEventListener('click', async () => {
+        if (pot <= 0) return;
+        try {
+            const res = await fetch('/api/pot/take-all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: playerName })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                showToast(err.error || 'Action failed');
+                return;
+            }
+            if (navigator.vibrate) navigator.vibrate([30, 60, 30]);
+        } catch (e) {
+            showToast('Connection error');
+        }
+    });
 
     async function chipAction(endpoint) {
         const amount = parseInt($('#chip-amount').value, 10);

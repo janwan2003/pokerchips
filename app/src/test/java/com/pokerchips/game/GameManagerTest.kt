@@ -95,6 +95,21 @@ class GameManagerTest {
     }
 
     @Test
+    fun `take whole pot empties it into the winner and fails on an empty pot`() = runBlocking {
+        val gm = manager(tmp.newFolder("games"))
+        gm.joinPlayer("Jan")
+        gm.joinPlayer("Ola")
+        gm.addToPot("Jan", 60)
+        gm.addToPot("Ola", 60)
+
+        assertEquals(120, gm.takeWholePot("ola").getOrThrow())
+        assertEquals(0, gm.stateFlow.value.pot)
+        assertEquals(1060, gm.stateFlow.value.players.getValue("Ola").chips)
+        assertTrue(gm.takeWholePot("Jan").isFailure)
+        assertTrue(gm.history(gm.stateFlow.value.gameId).last().message == "Ola took the whole pot (120)")
+    }
+
+    @Test
     fun `a game can start from any typed-in state`() = runBlocking {
         val gm = manager(tmp.newFolder("games"))
         assertTrue(gm.startFromState(listOf("Jan" to 1500, "Ola" to 300), 200, 10, 20).isSuccess)

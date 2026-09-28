@@ -124,6 +124,17 @@ input[type="number"] {
     flex: 1;
 }
 
+.btn-gold {
+    background: var(--gold);
+    color: var(--bg-primary);
+    width: 100%;
+}
+
+.btn-gold:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
 .btn-row {
     display: flex;
     gap: 12px;

@@ -189,6 +189,18 @@ class GameManager(
         Result.success(Unit)
     }
 
+    /** The winner takes the whole pot, whatever it is by the time the request lands. */
+    suspend fun takeWholePot(playerName: String): Result<Int> = locked {
+        val name = findName(playerName) ?: return@locked fail("Player not found")
+        if (pot <= 0) return@locked fail("Pot is empty")
+        val won = pot
+        players[name] = players.getValue(name) + won
+        pot = 0
+        record("$name took the whole pot ($won)")
+        emit()
+        Result.success(won)
+    }
+
     // --- host corrections ---
 
     suspend fun setPlayerChips(playerName: String, chips: Int): Result<Unit> = locked {

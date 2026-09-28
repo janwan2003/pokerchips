@@ -9,7 +9,8 @@ the QR code and plays in the browser on the same Wi-Fi.
 
 - **Blinds like a real table** — 10/20 by default, presets from 1/2 to 1000/2000 or any
   custom level. Players' quick buttons are sized from them: SB, BB, 2/3/5 BB, ½ pot, pot,
-  all-in, and − / + step by one small blind.
+  all-in, and − / + step by one small blind. "Take whole pot" gives the winner
+  everything in the pot in one tap.
 - **Every action is saved on the host phone as it happens** (`files/games/<id>.jsonl`,
   append-only, one full snapshot of chips, pot and blinds per line). If the app crashes
   or the phone dies, reopening it brings the game back as it was. A torn last line is
