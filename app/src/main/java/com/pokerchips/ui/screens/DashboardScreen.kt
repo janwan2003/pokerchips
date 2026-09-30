@@ -1,12 +1,16 @@
 package com.pokerchips.ui.screens
 
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +24,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.PlayArrow
@@ -52,6 +60,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -240,7 +251,11 @@ private fun ServerStatusCard(running: Boolean, url: String?) {
             }
             if (running && url != null) {
                 Spacer(Modifier.height(12.dp))
-                Text(url, color = Gold, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                SelectionContainer {
+                    Text(url, color = Gold, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                }
+                Spacer(Modifier.height(12.dp))
+                LinkButtons(url)
                 Spacer(Modifier.height(12.dp))
                 val qrBitmap: Bitmap = remember(url) { QrCodeGenerator.generate(url, 400) }
                 Box(
@@ -264,6 +279,45 @@ private fun ServerStatusCard(running: Boolean, url: String?) {
                 )
             }
         }
+    }
+}
+
+/** For when the QR code is no help: the host's own phone, or sending the link to a chat. */
+@Composable
+private fun LinkButtons(url: String) {
+    val context = LocalContext.current
+    val clipboard = LocalClipboardManager.current
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+        LinkButton("Copy", Icons.Default.ContentCopy, Modifier.weight(1f)) {
+            clipboard.setText(AnnotatedString(url))
+            Toast.makeText(context, "Link copied", Toast.LENGTH_SHORT).show()
+        }
+        LinkButton("Open", Icons.AutoMirrored.Filled.OpenInNew, Modifier.weight(1f)) {
+            runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+                .onFailure { Toast.makeText(context, "No browser found", Toast.LENGTH_SHORT).show() }
+        }
+        LinkButton("Share", Icons.Default.Share, Modifier.weight(1f)) {
+            val send = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, "Join the poker game: $url")
+            }
+            context.startActivity(Intent.createChooser(send, "Share link"))
+        }
+    }
+}
+
+@Composable
+private fun LinkButton(label: String, icon: ImageVector, modifier: Modifier, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(containerColor = BgCard),
+        shape = RoundedCornerShape(10.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 10.dp),
+        modifier = modifier
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(label, fontSize = 14.sp)
     }
 }
 

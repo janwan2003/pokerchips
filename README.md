@@ -7,6 +7,9 @@ the QR code and plays in the browser on the same Wi-Fi.
 
 ## What it does
 
+- **Joining** — scan the QR code, or use Copy / Open / Share under the link on the host
+  screen: Open starts the game in the host phone's own browser, Share sends the link to
+  a chat.
 - **Blinds like a real table** — 10/20 by default, presets from 1/2 to 1000/2000 or any
   custom level. Players' quick buttons are sized from them: SB, BB, 2/3/5 BB, ½ pot, pot,
   all-in, and − / + step by one small blind. "Take whole pot" gives the winner
