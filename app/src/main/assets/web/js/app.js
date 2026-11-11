@@ -13,6 +13,16 @@
 
     const $ = (sel) => document.querySelector(sel);
 
+    // Without a timeout a request sent while the host's Wi-Fi was dozing can hang
+    // forever and the button just looks dead. Fail after 8 s so the toast shows.
+    const rawFetch = window.fetch.bind(window);
+    function fetch(url, opts) {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 8000);
+        return rawFetch(url, Object.assign({}, opts, { signal: ctrl.signal }))
+            .finally(() => clearTimeout(t));
+    }
+
     // Survives closing the tab or restarting the browser, so a player never has to
     // remember what exact name they joined with.
     function loadName() {
@@ -81,26 +91,102 @@
     }
 
     // --- WEBSOCKET ---
+    // A phone that sleeps or switches networks often leaves the socket looking OPEN
+    // while nothing arrives any more. So: ping every 10 s, and if nothing (pong or
+    // state) has come back for 25 s, tear the socket down and reconnect. Also
+    // reconnect immediately whenever the tab becomes visible or the network returns.
+    const PING_MS = 10000;
+    const STALE_MS = 25000;
+    let lastMessageAt = 0;
+    let reconnectTimer = null;
+    let reconnectDelay = 1000;
+
     function connectWS() {
         if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
             return;
         }
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
         const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-        ws = new WebSocket(proto + '//' + location.host + '/ws');
+        const sock = new WebSocket(proto + '//' + location.host + '/ws');
+        ws = sock;
+        lastMessageAt = Date.now();
 
-        ws.onmessage = (e) => {
+        sock.onopen = () => {
+            reconnectDelay = 1000;
+            setConnected(true);
+        };
+
+        sock.onmessage = (e) => {
+            lastMessageAt = Date.now();
+            if (e.data === 'pong') return;
             try {
                 updateUI(JSON.parse(e.data));
             } catch (_) {}
         };
 
-        ws.onclose = () => {
-            setTimeout(connectWS, 2000);
+        sock.onclose = () => {
+            if (ws !== sock) return; // superseded by a newer socket
+            ws = null;
+            setConnected(false);
+            scheduleReconnect();
         };
 
-        ws.onerror = () => {
-            ws.close();
+        sock.onerror = () => {
+            try { sock.close(); } catch (_) {}
         };
+    }
+
+    function scheduleReconnect() {
+        if (reconnectTimer) return;
+        reconnectTimer = setTimeout(() => {
+            reconnectTimer = null;
+            connectWS();
+        }, reconnectDelay);
+        reconnectDelay = Math.min(reconnectDelay * 2, 5000);
+    }
+
+    // Drop the current socket (even if it claims to be open) and start a fresh one.
+    function forceReconnect() {
+        const old = ws;
+        ws = null;
+        if (old) {
+            old.onclose = null;
+            try { old.close(); } catch (_) {}
+        }
+        reconnectDelay = 1000;
+        connectWS();
+    }
+
+    setInterval(() => {
+        if (!joined) return;
+        if (!ws) { connectWS(); return; }
+        if (ws.readyState !== WebSocket.OPEN) return;
+        if (Date.now() - lastMessageAt > STALE_MS) {
+            setConnected(false);
+            forceReconnect();
+            return;
+        }
+        try { ws.send('ping'); } catch (_) { forceReconnect(); }
+    }, PING_MS);
+
+    function resume() {
+        if (!joined) return;
+        if (!ws || ws.readyState !== WebSocket.OPEN || Date.now() - lastMessageAt > PING_MS) {
+            forceReconnect();
+        } else {
+            try { ws.send('ping'); } catch (_) { forceReconnect(); }
+        }
+    }
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') resume();
+    });
+    window.addEventListener('online', resume);
+    window.addEventListener('pageshow', (e) => { if (e.persisted) forceReconnect(); });
+
+    function setConnected(ok) {
+        const el = $('#conn-status');
+        if (el) el.classList.toggle('hidden', ok);
     }
 
     // --- UI UPDATE ---

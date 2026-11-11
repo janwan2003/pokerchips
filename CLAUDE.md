@@ -22,6 +22,9 @@ This repo is maintained by AI. The owner uses the app; they do not review diffs.
 
 ## Build
 
+Gradle 8.9 cannot run on JDK 25 (fails with just the version string `25.0.x` as the error);
+use JDK 21, e.g. `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`.
+
 ```bash
 ./gradlew testDebugUnitTest assembleRelease
 cp app/build/outputs/apk/release/app-release.apk release/pokerchips.apk
@@ -49,7 +52,11 @@ In a fresh cloud container there is no Android SDK. What worked on 2026-09-28:
 - `server/` — Ktor on port 8080: REST for actions, a WebSocket that broadcasts state.
 - `assets/web/` — the players' browser client (plain JS, no build step).
 - `ui/screens/` — the host's Compose screens: dashboard, history, custom-state setup.
-- Unit tests in `app/src/test` are plain JVM (no Android needed).
+- Unit tests in `app/src/test` are plain JVM (no Android needed). `server/WebSocketTest`
+  boots the real Ktor server on a free port and talks to `/ws` with the Ktor client.
+- Keep-alive: the host service holds a partial wake lock and a Wi-Fi lock while serving,
+  and asks for a battery-optimisation exemption; the web client pings `/ws` every 10 s
+  and reconnects after 25 s of silence or when the tab becomes visible again.
 
 The host Compose screens have never been run on an emulator here (no KVM). The web
 client can be checked: boot `PokerServer` from a throwaway JVM test pointing at

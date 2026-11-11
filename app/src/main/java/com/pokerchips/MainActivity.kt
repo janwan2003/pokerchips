@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.PowerManager
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -147,6 +149,20 @@ class MainActivity : ComponentActivity() {
             action = ServerService.ACTION_START
         }
         startForegroundService(intent)
+        requestBatteryExemption()
+    }
+
+    // Doze and OEM battery savers cut a background app's network even with a wake lock.
+    // Asking once per start is cheap; the system dialog does not appear once granted.
+    private fun requestBatteryExemption() {
+        val pm = getSystemService(PowerManager::class.java)
+        if (pm.isIgnoringBatteryOptimizations(packageName)) return
+        runCatching {
+            startActivity(
+                Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                    .setData(android.net.Uri.parse("package:$packageName"))
+            )
+        }
     }
 
     private fun stopServer() {

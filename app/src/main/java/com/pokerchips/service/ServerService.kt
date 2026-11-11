@@ -5,9 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.IBinder
+import android.os.PowerManager
 import com.pokerchips.MainActivity
 import com.pokerchips.PokerChipsApplication
 import com.pokerchips.R
@@ -35,6 +38,8 @@ class ServerService : Service() {
     private val binder = LocalBinder()
     private var pokerServer: PokerServer? = null
     private var serviceScope: CoroutineScope? = null
+    private var wakeLock: PowerManager.WakeLock? = null
+    private var wifiLock: WifiManager.WifiLock? = null
 
     val gameManager: GameManager by lazy { (application as PokerChipsApplication).gameManager }
 
@@ -88,8 +93,38 @@ class ServerService : Service() {
             it.start(scope)
         }
 
+        acquireLocks()
+
         _serverUrl.value = url
         _isRunning.value = true
+    }
+
+    // With the screen off Android lets the CPU sleep and puts the Wi-Fi radio into
+    // power-save, so players' requests time out until the host touches the phone.
+    // A foreground service alone does not prevent either; these locks do.
+    @Suppress("DEPRECATION") // HIGH_PERF is deprecated on API 34+ but still the best hint for a background server
+    private fun acquireLocks() {
+        if (wakeLock == null) {
+            val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+            wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "PokerChips:server").apply {
+                setReferenceCounted(false)
+                acquire()
+            }
+        }
+        if (wifiLock == null) {
+            val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "PokerChips:server").apply {
+                setReferenceCounted(false)
+                acquire()
+            }
+        }
+    }
+
+    private fun releaseLocks() {
+        wakeLock?.let { if (it.isHeld) it.release() }
+        wakeLock = null
+        wifiLock?.let { if (it.isHeld) it.release() }
+        wifiLock = null
     }
 
     private fun stopServer() {
@@ -97,6 +132,7 @@ class ServerService : Service() {
         pokerServer = null
         serviceScope?.cancel()
         serviceScope = null
+        releaseLocks()
         _serverUrl.value = null
         _isRunning.value = false
         stopForeground(STOP_FOREGROUND_REMOVE)
