@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyPoker</title>
+    <meta name="description" content="Poker chips on everyone's phone. Host a game in your browser, share the link, play. No app, no sign-up.">
+    <meta property="og:title" content="EasyPoker — poker chips on your phone">
+    <meta property="og:description" content="Host a game in your browser, share the link, play. No app, no sign-up.">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <main class="screen home">
+        <div class="logo">&spades; EasyPoker</div>
+        <p class="tagline">Poker chips on everyone's phone.<br>Host a game, share the link, play. No app, no sign-up.</p>
+
+        <section class="card">
+            <h2>Host a game</h2>
+            <label class="field">Your name
+                <input type="text" id="host-name" maxlength="20" autocomplete="nickname" placeholder="e.g. Ana">
+            </label>
+            <div class="field-row">
+                <label class="field">Starting chips
+                    <input type="number" id="starting-chips" value="1000" min="1" inputmode="numeric">
+                </label>
+                <label class="field">Blinds
+                    <select id="blinds"></select>
+                </label>
+            </div>
+            <button id="create-btn" class="btn btn-primary">Create table</button>
+        </section>
+
+        <section class="card">
+            <h2>Join a game</h2>
+            <div class="join-code-row">
+                <input type="text" id="join-code" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="CODE" spellcheck="false">
+                <button id="join-btn" class="btn btn-success">Join</button>
+            </div>
+        </section>
+
+        <section class="how">
+            <h2>How it works</h2>
+            <ol>
+                <li>One person creates a table and shares the link or QR code.</li>
+                <li>Everyone opens it on their phone and types a name.</li>
+                <li>Bet, take from the pot, take the whole pot. Every phone updates live.</li>
+            </ol>
+            <p class="muted">Every action is saved, so a closed tab or a dead battery loses nothing. The host can correct balances and rewind to any earlier moment.</p>
+        </section>
+    </main>
+    <div id="toast" class="toast hidden"></div>
+    <script src="/js/home.js"></script>
+</body>
+</html>

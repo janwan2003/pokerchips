@@ -49,6 +49,19 @@ In a fresh cloud container there is no Android SDK. What worked on 2026-09-28:
   to `repo1.maven.org`, plus `--max-workers=1` and a retry loop, got the dependency cache
   filled on the third attempt. After that, `--offline` builds are fine.
 
+## Web version (easypoker.cc)
+
+`web/` is a separate, browser-only version: a Cloudflare Worker plus one Durable Object
+per table (see `web/README.md`). It shares no code with the app; `web/src/game.js` is a
+port of `GameManager.kt`, so a rule change in one should be mirrored in the other.
+
+- Deploy with `cd web && npm test && npx wrangler deploy` (wrangler is logged in via
+  OAuth on the owner's machine). Changing only `web/` needs no APK rebuild.
+- Same history rule: table journals live in Durable Object SQLite. Never delete the
+  `v1` migration or rename the `Room` class, and only add journal fields with defaults.
+- End-to-end check: `npx wrangler dev`, then drive two Playwright browser contexts
+  (host + player) against it.
+
 ## Layout
 
 - `game/GameManager.kt` — all game rules; every change goes through `record()`, which
