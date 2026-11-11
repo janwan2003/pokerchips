@@ -127,4 +127,78 @@ class GameManagerTest {
         assertTrue(gm.startFromState(listOf("Jan" to 1, "JAN" to 2), 0, 10, 20).isFailure)
         assertTrue(gm.startFromState(listOf(" " to 1), 0, 10, 20).isFailure)
     }
+
+    @Test
+    fun `a failed journal write undoes the action instead of losing it silently`() = runBlocking {
+        val dir = tmp.newFolder("games")
+        val gm = manager(dir)
+        gm.joinPlayer("Jan")
+        gm.addToPot("Jan", 100)
+        val before = gm.stateFlow.value
+        val file = File(dir, "${before.gameId}.jsonl")
+        assertTrue(file.setWritable(false))
+        try {
+            val result = gm.addToPot("Jan", 50)
+            assertTrue(result.isFailure)
+            assertTrue(result.exceptionOrNull() is JournalWriteException)
+            assertEquals(before, gm.stateFlow.value)
+        } finally {
+            file.setWritable(true)
+        }
+        // The next action works and the journal agrees with the screen.
+        assertTrue(gm.addToPot("Jan", 10).isSuccess)
+        val reborn = manager(dir).stateFlow.value
+        assertEquals(890, reborn.players.getValue("Jan").chips)
+        assertEquals(110, reborn.pot)
+    }
+
+    @Test
+    fun `a failed write for a new game keeps the old game current`() = runBlocking {
+        val dir = tmp.newFolder("games")
+        val gm = manager(dir)
+        gm.joinPlayer("Jan")
+        val before = gm.stateFlow.value
+        assertTrue(dir.setWritable(false))
+        try {
+            assertTrue(gm.newGame().isFailure)
+            assertEquals(before, gm.stateFlow.value)
+        } finally {
+            dir.setWritable(true)
+        }
+        assertEquals(before.gameId, manager(dir).stateFlow.value.gameId)
+    }
+
+    @Test
+    fun `chip totals cannot overflow`() = runBlocking {
+        val gm = manager(tmp.newFolder("games"))
+        gm.joinPlayer("Jan")
+        gm.joinPlayer("Ola")
+        assertTrue(gm.setPlayerChips("Jan", Int.MAX_VALUE).isFailure)
+        assertTrue(gm.setPot(Int.MAX_VALUE).isFailure)
+        assertTrue(gm.setPlayerChips("Jan", GameManager.MAX_CHIPS).isSuccess)
+        assertTrue(gm.setPlayerChips("Ola", GameManager.MAX_CHIPS).isSuccess)
+        assertTrue(gm.setPot(GameManager.MAX_CHIPS).isSuccess)
+        assertTrue(gm.addToPot("Jan", GameManager.MAX_CHIPS).isSuccess)
+        // Pot now 2e9; another 1e9 would wrap past Int.MAX_VALUE.
+        assertTrue(gm.addToPot("Ola", GameManager.MAX_CHIPS).isFailure)
+        assertEquals(2 * GameManager.MAX_CHIPS, gm.stateFlow.value.pot)
+        assertTrue(gm.takeWholePot("Ola").isFailure)
+        assertEquals(GameManager.MAX_CHIPS, gm.stateFlow.value.players.getValue("Ola").chips)
+    }
+
+    @Test
+    fun `history list summarises games without decoding every line`() = runBlocking {
+        val dir = tmp.newFolder("games")
+        val gm = manager(dir)
+        gm.joinPlayer("Jan")
+        gm.addToPot("Jan", 30)
+        val id = gm.stateFlow.value.gameId
+        File(dir, "$id.jsonl").appendText("{\"seq\":99,\"timestamp\":1,\"mess")
+        val summary = GameStore(dir).listGames().single()
+        val all = GameStore(dir).readAll(id)
+        assertEquals(all.size, summary.actions)
+        assertEquals(all.first().timestamp, summary.createdAt)
+        assertEquals(all.last().timestamp, summary.updatedAt)
+        assertEquals(30, summary.pot)
+    }
 }

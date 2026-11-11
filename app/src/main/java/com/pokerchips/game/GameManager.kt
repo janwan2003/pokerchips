@@ -34,6 +34,8 @@ class GameManager(
         const val DEFAULT_SMALL_BLIND = 10
         const val DEFAULT_BIG_BLIND = 20
         const val MAX_NAME_LENGTH = 20
+        /** Upper bound for any single typed-in amount, so sums stay far from Int overflow. */
+        const val MAX_CHIPS = 1_000_000_000
         private const val RECENT_LOG_SIZE = 50
 
         /** Common cash-game and home-game levels. */
@@ -63,10 +65,11 @@ class GameManager(
             ?: store.listGames().firstOrNull()?.let { summary -> summary.gameId to store.readAll(summary.gameId) }
         if (restored != null) {
             load(restored.first, restored.second)
-            store.writeActiveGameId(gameId)
+            runCatching { store.writeActiveGameId(gameId) }
         } else {
             beginGame(emptyMap(), 0)
-            record("New game")
+            // Nothing to protect yet; if storage is broken, the first real action reports it.
+            runCatching { record("New game") }
         }
         _stateFlow = MutableStateFlow(snapshot())
         stateFlow = _stateFlow.asStateFlow()
@@ -99,7 +102,7 @@ class GameManager(
         players.putAll(newPlayers)
         pot = newPot
         recentLog.clear()
-        store.writeActiveGameId(gameId)
+        setActive(gameId)
     }
 
     private fun load(id: String, entries: List<JournalEntry>) {
@@ -121,6 +124,14 @@ class GameManager(
         bigBlind = entry.bigBlind
     }
 
+    private fun setActive(id: String) {
+        try {
+            store.writeActiveGameId(id)
+        } catch (e: Exception) {
+            throw JournalWriteException(e)
+        }
+    }
+
     private fun record(message: String) {
         seq += 1
         val now = clock()
@@ -134,7 +145,11 @@ class GameManager(
             smallBlind = smallBlind,
             bigBlind = bigBlind
         )
-        runCatching { store.append(gameId, entry) }
+        try {
+            store.append(gameId, entry)
+        } catch (e: Exception) {
+            throw JournalWriteException(e)
+        }
         recentLog.addLast(LogEntry(now, message))
         while (recentLog.size > RECENT_LOG_SIZE) recentLog.removeFirst()
     }
@@ -146,8 +161,60 @@ class GameManager(
     private fun findName(name: String): String? =
         players.keys.firstOrNull { it.equals(name.trim(), ignoreCase = true) }
 
+    /** Everything [record] snapshots, so a failed journal write can be undone in memory. */
+    private class Saved(
+        val gameId: String, val createdAt: Long, val seq: Int, val players: Map<String, Int>,
+        val pot: Int, val startingChips: Int, val smallBlind: Int, val bigBlind: Int,
+        val log: List<LogEntry>
+    )
+
+    private fun save() = Saved(
+        gameId, createdAt, seq, LinkedHashMap(players), pot, startingChips, smallBlind, bigBlind,
+        recentLog.toList()
+    )
+
+    private fun restore(s: Saved) {
+        if (gameId != s.gameId) runCatching { store.writeActiveGameId(s.gameId) } // best effort
+        gameId = s.gameId
+        createdAt = s.createdAt
+        seq = s.seq
+        players.clear()
+        players.putAll(s.players)
+        pot = s.pot
+        startingChips = s.startingChips
+        smallBlind = s.smallBlind
+        bigBlind = s.bigBlind
+        recentLog.clear()
+        recentLog.addAll(s.log)
+    }
+
+    /**
+     * Runs [block] under the mutex. If its journal write fails, the in-memory game is put
+     * back exactly as it was, so the screen never shows an action that is not on disk.
+     */
     private suspend fun <T> locked(block: () -> T): T =
-        withContext(Dispatchers.IO) { mutex.withLock { block() } }
+        withContext(Dispatchers.IO) {
+            mutex.withLock {
+                val before = save()
+                try {
+                    block()
+                } catch (e: JournalWriteException) {
+                    restore(before)
+                    throw e
+                }
+            }
+        }
+
+    /** [locked] for actions that report failure as a [Result] (the host UI toasts it). */
+    private suspend fun <T> lockedResult(block: () -> Result<T>): Result<T> =
+        try {
+            locked(block)
+        } catch (e: JournalWriteException) {
+            Result.failure(e)
+        }
+
+    /** a + b, or null if it would overflow an Int. */
+    private fun plus(a: Int, b: Int): Int? = runCatching { Math.addExact(a, b) }.getOrNull()
 
     private fun fail(message: String): Result<Nothing> = Result.failure(IllegalArgumentException(message))
 
@@ -166,23 +233,24 @@ class GameManager(
         }
     }
 
-    suspend fun addToPot(playerName: String, amount: Int): Result<Unit> = locked {
-        val name = findName(playerName) ?: return@locked fail("Player not found")
+    suspend fun addToPot(playerName: String, amount: Int): Result<Unit> = lockedResult {
+        val name = findName(playerName) ?: return@lockedResult fail("Player not found")
         val chips = players.getValue(name)
-        if (amount <= 0) return@locked fail("Amount must be positive")
-        if (chips < amount) return@locked fail("Not enough chips")
+        if (amount <= 0) return@lockedResult fail("Amount must be positive")
+        if (chips < amount) return@lockedResult fail("Not enough chips")
+        val newPot = plus(pot, amount) ?: return@lockedResult fail("Too many chips in the pot")
         players[name] = chips - amount
-        pot += amount
+        pot = newPot
         record("$name bet $amount (pot $pot)")
         emit()
         Result.success(Unit)
     }
 
-    suspend fun takeFromPot(playerName: String, amount: Int): Result<Unit> = locked {
-        val name = findName(playerName) ?: return@locked fail("Player not found")
-        if (amount <= 0) return@locked fail("Amount must be positive")
-        if (pot < amount) return@locked fail("Not enough in pot")
-        players[name] = players.getValue(name) + amount
+    suspend fun takeFromPot(playerName: String, amount: Int): Result<Unit> = lockedResult {
+        val name = findName(playerName) ?: return@lockedResult fail("Player not found")
+        if (amount <= 0) return@lockedResult fail("Amount must be positive")
+        if (pot < amount) return@lockedResult fail("Not enough in pot")
+        players[name] = plus(players.getValue(name), amount) ?: return@lockedResult fail("Too many chips")
         pot -= amount
         record("$name took $amount from pot" + if (pot > 0) " (pot $pot)" else "")
         emit()
@@ -190,11 +258,11 @@ class GameManager(
     }
 
     /** The winner takes the whole pot, whatever it is by the time the request lands. */
-    suspend fun takeWholePot(playerName: String): Result<Int> = locked {
-        val name = findName(playerName) ?: return@locked fail("Player not found")
-        if (pot <= 0) return@locked fail("Pot is empty")
+    suspend fun takeWholePot(playerName: String): Result<Int> = lockedResult {
+        val name = findName(playerName) ?: return@lockedResult fail("Player not found")
+        if (pot <= 0) return@lockedResult fail("Pot is empty")
         val won = pot
-        players[name] = players.getValue(name) + won
+        players[name] = plus(players.getValue(name), won) ?: return@lockedResult fail("Too many chips")
         pot = 0
         record("$name took the whole pot ($won)")
         emit()
@@ -203,20 +271,22 @@ class GameManager(
 
     // --- host corrections ---
 
-    suspend fun setPlayerChips(playerName: String, chips: Int): Result<Unit> = locked {
-        val name = findName(playerName) ?: return@locked fail("Player not found")
-        if (chips < 0) return@locked fail("Chips cannot be negative")
+    suspend fun setPlayerChips(playerName: String, chips: Int): Result<Unit> = lockedResult {
+        val name = findName(playerName) ?: return@lockedResult fail("Player not found")
+        if (chips < 0) return@lockedResult fail("Chips cannot be negative")
+        if (chips > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips")
         val before = players.getValue(name)
-        if (before == chips) return@locked Result.success(Unit)
+        if (before == chips) return@lockedResult Result.success(Unit)
         players[name] = chips
         record("Host set $name's chips $before → $chips")
         emit()
         Result.success(Unit)
     }
 
-    suspend fun setPot(amount: Int): Result<Unit> = locked {
-        if (amount < 0) return@locked fail("Pot cannot be negative")
-        if (amount == pot) return@locked Result.success(Unit)
+    suspend fun setPot(amount: Int): Result<Unit> = lockedResult {
+        if (amount < 0) return@lockedResult fail("Pot cannot be negative")
+        if (amount > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips")
+        if (amount == pot) return@lockedResult Result.success(Unit)
         val before = pot
         pot = amount
         record("Host set pot $before → $amount")
@@ -224,18 +294,19 @@ class GameManager(
         Result.success(Unit)
     }
 
-    suspend fun removePlayer(playerName: String): Result<Unit> = locked {
-        val name = findName(playerName) ?: return@locked fail("Player not found")
+    suspend fun removePlayer(playerName: String): Result<Unit> = lockedResult {
+        val name = findName(playerName) ?: return@lockedResult fail("Player not found")
         val chips = players.remove(name) ?: 0
         record("$name left the game with $chips")
         emit()
         Result.success(Unit)
     }
 
-    suspend fun setBlinds(small: Int, big: Int): Result<Unit> = locked {
-        if (small <= 0 || big <= 0) return@locked fail("Blinds must be positive")
-        if (small > big) return@locked fail("Small blind cannot exceed big blind")
-        if (small == smallBlind && big == bigBlind) return@locked Result.success(Unit)
+    suspend fun setBlinds(small: Int, big: Int): Result<Unit> = lockedResult {
+        if (small <= 0 || big <= 0) return@lockedResult fail("Blinds must be positive")
+        if (small > big) return@lockedResult fail("Small blind cannot exceed big blind")
+        if (big > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips")
+        if (small == smallBlind && big == bigBlind) return@lockedResult Result.success(Unit)
         smallBlind = small
         bigBlind = big
         record("Blinds set to $small/$big")
@@ -243,9 +314,10 @@ class GameManager(
         Result.success(Unit)
     }
 
-    suspend fun setStartingChips(amount: Int): Result<Unit> = locked {
-        if (amount <= 0) return@locked fail("Starting chips must be positive")
-        if (amount == startingChips) return@locked Result.success(Unit)
+    suspend fun setStartingChips(amount: Int): Result<Unit> = lockedResult {
+        if (amount <= 0) return@lockedResult fail("Starting chips must be positive")
+        if (amount > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips")
+        if (amount == startingChips) return@lockedResult Result.success(Unit)
         startingChips = amount
         record("Starting chips set to $amount")
         emit()
@@ -255,7 +327,7 @@ class GameManager(
     // --- games ---
 
     /** Starts a fresh game with the same players on starting chips. The old one stays in history. */
-    suspend fun newGame(): Result<Unit> = locked {
+    suspend fun newGame(): Result<Unit> = lockedResult {
         val names = players.keys.toList()
         beginGame(names.associateWith { startingChips }, 0)
         record(
@@ -275,18 +347,20 @@ class GameManager(
         newPot: Int,
         small: Int,
         big: Int
-    ): Result<Unit> = locked {
+    ): Result<Unit> = lockedResult {
         val cleaned = LinkedHashMap<String, Int>()
         for ((rawName, chips) in newPlayers) {
             val name = rawName.trim()
-            if (name.isEmpty()) return@locked fail("Every player needs a name")
-            if (name.length > MAX_NAME_LENGTH) return@locked fail("Name too long: $name")
-            if (cleaned.keys.any { it.equals(name, ignoreCase = true) }) return@locked fail("Duplicate name: $name")
-            if (chips < 0) return@locked fail("Chips cannot be negative ($name)")
+            if (name.isEmpty()) return@lockedResult fail("Every player needs a name")
+            if (name.length > MAX_NAME_LENGTH) return@lockedResult fail("Name too long: $name")
+            if (cleaned.keys.any { it.equals(name, ignoreCase = true) }) return@lockedResult fail("Duplicate name: $name")
+            if (chips < 0) return@lockedResult fail("Chips cannot be negative ($name)")
+            if (chips > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips ($name)")
             cleaned[name] = chips
         }
-        if (newPot < 0) return@locked fail("Pot cannot be negative")
-        if (small <= 0 || big <= 0 || small > big) return@locked fail("Invalid blinds")
+        if (newPot < 0) return@lockedResult fail("Pot cannot be negative")
+        if (newPot > MAX_CHIPS) return@lockedResult fail("At most $MAX_CHIPS chips in the pot")
+        if (small <= 0 || big <= 0 || small > big || big > MAX_CHIPS) return@lockedResult fail("Invalid blinds")
         smallBlind = small
         bigBlind = big
         beginGame(cleaned, newPot)
@@ -296,11 +370,11 @@ class GameManager(
     }
 
     /** Makes a game from history the current one, exactly as it was left. */
-    suspend fun resumeGame(id: String): Result<Unit> = locked {
+    suspend fun resumeGame(id: String): Result<Unit> = lockedResult {
         val entries = store.readAll(id)
-        if (entries.isEmpty()) return@locked fail("Game not found")
+        if (entries.isEmpty()) return@lockedResult fail("Game not found")
         load(id, entries)
-        store.writeActiveGameId(id)
+        setActive(id)
         record("Game resumed")
         emit()
         Result.success(Unit)
@@ -310,11 +384,11 @@ class GameManager(
      * Rewinds a game to the state right after entry [targetSeq]. It is recorded as a new
      * entry at the end of that game's journal, so the rewind itself can be undone.
      */
-    suspend fun restoreToEntry(id: String, targetSeq: Int): Result<Unit> = locked {
+    suspend fun restoreToEntry(id: String, targetSeq: Int): Result<Unit> = lockedResult {
         val entries = store.readAll(id)
-        val target = entries.firstOrNull { it.seq == targetSeq } ?: return@locked fail("History entry not found")
+        val target = entries.firstOrNull { it.seq == targetSeq } ?: return@lockedResult fail("History entry not found")
         load(id, entries)
-        store.writeActiveGameId(id)
+        setActive(id)
         applySnapshot(target)
         record("Restored to state after #${target.seq}: ${target.message}")
         emit()
@@ -325,3 +399,7 @@ class GameManager(
 
     suspend fun listGames(): List<GameSummary> = withContext(Dispatchers.IO) { store.listGames() }
 }
+
+/** The journal could not be written; the action was undone in memory and did not happen. */
+class JournalWriteException(cause: Throwable) :
+    IllegalStateException("Could not save to game history: ${cause.message}", cause)

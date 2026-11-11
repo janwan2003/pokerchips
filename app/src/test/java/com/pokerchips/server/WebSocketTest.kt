@@ -84,4 +84,25 @@ class WebSocketTest {
         assertTrue("healthy client got the latest state", sawFinal)
         stalled.cancel()
     }
+
+    @Test
+    fun `a client sees states in the order they happened`() = runBlocking {
+        gm.joinPlayer("Jan")
+        val s = connect()
+        s.nextText()
+        repeat(300) { gm.addToPot("Jan", 1) }
+        var lastPot = -1
+        val reached = withTimeoutOrNull(15_000) {
+            while (true) {
+                val text = (s.incoming.receive() as? Frame.Text)?.readText() ?: continue
+                if (text == "pong") continue
+                val pot = Regex("\"pot\":(\\d+)").find(text)!!.groupValues[1].toInt()
+                assertTrue("pot went backwards: $lastPot then $pot", pot >= lastPot)
+                lastPot = pot
+                if (pot == 300) return@withTimeoutOrNull true
+            }
+            @Suppress("UNREACHABLE_CODE") false
+        } ?: false
+        assertTrue("reached the final state", reached)
+    }
 }

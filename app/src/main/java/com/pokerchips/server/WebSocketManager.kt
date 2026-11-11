@@ -1,20 +1,27 @@
 package com.pokerchips.server
 
 import com.pokerchips.game.GameManager
-import com.pokerchips.model.GameState
 import io.ktor.server.websocket.WebSocketServerSession
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Every connected browser gets its own sender that follows [GameManager.stateFlow].
+ *
+ * One sender per client keeps a stalled phone from freezing updates for everyone else,
+ * and because each sender walks the state flow in order, a client can never receive an
+ * older state after a newer one. If a client falls behind, the flow conflates and it
+ * simply gets the latest state next — never a stale one.
+ */
 class WebSocketManager(private val gameManager: GameManager) {
 
     companion object {
@@ -23,39 +30,29 @@ class WebSocketManager(private val gameManager: GameManager) {
     }
 
     private val sessions = ConcurrentHashMap.newKeySet<WebSocketServerSession>()
-    private var broadcastJob: Job? = null
-
-    fun startBroadcasting(scope: CoroutineScope) {
-        broadcastJob = scope.launch {
-            gameManager.stateFlow.collect { state ->
-                broadcast(scope, state)
-            }
-        }
-    }
-
-    // Each client gets its own send with a timeout. Before, one phone whose screen went
-    // off mid-send could suspend the loop and freeze updates for every other player.
-    private fun broadcast(scope: CoroutineScope, state: GameState) {
-        val json = Json.encodeToString(state)
-        for (session in sessions) {
-            scope.launch {
-                val sent = withTimeoutOrNull(SEND_TIMEOUT_MS) {
-                    runCatching { session.outgoing.send(Frame.Text(json)) }.isSuccess
-                }
-                if (sent != true) drop(session)
-            }
-        }
-    }
-
-    private suspend fun drop(session: WebSocketServerSession) {
-        sessions.remove(session)
-        runCatching { session.close(CloseReason(CloseReason.Codes.GOING_AWAY, "unresponsive")) }
-    }
 
     suspend fun handleSession(session: WebSocketServerSession) {
         sessions.add(session)
+        val sender = session.launch {
+            gameManager.stateFlow.collect { state ->
+                val json = Json.encodeToString(state)
+                val sent = withTimeoutOrNull(SEND_TIMEOUT_MS) {
+                    try {
+                        session.outgoing.send(Frame.Text(json))
+                        true
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (_: Exception) {
+                        false
+                    }
+                }
+                if (sent != true) {
+                    drop(session)
+                    throw CancellationException("client unresponsive")
+                }
+            }
+        }
         try {
-            session.outgoing.send(Frame.Text(Json.encodeToString(gameManager.stateFlow.value)))
             for (frame in session.incoming) {
                 // Actions go over REST. The only client message is an app-level
                 // heartbeat, so the browser can tell a silently dead socket from a quiet game.
@@ -64,16 +61,19 @@ class WebSocketManager(private val gameManager: GameManager) {
                 }
             }
         } finally {
+            sender.cancel()
             sessions.remove(session)
         }
     }
 
+    private suspend fun drop(session: WebSocketServerSession) {
+        sessions.remove(session)
+        runCatching { session.close(CloseReason(CloseReason.Codes.GOING_AWAY, "unresponsive")) }
+    }
+
     fun shutdown() {
-        broadcastJob?.cancel()
         for (session in sessions) {
-            runCatching {
-                kotlinx.coroutines.runBlocking { session.close() }
-            }
+            runCatching { runBlocking { session.close() } }
         }
         sessions.clear()
     }

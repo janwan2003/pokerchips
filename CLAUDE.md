@@ -31,6 +31,10 @@ cp app/build/outputs/apk/release/app-release.apk release/pokerchips.apk
 ~/android-sdk/build-tools/35.0.0/apksigner verify --print-certs release/pokerchips.apk
 ```
 
+Gradle here cannot run on JDK 25 (it fails with just `What went wrong: 25.0.x`). On the
+owner's machine the default `java` is 25, so prefix every Gradle command with
+`JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`.
+
 The signer must be `CN=PokerChips`, SHA-256
 `78c45875d1d1c5a54c0cf1c00f464c16c3e8ade58414a7af0dd0e6bbd0f3d617`.
 

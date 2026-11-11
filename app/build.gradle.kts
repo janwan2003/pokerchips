@@ -13,8 +13,8 @@ android {
         applicationId = "com.pokerchips"
         minSdk = 26
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.4"
+        versionCode = 6
+        versionName = "1.5"
     }
 
     // One fixed key, checked in, so every build from any machine can install over the

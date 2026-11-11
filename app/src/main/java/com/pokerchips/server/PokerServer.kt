@@ -47,7 +47,6 @@ class PokerServer(
             configureRoutes(gameManager, webSocketManager, assetProvider)
         }.start(wait = false)
 
-        webSocketManager.startBroadcasting(scope)
     }
 
     fun stop() {

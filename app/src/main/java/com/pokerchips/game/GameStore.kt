@@ -43,6 +43,9 @@ class GameStore(private val dir: File) {
         }
     }
 
+    private fun decode(line: String): JournalEntry? =
+        runCatching { json.decodeFromString(JournalEntry.serializer(), line) }.getOrNull()
+
     fun latest(gameId: String): JournalEntry? = readAll(gameId).lastOrNull()
 
     fun exists(gameId: String) = fileFor(gameId).exists()
@@ -50,15 +53,20 @@ class GameStore(private val dir: File) {
     fun listGames(): List<GameSummary> =
         (dir.listFiles { f -> f.isFile && f.name.endsWith(".jsonl") } ?: emptyArray())
             .mapNotNull { file ->
-                val id = file.name.removeSuffix(".jsonl")
-                val entries = readAll(id)
-                val first = entries.firstOrNull() ?: return@mapNotNull null
-                val last = entries.last()
+                // Only the first and last entries matter for a summary; decoding every
+                // line of every game made the history screen slower with each game played.
+                val lines = file.readLines(Charsets.UTF_8).filter { it.isNotBlank() }
+                val decoded = lines.indices.asSequence().map { i -> i to decode(lines[i]) }
+                val first = decoded.firstOrNull { it.second != null } ?: return@mapNotNull null
+                val last = lines.indices.reversed().asSequence()
+                    .mapNotNull { i -> decode(lines[i]) }.first()
+                // Undecodable lines (a torn last write) are not actions.
+                val torn = if (decode(lines.last()) == null) 1 else 0
                 GameSummary(
-                    gameId = id,
-                    createdAt = first.timestamp,
+                    gameId = file.name.removeSuffix(".jsonl"),
+                    createdAt = first.second!!.timestamp,
                     updatedAt = last.timestamp,
-                    actions = entries.size,
+                    actions = lines.size - first.first - torn,
                     players = last.players,
                     pot = last.pot,
                     smallBlind = last.smallBlind,
