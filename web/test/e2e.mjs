@@ -1,0 +1,85 @@
+// Two-browser end-to-end check (host + player). Not part of `npm test`: needs Playwright.
+// Usage: node test/e2e.mjs [base URL, default http://127.0.0.1:8788]  (CHROME=/path/to/chrome optional)
+import { chromium, devices } from 'playwright';
+const B = process.argv[2] || 'http://127.0.0.1:8788';
+const out = (n) => `${process.env.SHOTS || '/tmp'}/easypoker-${n}.png`;
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
+const phone = { ...devices['Pixel 7'] };
+const hostCtx = await browser.newContext(phone);
+const playerCtx = await browser.newContext(phone);
+const host = await hostCtx.newPage();
+const player = await playerCtx.newPage();
+const errors = [];
+for (const p of [host, player]) p.on('pageerror', (e) => errors.push(e.message));
+const check = (cond, msg) => { if (!cond) { console.log('FAIL', msg); process.exitCode = 1; } else console.log('ok  ', msg); };
+
+await host.goto(B + '/');
+await host.screenshot({ path: out('1-home'), fullPage: true });
+await host.fill('#host-name', 'Ana');
+await host.selectOption('#blinds', '5/10');
+await host.fill('#starting-chips', '500');
+await host.click('#create-btn');
+await host.waitForURL(/\/[A-Z0-9]{6}$/);
+const code = new URL(host.url()).pathname.slice(1);
+await host.waitForSelector('#game-screen:not(.hidden)');
+check(await host.isVisible('#host-panel'), 'host sees host panel');
+check(await host.waitForSelector('#invite:not(.hidden)', { timeout: 5000 }).then(() => true, () => false), 'host sees invite card while alone');
+await host.waitForSelector('#qr svg', { timeout: 5000 }).catch(() => {});
+check(await host.isVisible('#qr svg'), 'QR code drawn');
+await host.screenshot({ path: out('2-host'), fullPage: true });
+
+await player.goto(B + '/' + code.toLowerCase());
+await player.waitForSelector('#join-screen:not(.hidden)');
+await player.fill('#name-input', 'Bo');
+await player.click('#join-btn');
+await player.waitForSelector('#game-screen:not(.hidden)');
+check(!(await player.isVisible('#host-panel')), 'player has no host panel');
+check((await player.textContent('#my-chips')).includes('500'), 'player starts with 500');
+
+await player.click('.quick-btn:has-text("5 BB")');
+await player.click('#add-btn');
+await host.waitForFunction(() => document.querySelector('#pot-amount').textContent === '50', null, { timeout: 5000 });
+check(true, 'host sees pot 50 live after player bet');
+check(await host.isHidden('#invite'), 'invite card hides once a 2nd player joined');
+
+await host.click('#take-all-btn');
+await player.waitForFunction(() => document.querySelector('#pot-amount').textContent === '0', null, { timeout: 5000 });
+const hostChips = await host.textContent('#my-chips');
+check(hostChips.includes('550'), 'host took whole pot: ' + hostChips);
+
+// Host corrects Bo's chips via the sheet
+await host.click('.player-item:has-text("Bo")');
+await host.fill('#sheet-chips', '777');
+await host.click('#sheet-save');
+await player.waitForFunction(() => document.querySelector('#my-chips').textContent.startsWith('777'), null, { timeout: 5000 });
+check(true, 'player sees host correction 777');
+
+// Reload player: auto-rejoins with same name, same chips
+await player.reload();
+await player.waitForSelector('#game-screen:not(.hidden)');
+check((await player.textContent('#my-chips')).startsWith('777'), 'player reload keeps seat and chips');
+
+// History & restore to the entry after Bo's bet
+await host.click('#history-btn');
+await host.waitForSelector('.history-game');
+await host.click('.history-game');
+const entry = await host.locator('.history-entry', { hasText: 'Bo bet 50' }).elementHandle();
+await entry.click();
+await host.screenshot({ path: out('3-history'), fullPage: true });
+await entry.click();
+await player.waitForFunction(() => document.querySelector('#pot-amount').textContent === '50', null, { timeout: 5000 });
+check((await player.textContent('#my-chips')).startsWith('450'), 'restore rewound Bo to 450 and pot 50');
+
+// Unknown table
+const p3 = await playerCtx.newPage();
+await p3.goto(B + '/ZZZZZZ');
+await p3.waitForSelector('#missing-screen:not(.hidden)');
+check(true, 'unknown code shows missing screen');
+
+// Player cannot use host endpoint
+const r = await player.evaluate(async (c) => (await fetch(`/api/t/${c}/host/pot`, { method: 'POST', body: '{"amount":0}' })).status, code);
+check(r === 403, 'host endpoint without key is 403');
+
+await player.screenshot({ path: out('4-player'), fullPage: true });
+check(errors.length === 0, 'no page errors ' + errors.join(' | '));
+await browser.close();

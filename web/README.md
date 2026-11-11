@@ -29,6 +29,7 @@ npm install
 npm test                 # rule unit tests (node:test)
 npx wrangler dev         # http://localhost:8787
 npx wrangler deploy      # needs `npx wrangler login` once
+node test/e2e.mjs https://easypoker.cc   # host + player in two browsers (needs Playwright)
 ```
 
 Never remove the `v1` migration or rename the `Room` class in `wrangler.jsonc`: that
