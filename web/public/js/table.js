@@ -1,5 +1,6 @@
-// The table page. Derived from the Android app's player client (assets/web/js/app.js):
-// same actions and reconnect logic, plus a host panel and an invite card.
+// The table page.
+// Game half: the Android app's player client (app/src/main/assets/web/js/app.js), same
+// behaviour and rendering, with API paths under /api/t/<CODE>. Host half: a separate tab.
 (function () {
     'use strict';
 
@@ -9,6 +10,7 @@
     const JOIN_URL = location.origin + '/' + CODE;
     const NAME_KEY = 'easypoker.joined.' + CODE;
     const HOST_KEY = 'easypoker.host.' + CODE;
+    const TAB_KEY = 'easypoker.tab.' + CODE;
     const LEVELS = [[1, 2], [5, 10], [10, 20], [20, 40], [50, 100], [100, 200], [200, 400], [500, 1000], [1000, 2000]];
 
     let playerName = null;
@@ -20,13 +22,14 @@
     let smallBlind = 10;
     let bigBlind = 20;
     let joined = false;
+    let tab = 'play';
 
     const store = {
-        get(k) { try { return localStorage.getItem(k); } catch (_) { return null; } },
-        set(k, v) { try { localStorage.setItem(k, v); } catch (_) {} }
+        get(k, s) { try { return (s ? sessionStorage : localStorage).getItem(k); } catch (_) { return null; } },
+        set(k, v, s) { try { (s ? sessionStorage : localStorage).setItem(k, v); } catch (_) {} }
     };
 
-    // A host link carries the key in the fragment (never sent to the server in a URL).
+    // A host link carries the key in the fragment, which never reaches the server.
     const hashKey = new URLSearchParams(location.hash.slice(1)).get('host');
     if (hashKey) {
         store.set(HOST_KEY, hashKey);
@@ -36,10 +39,10 @@
 
     // Without a timeout a request sent while a phone was dozing can hang forever and
     // the button just looks dead. Fail after 8 s so the toast shows.
-    function request(path, body, extraHeaders) {
+    function request(path, body, headers) {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 8000);
-        const opts = { signal: ctrl.signal, headers: Object.assign({}, extraHeaders) };
+        const opts = { signal: ctrl.signal, headers: Object.assign({}, headers) };
         if (body !== undefined) {
             opts.method = 'POST';
             opts.headers['Content-Type'] = 'application/json';
@@ -48,77 +51,95 @@
         return fetch(API + path, opts).finally(() => clearTimeout(t));
     }
 
-    async function call(path, body) {
+    async function send(path, body, headers, toast) {
         try {
-            const res = await request(path, body);
+            const res = await request(path, body, headers);
             const data = await res.json().catch(() => ({}));
-            if (!res.ok) { showToast(data.error || 'Action failed'); return null; }
+            if (!res.ok) { toast(data.error || 'Action failed', true); return null; }
             return data;
         } catch (_) {
-            showToast('Connection error');
+            toast('Connection error', true);
             return null;
         }
     }
+    const call = (path, body) => send(path, body, undefined, showToast);
+    const hostCall = (path, body) => send('/host/' + path, body, { 'X-Host-Key': hostKey }, hostToast);
 
-    function hostCall(path, body) {
-        return (async () => {
-            try {
-                const res = await request('/host/' + path, body, { 'X-Host-Key': hostKey });
-                const data = await res.json().catch(() => ({}));
-                if (!res.ok) { showToast(data.error || 'Action failed'); return null; }
-                return data;
-            } catch (_) {
-                showToast('Connection error');
-                return null;
-            }
-        })();
+    // Disable a button while its request is in flight.
+    async function busy(btn, fn) {
+        btn.classList.add('busy');
+        try { return await fn(); } finally { btn.classList.remove('busy'); }
     }
 
-    // --- SCREENS ---
-    function show(id) {
-        for (const s of ['#missing-screen', '#join-screen', '#game-screen']) {
-            $(s).classList.toggle('hidden', s !== id);
-        }
-    }
-
+    // ===================== SCREENS =====================
     function showJoin(note) {
         joined = false;
-        show('#join-screen');
-        $('#join-code-display').textContent = CODE;
+        $('#join-screen').classList.remove('hidden');
+        $('#game-screen').classList.add('hidden');
         const noteEl = $('#join-note');
-        noteEl.textContent = note || '';
-        noteEl.classList.toggle('hidden', !note);
-        $('#name-input').focus();
+        if (note) {
+            noteEl.textContent = note;
+            noteEl.classList.remove('hidden');
+        } else {
+            noteEl.classList.add('hidden');
+        }
+        if (hostKey) setTab('play');
     }
 
     function showGame() {
         joined = true;
-        show('#game-screen');
-        $('#code-chip').textContent = CODE;
-        $('#host-panel').classList.toggle('hidden', !hostKey);
+        $('#join-screen').classList.add('hidden');
+        $('#game-screen').classList.remove('hidden');
     }
 
-    // --- JOIN ---
+    // ===================== TABS (host only) =====================
+    function setTab(next) {
+        tab = next;
+        store.set(TAB_KEY, next, true);
+        const host = next === 'host';
+        $('#tab-play').setAttribute('aria-selected', String(!host));
+        $('#tab-host').setAttribute('aria-selected', String(host));
+        $('#host-view').classList.toggle('hidden', !host);
+        if (host) {
+            $('#join-screen').classList.add('hidden');
+            $('#game-screen').classList.add('hidden');
+            drawQr();
+            renderHost();
+        } else if (joined) {
+            showGame();
+        } else {
+            $('#join-screen').classList.remove('hidden');
+        }
+        window.scrollTo(0, 0);
+    }
+    $('#tab-play').addEventListener('click', () => setTab('play'));
+    $('#tab-host').addEventListener('click', () => setTab('host'));
+
+    // ===================== JOIN =====================
     $('#join-btn').addEventListener('click', () => join($('#name-input').value.trim()));
     $('#name-input').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') join($('#name-input').value.trim());
     });
 
     async function join(name) {
-        if (!name) { $('#name-input').focus(); return; }
+        if (!name) {
+            $('#name-input').focus();
+            return false;
+        }
         const data = await call('/join', { name: name });
-        if (!data) { if (!joined) showJoin(); return; }
+        if (!data) return false;
         playerName = data.name;
         myChips = data.chips;
         store.set(NAME_KEY, playerName);
         store.set('easypoker.name', playerName);
         $('#player-name-display').textContent = playerName;
         renderMyChips();
-        showGame();
+        if (tab === 'play') showGame(); else joined = true;
         connectWS();
+        return true;
     }
 
-    // --- WEBSOCKET ---
+    // ===================== WEBSOCKET =====================
     // A phone that sleeps or switches networks often leaves the socket looking OPEN
     // while nothing arrives any more. So: ping every 10 s, and if nothing (pong or
     // state) has come back for 25 s, tear the socket down and reconnect. Also
@@ -128,6 +149,7 @@
     let lastMessageAt = 0;
     let reconnectTimer = null;
     let reconnectDelay = 1000;
+    const wanted = () => joined || !!hostKey;
 
     function connectWS() {
         if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
@@ -168,7 +190,7 @@
     }
 
     setInterval(() => {
-        if (!joined) return;
+        if (!wanted()) return;
         if (!ws) { connectWS(); return; }
         if (ws.readyState !== WebSocket.OPEN) return;
         if (Date.now() - lastMessageAt > STALE_MS) { setConnected(false); forceReconnect(); return; }
@@ -176,7 +198,7 @@
     }, PING_MS);
 
     function resume() {
-        if (!joined) return;
+        if (!wanted()) return;
         if (!ws || ws.readyState !== WebSocket.OPEN || Date.now() - lastMessageAt > PING_MS) forceReconnect();
         else { try { ws.send('ping'); } catch (_) { forceReconnect(); } }
     }
@@ -184,10 +206,15 @@
     window.addEventListener('online', resume);
     window.addEventListener('pageshow', (e) => { if (e.persisted) forceReconnect(); });
 
-    function setConnected(ok) { $('#conn-status').classList.toggle('hidden', ok); }
+    function setConnected(ok) {
+        const el = $('#conn-status');
+        if (el) el.classList.toggle('hidden', ok);
+    }
 
-    // --- UI UPDATE ---
-    function renderMyChips() { $('#my-chips').textContent = myChips.toLocaleString() + ' chips'; }
+    // ===================== GAME UI (as app.js) =====================
+    function renderMyChips() {
+        $('#my-chips').textContent = myChips.toLocaleString() + ' chips';
+    }
 
     function updateUI(s) {
         state = s;
@@ -203,19 +230,41 @@
         $('#chip-amount').step = smallBlind;
         if (blindsChanged || !$('#chip-amount').value) $('#chip-amount').value = bigBlind;
 
-        // The host may have removed us or started a game without us.
+        renderHost();
+
+        // The host may have started a new game from a typed-in state, or removed us.
         const me = playerName && s.players[playerName];
         if (joined && !me) {
             $('#name-input').value = playerName || '';
-            store.set(NAME_KEY, '');
-            showJoin('You are not in the current game. Join again — use the same name to get your chips back.');
+            showJoin('You are not in the current game. Join again — use the same name the host entered.');
             return;
         }
-        if (me) { myChips = me.chips; renderMyChips(); }
+        if (me) {
+            myChips = me.chips;
+            renderMyChips();
+        }
 
         renderQuickButtons();
-        renderPlayers();
-        renderHostFields();
+
+        const list = $('#players-list');
+        list.innerHTML = '';
+        const entries = Object.entries(s.players);
+        entries.sort((a, b) => {
+            if (a[0] === playerName) return -1;
+            if (b[0] === playerName) return 1;
+            return 0;
+        });
+        for (const [name, player] of entries) {
+            const li = document.createElement('li');
+            li.className = 'player-item';
+            const isMe = name === playerName;
+            li.innerHTML =
+                '<span class="name' + (isMe ? ' is-me' : '') + '">' +
+                escapeHtml(player.name) + (isMe ? ' (you)' : '') +
+                '</span>' +
+                '<span class="chips">' + player.chips.toLocaleString() + '</span>';
+            list.appendChild(li);
+        }
 
         const logList = $('#log-list');
         logList.innerHTML = '';
@@ -225,34 +274,8 @@
             li.textContent = entry.message;
             logList.appendChild(li);
         }
-
-        // The host sees the invite card until somebody else has joined.
-        if (hostKey && !inviteToggled) $('#invite').classList.toggle('hidden', (s.order || []).length > 1);
     }
 
-    function renderPlayers() {
-        const list = $('#players-list');
-        list.innerHTML = '';
-        const names = (state.order || Object.keys(state.players)).slice();
-        names.sort((a, b) => (a === playerName ? -1 : b === playerName ? 1 : 0));
-        for (const name of names) {
-            const player = state.players[name];
-            const li = document.createElement('li');
-            li.className = 'player-item' + (hostKey ? ' editable' : '');
-            const isMe = name === playerName;
-            const n = document.createElement('span');
-            n.className = 'name' + (isMe ? ' is-me' : '');
-            n.textContent = player.name + (isMe ? ' (you)' : '');
-            const c = document.createElement('span');
-            c.className = 'chips';
-            c.textContent = player.chips.toLocaleString();
-            li.append(n, c);
-            if (hostKey) li.addEventListener('click', () => openSheet(player));
-            list.appendChild(li);
-        }
-    }
-
-    // --- QUICK BUTTONS: sized from the blinds, like a real table ---
     function quickAmounts() {
         return [
             { label: 'SB', value: smallBlind },
@@ -273,13 +296,12 @@
         for (const q of quickAmounts()) {
             const btn = document.createElement('button');
             btn.className = 'quick-btn' + (q.value === selected ? ' active' : '');
-            btn.textContent = q.label;
-            const sub = document.createElement('span');
-            sub.className = 'sub';
-            sub.textContent = q.value.toLocaleString();
-            btn.appendChild(sub);
+            btn.innerHTML = escapeHtml(q.label) + '<span class="sub">' + q.value.toLocaleString() + '</span>';
             btn.disabled = q.value <= 0;
-            btn.addEventListener('click', () => { $('#chip-amount').value = q.value; renderQuickButtons(); });
+            btn.addEventListener('click', () => {
+                $('#chip-amount').value = q.value;
+                renderQuickButtons();
+            });
             row.appendChild(btn);
         }
     }
@@ -296,7 +318,6 @@
     $('#plus-btn').addEventListener('click', () => step(1));
     $('#chip-amount').addEventListener('input', renderQuickButtons);
 
-    // --- ACTIONS ---
     async function chipAction(path) {
         const amount = parseInt($('#chip-amount').value, 10);
         if (!amount || amount <= 0) { showToast('Enter an amount'); return; }
@@ -311,141 +332,220 @@
         if (await call('/pot/take-all', { name: playerName }) && navigator.vibrate) navigator.vibrate([30, 60, 30]);
     });
 
-    // --- INVITE ---
-    let inviteToggled = false;
+    let toastTimeout = null;
+    function showToast(msg) {
+        const el = $('#toast');
+        el.textContent = msg;
+        el.classList.remove('hidden');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ===================== HOST VIEW =====================
+    let hostToastTimer = null;
+    function hostToast(msg, error) {
+        const el = $('#host-toast');
+        el.textContent = msg;
+        el.classList.toggle('error', !!error);
+        el.classList.remove('hidden');
+        clearTimeout(hostToastTimer);
+        hostToastTimer = setTimeout(() => el.classList.add('hidden'), 3000);
+    }
+
+    $('#host-code').textContent = CODE;
+    $('#invite-link').textContent = JOIN_URL.replace(/^https?:\/\//, '');
+
     let qrDrawn = false;
     function drawQr() {
         if (qrDrawn || typeof window.qrcode !== 'function') return;
         const qr = window.qrcode(0, 'M');
         qr.addData(JOIN_URL);
         qr.make();
-        $('#qr').innerHTML = qr.createSvgTag({ cellSize: 5, margin: 2, scalable: true });
+        $('#qr').innerHTML = qr.createSvgTag({ cellSize: 5, margin: 1, scalable: true });
         qrDrawn = true;
     }
-    $('#invite-code').textContent = CODE;
-    $('#invite-link').textContent = JOIN_URL.replace(/^https?:\/\//, '');
-    const inviteObserver = new MutationObserver(() => { if (!$('#invite').classList.contains('hidden')) drawQr(); });
-    inviteObserver.observe($('#invite'), { attributes: true, attributeFilter: ['class'] });
-    window.addEventListener('load', () => { if (!$('#invite').classList.contains('hidden')) drawQr(); });
-
-    $('#code-chip').addEventListener('click', () => {
-        inviteToggled = true;
-        $('#invite').classList.toggle('hidden');
-    });
+    window.addEventListener('load', () => { if (tab === 'host') drawQr(); });
 
     async function copy(text, done) {
         try {
             await navigator.clipboard.writeText(text);
-            showToast(done);
+            hostToast(done);
         } catch (_) {
             window.prompt('Copy this link:', text);
         }
     }
     $('#copy-btn').addEventListener('click', () => copy(JOIN_URL, 'Link copied'));
-    $('#share-btn').addEventListener('click', async () => {
-        if (navigator.share) {
+    if (navigator.share) {
+        $('#share-btn').addEventListener('click', async () => {
             try { await navigator.share({ title: 'EasyPoker table ' + CODE, text: 'Join my poker table', url: JOIN_URL }); } catch (_) {}
-        } else {
-            copy(JOIN_URL, 'Link copied');
-        }
-    });
-    if (!navigator.share) $('#share-btn').classList.add('hidden');
-
-    // --- HOST ---
-    const preset = $('#blind-preset');
-    const custom = document.createElement('option');
-    custom.value = '';
-    custom.textContent = 'Custom';
-    preset.appendChild(custom);
-    for (const [s, b] of LEVELS) {
-        const opt = document.createElement('option');
-        opt.value = s + '/' + b;
-        opt.textContent = s + ' / ' + b;
-        preset.appendChild(opt);
+        });
+    } else {
+        $('#share-btn').classList.add('hidden');
+        $('#share-btn').parentElement.classList.add('single');
     }
-    preset.addEventListener('change', () => {
-        if (!preset.value) return;
-        const [s, b] = preset.value.split('/');
-        $('#sb-input').value = s;
-        $('#bb-input').value = b;
-    });
+    $('#host-link-btn').addEventListener('click', () =>
+        copy(JOIN_URL + '#host=' + hostKey, 'Host link copied — anyone with it can run the table'));
+
+    // Blind level pills apply in one tap; every change is recorded and reversible.
+    const pills = $('#blind-pills');
+    for (const [s, b] of LEVELS) {
+        const pill = document.createElement('button');
+        pill.className = 'ep-pill';
+        pill.dataset.level = s + '/' + b;
+        pill.textContent = s.toLocaleString() + '/' + b.toLocaleString();
+        pill.setAttribute('aria-pressed', 'false');
+        pill.addEventListener('click', () => busy(pill, async () => {
+            if (await hostCall('blinds', { small: s, big: b })) hostToast('Blinds ' + s + '/' + b);
+        }));
+        pills.appendChild(pill);
+    }
 
     const editing = (el) => document.activeElement === el;
-    function renderHostFields() {
+    const fmt = (n) => n.toLocaleString();
+
+    function renderHost() {
         if (!hostKey || !state) return;
-        if (!editing($('#sb-input')) && !editing($('#bb-input')) && !editing(preset)) {
+        const names = state.order || Object.keys(state.players);
+        const inPlay = names.reduce((sum, n) => sum + state.players[n].chips, 0) + state.pot;
+
+        $('#host-summary').textContent =
+            names.length + (names.length === 1 ? ' player' : ' players') +
+            ' · pot ' + fmt(state.pot) + ' · blinds ' + fmt(state.smallBlind) + '/' + fmt(state.bigBlind);
+        const badge = $('#tab-host-badge');
+        badge.textContent = names.length;
+        badge.classList.toggle('hidden', names.length === 0);
+
+        // Players
+        const list = $('#host-players');
+        list.innerHTML = '';
+        if (!names.length) {
+            const li = document.createElement('li');
+            li.className = 'ep-empty';
+            li.textContent = 'Nobody yet. Share the link or QR code.';
+            list.appendChild(li);
+        }
+        for (const n of names) {
+            const p = state.players[n];
+            const li = document.createElement('li');
+            const b = document.createElement('button');
+            b.className = 'ep-player';
+            const name = document.createElement('span');
+            name.className = 'name';
+            name.textContent = p.name;
+            if (p.name === playerName) {
+                const you = document.createElement('span');
+                you.className = 'ep-you';
+                you.textContent = 'you';
+                name.appendChild(you);
+            }
+            const chips = document.createElement('span');
+            chips.className = 'chips';
+            chips.textContent = fmt(p.chips);
+            b.append(name, chips);
+            b.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-edit"/></svg>');
+            b.setAttribute('aria-label', 'Edit ' + p.name + ', ' + fmt(p.chips) + ' chips');
+            b.addEventListener('click', () => openSheet(p));
+            li.appendChild(b);
+            list.appendChild(li);
+        }
+        $('#host-total').innerHTML = '<span>Chips in play</span><strong></strong>';
+        $('#host-total strong').textContent = fmt(inPlay);
+
+        // Settings
+        const level = state.smallBlind + '/' + state.bigBlind;
+        for (const pill of pills.children) pill.setAttribute('aria-pressed', String(pill.dataset.level === level));
+        $('#blinds-now').textContent = fmt(state.smallBlind) + ' / ' + fmt(state.bigBlind);
+        if (!editing($('#sb-input')) && !editing($('#bb-input'))) {
             $('#sb-input').value = state.smallBlind;
             $('#bb-input').value = state.bigBlind;
-            preset.value = state.smallBlind + '/' + state.bigBlind; // unknown level shows "Custom"
         }
         if (!editing($('#pot-input'))) $('#pot-input').value = state.pot;
         if (!editing($('#start-input'))) $('#start-input').value = state.startingChips;
     }
 
     const num = (sel) => parseInt($(sel).value, 10);
-    $('#blinds-btn').addEventListener('click', async () => {
-        if (await hostCall('blinds', { small: num('#sb-input'), big: num('#bb-input') })) showToast('Blinds updated');
-    });
-    $('#pot-btn').addEventListener('click', async () => {
-        if (await hostCall('pot', { amount: num('#pot-input') })) showToast('Pot updated');
-    });
-    $('#start-btn').addEventListener('click', async () => {
-        if (await hostCall('starting-chips', { amount: num('#start-input') })) showToast('Starting chips updated');
-    });
+    $('#blinds-btn').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+        if (await hostCall('blinds', { small: num('#sb-input'), big: num('#bb-input') })) hostToast('Blinds updated');
+    }));
+    $('#pot-btn').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+        if (await hostCall('pot', { amount: num('#pot-input') })) hostToast('Pot updated');
+    }));
+    $('#start-btn').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+        if (await hostCall('starting-chips', { amount: num('#start-input') })) hostToast('Starting chips updated');
+    }));
+    for (const [input, btn] of [['#pot-input', '#pot-btn'], ['#start-input', '#start-btn'], ['#bb-input', '#blinds-btn'], ['#sb-input', '#blinds-btn']]) {
+        $(input).addEventListener('keydown', (e) => { if (e.key === 'Enter') $(btn).click(); });
+    }
 
     // Two taps instead of a confirm() dialog, which some in-app browsers block.
-    function twoTap(btn, label, action) {
-        let armed = null;
+    function twoTap(btn, armedLabel, action) {
+        let timer = null;
+        const label = btn.querySelector('strong') || btn;
         btn.addEventListener('click', async () => {
-            if (!armed) {
-                const original = btn.textContent;
-                btn.textContent = label;
+            if (!timer) {
+                btn.dataset.original = label.textContent;
+                label.textContent = armedLabel;
                 btn.classList.add('armed');
-                armed = setTimeout(() => { btn.textContent = original; btn.classList.remove('armed'); armed = null; }, 3000);
-                btn.dataset.original = original;
+                timer = setTimeout(reset, 3500);
                 return;
             }
-            clearTimeout(armed);
-            armed = null;
-            btn.textContent = btn.dataset.original;
-            btn.classList.remove('armed');
-            await action();
+            reset();
+            await busy(btn, action);
         });
+        function reset() {
+            clearTimeout(timer);
+            timer = null;
+            if (btn.dataset.original) label.textContent = btn.dataset.original;
+            btn.classList.remove('armed');
+        }
     }
     twoTap($('#new-game-btn'), 'Tap again to start a new game', async () => {
-        if (await hostCall('new-game', {})) showToast('New game started — the old one is in History');
+        if (await hostCall('new-game', {})) hostToast('New game started — the old one is in history');
     });
 
-    $('#host-link-btn').addEventListener('click', () =>
-        copy(JOIN_URL + '#host=' + hostKey, 'Host link copied — keep it private'));
-
-    // Player sheet: correct chips or remove.
+    // Player sheet
     let sheetPlayer = null;
     function openSheet(player) {
         sheetPlayer = player.name;
         $('#sheet-title').textContent = player.name;
         $('#sheet-chips').value = player.chips;
         $('#sheet').classList.remove('hidden');
-        $('#sheet-remove').textContent = 'Remove';
+        $('#sheet-chips').focus();
+        $('#sheet-chips').select();
     }
     function closeSheet() { $('#sheet').classList.add('hidden'); sheetPlayer = null; }
     $('#sheet-cancel').addEventListener('click', closeSheet);
     $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') closeSheet(); });
-    $('#sheet-save').addEventListener('click', async () => {
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sheetPlayer) closeSheet(); });
+    const saveSheet = () => busy($('#sheet-save'), async () => {
         if (await hostCall('player-chips', { name: sheetPlayer, chips: num('#sheet-chips') })) closeSheet();
     });
-    twoTap($('#sheet-remove'), 'Tap again to remove', async () => {
+    $('#sheet-save').addEventListener('click', saveSheet);
+    $('#sheet-chips').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveSheet(); });
+    twoTap($('#sheet-remove'), 'Tap again', async () => {
         if (await hostCall('remove', { name: sheetPlayer })) closeSheet();
     });
 
-    // History & restore.
-    const fmtTime = (ts) => new Date(ts).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const fmtClock = (ts) => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    // History & restore
+    const fmtDate = (ts) => new Date(ts).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const fmtTime = (ts) => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    $('#history-btn').addEventListener('click', async () => {
+    $('#history-btn').addEventListener('click', async (e) => {
         const box = $('#history');
-        if (!box.classList.contains('hidden')) { box.classList.add('hidden'); return; }
-        await showGames();
+        const btn = e.currentTarget;
+        if (!box.classList.contains('hidden')) {
+            box.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+            return;
+        }
+        await busy(btn, showGames);
+        btn.setAttribute('aria-expanded', 'true');
     });
 
     async function showGames() {
@@ -456,11 +556,14 @@
         box.classList.remove('hidden');
         for (const g of games) {
             const row = document.createElement('button');
-            row.className = 'history-game';
-            const who = g.players.map((p) => p.name + ' ' + p.chips.toLocaleString()).join(', ') || 'no players';
-            row.innerHTML = '<strong></strong><span></span>';
-            row.firstChild.textContent = fmtTime(g.createdAt) + (g.current ? ' · current' : '') + ' · ' + g.actions + ' actions';
-            row.lastChild.textContent = who + (g.pot ? ' · pot ' + g.pot.toLocaleString() : '');
+            row.className = 'ep-game';
+            const title = document.createElement('strong');
+            title.textContent = fmtDate(g.createdAt) + ' · ' + g.actions + ' actions';
+            if (g.current) title.insertAdjacentHTML('beforeend', ' · <span class="ep-current">now playing</span>');
+            const who = document.createElement('span');
+            who.textContent = (g.players.map((p) => p.name + ' ' + fmt(p.chips)).join(', ') || 'No players') +
+                (g.pot ? ' · pot ' + fmt(g.pot) : '');
+            row.append(title, who);
             row.addEventListener('click', () => showEntries(g));
             box.appendChild(row);
         }
@@ -471,68 +574,77 @@
         if (!entries) return;
         const box = $('#history');
         box.innerHTML = '';
+        const bar = document.createElement('div');
+        bar.className = 'ep-history-bar';
         const back = document.createElement('button');
-        back.className = 'btn btn-small btn-outline';
+        back.className = 'ep-btn ep-btn-ghost';
         back.textContent = '← All games';
         back.addEventListener('click', showGames);
-        box.appendChild(back);
+        bar.appendChild(back);
         if (!game.current) {
             const resume = document.createElement('button');
-            resume.className = 'btn btn-small btn-success';
+            resume.className = 'ep-btn ep-btn-green';
             resume.textContent = 'Resume this game';
             twoTap(resume, 'Tap again to resume', async () => {
-                if (await hostCall('resume', { gameId: game.gameId })) { showToast('Game resumed'); box.classList.add('hidden'); }
+                if (await hostCall('resume', { gameId: game.gameId })) { hostToast('Game resumed'); box.classList.add('hidden'); }
             });
-            box.appendChild(resume);
+            bar.appendChild(resume);
         }
+        box.appendChild(bar);
         const hint = document.createElement('p');
-        hint.className = 'muted small';
+        hint.className = 'ep-hint';
         hint.textContent = 'Tap an entry to rewind to right after it. The rewind is recorded too, so it can be undone.';
         box.appendChild(hint);
         const list = document.createElement('ul');
-        list.className = 'history-list';
+        list.className = 'ep-entries';
         for (const e of entries.slice().reverse()) {
             const li = document.createElement('li');
-            li.className = 'history-entry';
+            const row = document.createElement('button');
+            row.className = 'ep-entry';
+            const when = document.createElement('span');
+            when.className = 'when';
+            when.textContent = '#' + e.seq + ' ' + fmtTime(e.timestamp).slice(0, 5);
             const text = document.createElement('span');
-            text.textContent = '#' + e.seq + ' ' + fmtClock(e.timestamp) + ' — ' + e.message;
-            li.appendChild(text);
-            li.addEventListener('click', () => {
-                if (li.classList.contains('armed')) {
-                    hostCall('restore', { gameId: game.gameId, seq: e.seq }).then((ok) => {
-                        if (ok) { showToast('Restored to #' + e.seq); box.classList.add('hidden'); }
-                    });
+            const plain = e.message;
+            text.textContent = plain;
+            row.append(when, text);
+            let timer = null;
+            row.addEventListener('click', async () => {
+                if (row.classList.contains('armed')) {
+                    clearTimeout(timer);
+                    if (await hostCall('restore', { gameId: game.gameId, seq: e.seq })) {
+                        hostToast('Restored to #' + e.seq);
+                        box.classList.add('hidden');
+                        $('#history-btn').setAttribute('aria-expanded', 'false');
+                    }
                     return;
                 }
-                for (const other of list.querySelectorAll('.armed')) other.classList.remove('armed');
-                li.classList.add('armed');
-                const balances = e.players.map((p) => p.name + ' ' + p.chips.toLocaleString()).join(', ');
-                text.textContent = 'Tap again to restore: ' + (balances || 'no players') + ', pot ' + e.pot.toLocaleString();
-                setTimeout(() => {
-                    li.classList.remove('armed');
-                    text.textContent = '#' + e.seq + ' ' + fmtClock(e.timestamp) + ' — ' + e.message;
-                }, 4000);
+                for (const other of list.querySelectorAll('.armed')) other.dispatchEvent(new Event('disarm'));
+                row.classList.add('armed');
+                const balances = e.players.map((p) => p.name + ' ' + fmt(p.chips)).join(', ');
+                text.textContent = 'Tap again to restore: ' + (balances || 'no players') + ', pot ' + fmt(e.pot);
+                timer = setTimeout(() => row.dispatchEvent(new Event('disarm')), 4000);
             });
+            row.addEventListener('disarm', () => {
+                clearTimeout(timer);
+                row.classList.remove('armed');
+                text.textContent = plain;
+            });
+            li.appendChild(row);
             list.appendChild(li);
         }
         box.appendChild(list);
     }
 
-    // --- TOAST ---
-    let toastTimeout = null;
-    function showToast(msg) {
-        const el = $('#toast');
-        el.textContent = msg;
-        el.classList.remove('hidden');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => el.classList.add('hidden'), 3000);
-    }
-
-    // --- START ---
+    // ===================== START =====================
     (async function start() {
         let res;
         try { res = await request('/state'); } catch (_) { showJoin('Connection error — check your internet and reload.'); return; }
-        if (res.status === 404) { show('#missing-screen'); return; }
+        if (res.status === 404) {
+            $('#join-screen').classList.add('hidden');
+            $('#missing-screen').classList.remove('hidden');
+            return;
+        }
         if (hostKey) {
             try {
                 const check = await request('/host/check', undefined, { 'X-Host-Key': hostKey });
@@ -540,9 +652,21 @@
             } catch (_) {}
         }
         document.title = 'EasyPoker · ' + CODE;
+        try { updateUI(await res.json()); } catch (_) {}
+
+        if (hostKey) {
+            document.body.classList.add('has-tabs');
+            $('#tabs').classList.remove('hidden');
+            connectWS();
+        }
         const saved = store.get(NAME_KEY);
         $('#name-input').value = saved || store.get('easypoker.name') || '';
         if (saved) await join(saved);
-        else showJoin();
+
+        if (hostKey) {
+            const remembered = store.get(TAB_KEY, true);
+            const alone = (state && (state.order || []).length < 2);
+            setTab(remembered || (alone ? 'host' : 'play'));
+        }
     })();
 })();

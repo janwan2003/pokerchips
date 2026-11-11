@@ -9,7 +9,7 @@
     for (const [s, b] of LEVELS) {
         const opt = document.createElement('option');
         opt.value = s + '/' + b;
-        opt.textContent = s + ' / ' + b;
+        opt.textContent = s.toLocaleString() + ' / ' + b.toLocaleString();
         if (s === 10) opt.selected = true;
         blinds.appendChild(opt);
     }
@@ -32,6 +32,7 @@
         const startingChips = parseInt($('#starting-chips').value, 10);
         const btn = $('#create-btn');
         btn.disabled = true;
+        btn.textContent = 'Creating…';
         try {
             const res = await fetch('/api/tables', {
                 method: 'POST',
@@ -50,6 +51,7 @@
             toast('Connection error');
         } finally {
             btn.disabled = false;
+            btn.textContent = 'Create table';
         }
     });
 

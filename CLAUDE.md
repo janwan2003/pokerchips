@@ -59,6 +59,11 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
   OAuth on the owner's machine). Changing only `web/` needs no APK rebuild.
 - Same history rule: table journals live in Durable Object SQLite. Never delete the
   `v1` migration or rename the `Room` class, and only add journal fields with defaults.
+- The players' game view must stay identical to the app's player client:
+  `web/public/css/game.css` is a verbatim copy of `assets/web/css/style.css`, and
+  `web/public/table.html` embeds the app's join/game markup verbatim (`web/test/parity.test.js`
+  fails if they drift — re-copy). Host features live in a separate Host tab styled by
+  `web/public/css/site.css` (all `ep-` prefixed).
 - End-to-end check: `npx wrangler dev`, then drive two Playwright browser contexts
   (host + player) against it.
 

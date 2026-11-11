@@ -6,24 +6,144 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1a2e">
     <title>EasyPoker table</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♠</text></svg>">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400..700&display=swap">
+    <!-- game.css is a verbatim copy of the Android app's player stylesheet (test/parity.test.js). -->
+    <link rel="stylesheet" href="/css/game.css">
+    <link rel="stylesheet" href="/css/site.css">
 </head>
 <body>
-    <div id="missing-screen" class="screen hidden">
-        <div class="join-container">
-            <div class="logo">&spades; EasyPoker</div>
-            <p class="subtitle">There is no table with this code.</p>
-            <a class="btn btn-primary link-btn" href="/">Start or join a table</a>
+    <!-- Host only: switch between playing and running the table. -->
+    <nav id="tabs" class="ep-tabs ep-scope hidden" aria-label="View">
+        <div class="ep-tabs-inner" role="tablist">
+            <button id="tab-play" class="ep-tab" role="tab" aria-selected="true">Play</button>
+            <button id="tab-host" class="ep-tab" role="tab" aria-selected="false">Host<span id="tab-host-badge" class="ep-tab-badge hidden"></span></button>
+        </div>
+    </nav>
+
+    <main id="missing-screen" class="ep-scope ep-center hidden">
+        <div class="ep-stack">
+            <a class="ep-brand ep-brand-lg" href="/"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker</a>
+            <p class="ep-muted">There is no table with this code. Check the link, or start a new table.</p>
+            <a class="ep-btn ep-btn-red ep-btn-block" href="/">Start or join a table</a>
+        </div>
+    </main>
+
+    <main id="host-view" class="ep-scope ep-host hidden">
+        <header class="ep-host-head">
+            <div>
+                <h1 class="ep-host-title">Table <span id="host-code" class="ep-code"></span></h1>
+                <p id="host-summary" class="ep-muted ep-num"></p>
+            </div>
+        </header>
+
+        <div class="ep-host-grid">
+            <div class="ep-host-col">
+                <section id="invite" class="ep-card ep-invite" aria-labelledby="invite-title">
+                    <div id="qr" class="ep-qr" aria-label="QR code for the join link"></div>
+                    <div class="ep-invite-body">
+                        <h2 id="invite-title" class="ep-title">Invite players</h2>
+                        <p class="ep-muted ep-small">Scan the code, or open the link and type a name.</p>
+                        <div id="invite-link" class="ep-invite-link"></div>
+                        <div class="ep-btn-pair">
+                            <button id="copy-btn" class="ep-btn ep-btn-gold"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-copy"/></svg>Copy link</button>
+                            <button id="share-btn" class="ep-btn ep-btn-quiet"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg>Share</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="ep-card" aria-labelledby="players-title">
+                    <div class="ep-section-head">
+                        <h2 id="players-title" class="ep-title">Players</h2>
+                        <span class="ep-hint">Tap to correct or remove</span>
+                    </div>
+                    <ul id="host-players" class="ep-players"></ul>
+                    <div id="host-total" class="ep-total ep-num"></div>
+                </section>
+            </div>
+
+            <div class="ep-host-col">
+                <section class="ep-card" aria-labelledby="table-title">
+                    <h2 id="table-title" class="ep-title">Table</h2>
+
+                    <div class="ep-setting">
+                        <div class="ep-setting-label">Blinds <span id="blinds-now" class="ep-now ep-num"></span></div>
+                        <div id="blind-pills" class="ep-pills" role="group" aria-label="Blind levels"></div>
+                        <div class="ep-inline-3">
+                            <label class="ep-field"><span class="ep-field-label">Small</span><input type="number" id="sb-input" class="ep-input" inputmode="numeric" min="1"></label>
+                            <label class="ep-field"><span class="ep-field-label">Big</span><input type="number" id="bb-input" class="ep-input" inputmode="numeric" min="1"></label>
+                            <button id="blinds-btn" class="ep-btn ep-btn-quiet">Set</button>
+                        </div>
+                    </div>
+
+                    <div class="ep-setting">
+                        <label class="ep-field">
+                            <span class="ep-setting-label">Pot</span>
+                            <span class="ep-inline-2">
+                                <input type="number" id="pot-input" class="ep-input" inputmode="numeric" min="0">
+                                <button id="pot-btn" class="ep-btn ep-btn-quiet" type="button">Set pot</button>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="ep-setting">
+                        <label class="ep-field">
+                            <span class="ep-setting-label">Starting chips <span class="ep-hint">for new players and new games</span></span>
+                            <span class="ep-inline-2">
+                                <input type="number" id="start-input" class="ep-input" inputmode="numeric" min="1">
+                                <button id="start-btn" class="ep-btn ep-btn-quiet" type="button">Set</button>
+                            </span>
+                        </label>
+                    </div>
+                </section>
+
+                <section class="ep-card" aria-labelledby="game-title">
+                    <h2 id="game-title" class="ep-title">Game</h2>
+                    <div class="ep-actions">
+                        <button id="new-game-btn" class="ep-row-btn">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"/></svg>
+                            <span><strong>New game</strong><small>Everyone back to starting chips. This game stays in history.</small></span>
+                        </button>
+                        <button id="history-btn" class="ep-row-btn" aria-expanded="false">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clock"/></svg>
+                            <span><strong>History &amp; restore</strong><small>Every action of every game. Rewind to any moment.</small></span>
+                        </button>
+                        <button id="host-link-btn" class="ep-row-btn">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-key"/></svg>
+                            <span><strong>Copy host link</strong><small>Run the table from another device. Keep it private.</small></span>
+                        </button>
+                    </div>
+                    <div id="history" class="ep-history hidden"></div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <div id="sheet" class="ep-scope ep-sheet hidden" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+        <div class="ep-sheet-body">
+            <h2 id="sheet-title" class="ep-sheet-title"></h2>
+            <label class="ep-field"><span class="ep-field-label">Chips</span>
+                <input type="number" id="sheet-chips" class="ep-input ep-input-lg" inputmode="numeric" min="0">
+            </label>
+            <div class="ep-btn-pair">
+                <button id="sheet-save" class="ep-btn ep-btn-green">Save</button>
+                <button id="sheet-remove" class="ep-btn ep-btn-quiet">Remove</button>
+            </div>
+            <button id="sheet-cancel" class="ep-btn ep-btn-ghost">Cancel</button>
         </div>
     </div>
 
-    <div id="join-screen" class="screen hidden">
+    <div id="host-toast" class="ep-scope ep-toast hidden" role="status"></div>
+
+    <!-- BEGIN app player client (verbatim from app/src/main/assets/web/index.html) -->
+    <div id="join-screen" class="screen">
         <div class="join-container">
-            <div class="logo">&spades; EasyPoker</div>
-            <p class="subtitle">Table <strong id="join-code-display"></strong> — enter your name to join</p>
+            <div class="logo">&spades; PokerChips</div>
+            <p class="subtitle">Enter your name to join the game</p>
             <p id="join-note" class="join-note hidden"></p>
-            <input type="text" id="name-input" placeholder="Your name" maxlength="20" autocomplete="nickname">
+            <input type="text" id="name-input" placeholder="Your name" maxlength="20" autocomplete="off" autofocus>
             <button id="join-btn" class="btn btn-primary">Join Game</button>
         </div>
     </div>
@@ -35,7 +155,6 @@
                 <span class="player-icon">&spades;</span>
                 <span id="player-name-display"></span>
             </div>
-            <button id="code-chip" class="code-chip" title="Invite players"></button>
             <div id="my-chips" class="my-chips"></div>
         </header>
 
@@ -59,59 +178,9 @@
             <button id="take-all-btn" class="btn btn-gold" disabled>Take whole pot</button>
         </section>
 
-        <section id="invite" class="card invite hidden">
-            <h3>Invite players</h3>
-            <div id="qr" class="qr"></div>
-            <div class="invite-code" id="invite-code"></div>
-            <div id="invite-link" class="invite-link"></div>
-            <div class="btn-row">
-                <button id="copy-btn" class="btn btn-small">Copy link</button>
-                <button id="share-btn" class="btn btn-small">Share</button>
-            </div>
-        </section>
-
         <section class="players-section">
             <h3>Players</h3>
             <ul id="players-list"></ul>
-        </section>
-
-        <section id="host-panel" class="card host-panel hidden">
-            <h3>Host controls</h3>
-            <p class="muted small">Tap a player above to correct their chips or remove them.</p>
-
-            <div class="host-block">
-                <div class="host-label">Blinds</div>
-                <div class="field-row">
-                    <select id="blind-preset"></select>
-                    <input type="number" id="sb-input" inputmode="numeric" placeholder="SB" min="1">
-                    <input type="number" id="bb-input" inputmode="numeric" placeholder="BB" min="1">
-                    <button id="blinds-btn" class="btn btn-small">Set</button>
-                </div>
-            </div>
-
-            <div class="host-block">
-                <div class="host-label">Pot</div>
-                <div class="field-row">
-                    <input type="number" id="pot-input" inputmode="numeric" min="0">
-                    <button id="pot-btn" class="btn btn-small">Set pot</button>
-                </div>
-            </div>
-
-            <div class="host-block">
-                <div class="host-label">Starting chips for new players</div>
-                <div class="field-row">
-                    <input type="number" id="start-input" inputmode="numeric" min="1">
-                    <button id="start-btn" class="btn btn-small">Set</button>
-                </div>
-            </div>
-
-            <div class="host-block">
-                <button id="new-game-btn" class="btn btn-small btn-outline">New game (everyone back to starting chips)</button>
-                <button id="history-btn" class="btn btn-small btn-outline">History &amp; restore</button>
-                <button id="host-link-btn" class="btn btn-small btn-outline">Copy host link (control from another device)</button>
-            </div>
-
-            <div id="history" class="history hidden"></div>
         </section>
 
         <section class="log-section">
@@ -120,21 +189,18 @@
         </section>
     </div>
 
-    <div id="sheet" class="sheet hidden">
-        <div class="sheet-body">
-            <h3 id="sheet-title"></h3>
-            <label class="field">Chips
-                <input type="number" id="sheet-chips" inputmode="numeric" min="0">
-            </label>
-            <div class="btn-row">
-                <button id="sheet-save" class="btn btn-success">Save</button>
-                <button id="sheet-remove" class="btn btn-danger">Remove</button>
-            </div>
-            <button id="sheet-cancel" class="btn btn-small btn-outline">Cancel</button>
-        </div>
-    </div>
-
     <div id="toast" class="toast hidden"></div>
+    <!-- END app player client -->
+
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="chip" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e94560"/><circle cx="24" cy="24" r="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="7.5 9.77" transform="rotate(-12 24 24)"/><circle cx="24" cy="24" r="14" fill="#c7364f"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 2.4"/><path d="M24 15.5c-3.2 3.3-7 5.4-7 9 0 2.2 1.7 3.8 3.8 3.8 1 0 2-.4 2.6-1.1-.3 1.6-1 3-2.2 4h5.6c-1.2-1-1.9-2.4-2.2-4 .7.7 1.6 1.1 2.6 1.1 2.1 0 3.8-1.6 3.8-3.8 0-3.6-3.8-5.7-7-9z" fill="#fff"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5"/></g></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></g></symbol>
+        <symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></g></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+        <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M17 6l3 3M15 8l2 2"/></g></symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></g></symbol>
+    </svg>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
     <script src="/js/table.js" defer></script>
