@@ -396,7 +396,7 @@ export const privacy = {
   description: 'What EasyPoker stores when you host or join a poker table, and what it does not.',
   h1: 'Privacy',
   body: `
-<p>EasyPoker has no accounts, no ads and no analytics or tracking scripts. This page lists everything the site does keep.</p>
+<p>EasyPoker has no accounts, no ads and no cookies. It does keep cookie-free usage statistics, described below. This page lists everything the site keeps.</p>
 <h2>What is stored about a table</h2>
 <ul>
   <li><strong>The table itself</strong>: its code, starting chips, blinds and buy-in settings.</li>
@@ -405,9 +405,12 @@ export const privacy = {
 </ul>
 <h2>What is stored in your browser</h2>
 <p>Your browser's own storage remembers the name you last used and, for the host, a secret host key for each table you created. It never leaves your device except when you use the host features of that table. No cookies are set.</p>
+<h2>Usage statistics</h2>
+<p>To see how the site is used, EasyPoker records each page view and each table event (a table created, a player joining, a bet or other action). Each record holds the page or action, the table code and player name where there is one, the approximate location Cloudflare derives from your connection (country, region, city), the referring site, whether the device is a phone or a computer, and the network operator. Visitors are counted with a hash of the IP address and browser that changes every day, so no IP address is stored and a visitor cannot be followed from one day to the next. These records are kept for three months.</p>
+<p>Pages also load Cloudflare Web Analytics, a cookie-free script that reports page views and load times to Cloudflare without identifying you.</p>
 <h2>Third parties</h2>
 <ul>
-  <li><strong>Cloudflare</strong> hosts the site and the tables and, like any web host, sees standard request information such as IP addresses.</li>
+  <li><strong>Cloudflare</strong> hosts the site and the tables and, like any web host, sees standard request information such as IP addresses. It also stores the usage statistics above.</li>
   <li><strong>Google Fonts</strong> serves the typefaces, so your browser requests them from Google.</li>
 </ul>
 <h2>Money</h2>

@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "easypoker",
-  "main": "src/index.js",
+  "main": "src/main.js",
   "compatibility_date": "2026-10-01",
   "assets": {
     "directory": "./public",
@@ -18,5 +18,9 @@
     { "pattern": "easypoker.cc", "custom_domain": true },
     { "pattern": "www.easypoker.cc", "custom_domain": true }
   ],
+  // Usage analytics: one data point per page view / table event, written by src/main.js.
+  // Visitor analytics (countries, referrers, browsers) is Cloudflare Web Analytics, enabled
+  // for the easypoker.cc zone in the dashboard with automatic beacon injection.
+  "analytics_engine_datasets": [{ "binding": "ANALYTICS", "dataset": "easypoker_events" }],
   "observability": { "enabled": true }
 }
