@@ -13,6 +13,38 @@ const ld = (obj) => `<script type="application/ld+json">${JSON.stringify(obj).re
 const url = (slug) => (slug === undefined ? `${ORIGIN}/` : `${ORIGIN}/guides/${slug}`);
 const bySlug = Object.fromEntries(pages.map((p) => [p.slug, p]));
 
+// Hub and footer sections. A guide not listed here falls into the last group.
+const GROUPS = [
+  ['Chips without a chip set', ['virtual-poker-chips', 'poker-chip-app', 'online-poker-chips', 'poker-without-chips', 'best-poker-chip-apps']],
+  ['Running a home game', ['how-to-host-a-poker-night', 'home-poker-blind-structure', 'poker-chip-calculator', 'poker-tournament-payouts', 'home-poker-house-rules']],
+  ['Rules and reference', ['texas-holdem-rules', 'poker-hand-rankings', 'side-pots', 'poker-terms-glossary']],
+];
+const grouped = () => {
+  const placed = new Set(GROUPS.flatMap(([, s]) => s));
+  return GROUPS.map(([name, slugs], i) => [
+    name,
+    [...slugs.filter((s) => bySlug[s]).map((s) => bySlug[s]), ...(i === GROUPS.length - 1 ? pages.filter((p) => !placed.has(p.slug)) : [])],
+  ]);
+};
+
+const slugify = (t) => strip(t).toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+// Give every h2 in a body an id, and return the table of contents.
+function withAnchors(body) {
+  const toc = [];
+  const html = body.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, inner) => {
+    const id = slugify(inner);
+    toc.push([id, strip(inner)]);
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+  return { html, toc };
+}
+
+// "Q♥" in prose becomes a small playing card; red suits are red.
+const cards = (html) =>
+  html.replace(/(?<![\w])(10|[2-9AKQJ])([♠♥♦♣])/g, (_, r, s) =>
+    `<span class="ep-pc${'♥♦'.includes(s) ? ' ep-pc-red' : ''}">${r}<span>${s}</span></span>`);
+
 const CHIP_SYMBOL = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">
         <symbol id="chip" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e94560"/><circle cx="24" cy="24" r="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="7.5 9.77" transform="rotate(-12 24 24)"/><circle cx="24" cy="24" r="14" fill="#c7364f"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 2.4"/><path d="M24 15.5c-3.2 3.3-7 5.4-7 9 0 2.2 1.7 3.8 3.8 3.8 1 0 2-.4 2.6-1.1-.3 1.6-1 3-2.2 4h5.6c-1.2-1-1.9-2.4-2.2-4 .7.7 1.6 1.1 2.6 1.1 2.1 0 3.8-1.6 3.8-3.8 0-3.6-3.8-5.7-7-9z" fill="#fff"/></symbol>
     </svg>`;
@@ -48,25 +80,31 @@ function head({ title, description, canonical, type = 'article', schema = [] }) 
 }
 
 const topbar = `
-    <header class="ep-doc-top">
+    <header class="ep-doc-top"><div class="ep-doc-top-inner">
         <a class="ep-brand" href="/"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker</a>
+        <nav class="ep-doc-nav" aria-label="Site"><a href="/guides/">Guides</a></nav>
         <a class="ep-btn ep-btn-red ep-doc-top-cta" href="/">Start a free table</a>
-    </header>`;
+    </div></header>`;
 
 function footer() {
-  const links = pages.map((p) => `<li><a href="/guides/${p.slug}">${esc(p.h1)}</a></li>`).join('');
+  const cols = grouped()
+    .map(([name, list]) => `<div><p class="ep-doc-foot-h">${esc(name)}</p><ul>${list.map((p) => `<li><a href="/guides/${p.slug}">${esc(p.h1)}</a></li>`).join('')}</ul></div>`)
+    .join('');
   return `
-    <footer class="ep-doc-foot">
-        <nav aria-label="Guides"><ul>${links}<li><a href="/guides/">All guides</a></li><li><a href="/about">About</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
-        <p>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
-    </footer>`;
+    <footer class="ep-doc-foot"><div class="ep-doc-foot-inner">
+        <nav class="ep-doc-foot-cols" aria-label="Guides">${cols}<div><p class="ep-doc-foot-h">EasyPoker</p><ul><li><a href="/">Start a free table</a></li><li><a href="/guides/">All guides</a></li><li><a href="/about">About</a></li><li><a href="/privacy">Privacy</a></li></ul></div></nav>
+        <p class="ep-doc-foot-note"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
+    </div></footer>`;
 }
 
 const cta = `
         <aside class="ep-cta">
-            <p class="ep-cta-title">Play tonight without a chip set</p>
-            <p>Host a table in your browser, share the link, and everyone bets from their own phone. Free, no app, no sign-up.</p>
-            <a class="ep-btn ep-btn-red ep-btn-lg" href="/">Start a free table</a>
+            <div class="ep-cta-copy">
+                <p class="ep-cta-title">Play tonight without a chip set</p>
+                <p>Host a table in your browser, share the link, and everyone bets from their own phone. Free, no app, no sign-up.</p>
+                <a class="ep-btn ep-btn-red ep-btn-lg" href="/">Start a free table</a>
+            </div>
+            <div class="ep-cta-stack" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#chip"/></svg><svg viewBox="0 0 48 48"><use href="#chip"/></svg><svg viewBox="0 0 48 48"><use href="#chip"/></svg></div>
         </aside>`;
 
 const crumbs = (items) => ({
@@ -117,20 +155,31 @@ ${p.faq.map(([q, a]) => `            <details><summary>${esc(q)}</summary><p>${e
     .map((s) => bySlug[s])
     .map((r) => `<li><a href="/guides/${r.slug}"><strong>${esc(r.h1)}</strong><span>${esc(r.description)}</span></a></li>`)
     .join('');
+  const { html: body, toc } = withAnchors(cards(p.body.trim()));
+  const tocLinks = toc.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join('')
+    + (p.faq?.length ? '<li><a href="#faq-title">Frequently asked questions</a></li>' : '');
   return `${head({ title: p.title, description: p.description, canonical, schema })}
 <body class="ep-page ep-scope">${topbar}
-    <main class="ep-doc">
-        <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a></nav>
-        <article class="ep-prose">
+    <main class="ep-doc ep-doc-guide">
+        <header class="ep-doc-head">
+            <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a></nav>
             <h1>${esc(p.h1)}</h1>
             <p class="ep-doc-lede">${esc(p.lede)}</p>
-            <p class="ep-muted ep-small">Last updated <time datetime="${UPDATED}">${UPDATED}</time></p>
-${p.body.trim()}
+            <p class="ep-doc-meta">Updated <time datetime="${UPDATED}">${UPDATED}</time></p>
+        </header>
+        <nav class="ep-toc" aria-label="On this page">
+            <details class="ep-toc-inline"><summary>On this page</summary><ol>${tocLinks}</ol></details>
+            <div class="ep-toc-side"><p class="ep-toc-h">On this page</p><ol>${tocLinks}</ol></div>
+        </nav>
+        <div class="ep-doc-main">
+        <article class="ep-prose">
+${body}
         </article>${cta}${faq}
         <section class="ep-related" aria-labelledby="related-title">
             <h2 id="related-title">Related guides</h2>
             <ul>${related}</ul>
         </section>
+        </div>
     </main>${footer()}
     ${CHIP_SYMBOL}${p.script ? `\n    <script src="${p.script}"></script>` : ''}
 </body>
@@ -151,22 +200,23 @@ function renderHub() {
     },
     crumbs([['EasyPoker', `${ORIGIN}/`], ['Guides', canonical]]),
   ];
-  const cards = pages
-    .map((p) => `<li><a href="/guides/${p.slug}"><strong>${esc(p.h1)}</strong><span>${esc(p.description)}</span></a></li>`)
-    .join('\n                ');
+  const sections = grouped()
+    .map(([name, list]) => `
+        <section class="ep-related ep-related-hub" aria-labelledby="g-${slugify(name)}">
+            <h2 id="g-${slugify(name)}">${esc(name)}</h2>
+            <ul>${list.map((p) => `<li><a href="/guides/${p.slug}"><strong>${esc(p.h1)}</strong><span>${esc(p.description)}</span></a></li>`).join('')}</ul>
+        </section>`)
+    .join('');
   return `${head({ title: hub.title, description: hub.description, canonical, type: 'website', schema })}
 <body class="ep-page ep-scope">${topbar}
     <main class="ep-doc">
-        <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a></nav>
-        <article class="ep-prose">
+        <header class="ep-doc-head">
+            <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a></nav>
             <h1>${esc(hub.h1)}</h1>
             <p class="ep-doc-lede">${esc(hub.lede)}</p>
-        </article>
-        <section class="ep-related ep-related-hub">
-            <ul>
-                ${cards}
-            </ul>
-        </section>${cta}
+        </header>
+        <div class="ep-doc-main">${sections}${cta}
+        </div>
     </main>${footer()}
     ${CHIP_SYMBOL}
 </body>
@@ -179,11 +229,15 @@ function renderPrivacy() {
   return `${head({ title: privacy.title, description: privacy.description, canonical, type: 'website' })}
 <body class="ep-page ep-scope">${topbar}
     <main class="ep-doc">
-        <article class="ep-prose">
+        <header class="ep-doc-head">
             <h1>${esc(privacy.h1)}</h1>
-            <p class="ep-muted ep-small">Last updated ${UPDATED}</p>
+            <p class="ep-doc-meta">Updated <time datetime="${UPDATED}">${UPDATED}</time></p>
+        </header>
+        <div class="ep-doc-main">
+        <article class="ep-prose">
 ${privacy.body.trim()}
         </article>
+        </div>
     </main>${footer()}
     ${CHIP_SYMBOL}
 </body>
@@ -218,11 +272,15 @@ function renderAbout() {
   return `${head({ title: about.title, description: about.description, canonical, type: 'website', schema })}
 <body class="ep-page ep-scope">${topbar}
     <main class="ep-doc">
-        <article class="ep-prose">
+        <header class="ep-doc-head">
             <h1>${esc(about.h1)}</h1>
-            <p class="ep-muted ep-small">Last updated ${UPDATED}</p>
+            <p class="ep-doc-meta">Updated <time datetime="${UPDATED}">${UPDATED}</time></p>
+        </header>
+        <div class="ep-doc-main">
+        <article class="ep-prose">
 ${about.body.trim()}
         </article>
+        </div>
     </main>${footer()}
     ${CHIP_SYMBOL}
 </body>
