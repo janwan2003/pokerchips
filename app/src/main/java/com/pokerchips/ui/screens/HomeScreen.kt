@@ -25,6 +25,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
+import com.pokerchips.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -58,7 +60,7 @@ fun HomeScreen(
             .padding(horizontal = 20.dp, vertical = 28.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text("♠ PokerChips", color = Accent, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+        Text("♠ " + stringResource(R.string.app_name), color = Accent, fontSize = 32.sp, fontWeight = FontWeight.Bold)
         Text("Chips on everyone's phone.", color = TextSecondary, fontSize = 16.sp)
         Spacer(Modifier.height(10.dp))
 

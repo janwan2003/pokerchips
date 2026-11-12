@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,14 +9,13 @@ plugins {
 
 android {
     namespace = "com.pokerchips"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.pokerchips"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 7
-        versionName = "1.6"
+        targetSdk = 36
+        versionCode = 8
+        versionName = "1.7"
     }
 
     // One fixed key, checked in, so every build from any machine can install over the
@@ -27,6 +28,42 @@ android {
             keyAlias = "pokerchips"
             keyPassword = "pokerchips"
         }
+        // The Play Store upload key. Private: it lives outside the repo, in
+        // ~/.config/easypoker/upload.properties (or $EASYPOKER_UPLOAD_PROPERTIES). Without
+        // it the play release builds unsigned, which Play will not accept.
+        val uploadProps = (System.getenv("EASYPOKER_UPLOAD_PROPERTIES")
+            ?: "${System.getProperty("user.home")}/.config/easypoker/upload.properties").let(::File)
+        if (uploadProps.exists()) {
+            val p = Properties().apply { uploadProps.inputStream().use { load(it) } }
+            create("upload") {
+                storeFile = File(p.getProperty("storeFile"))
+                storePassword = p.getProperty("storePassword")
+                keyAlias = p.getProperty("keyAlias")
+                keyPassword = p.getProperty("keyPassword")
+            }
+        }
+    }
+
+    // legacy: the sideloaded "PokerChips" (com.pokerchips) that existing phones run; same
+    //         checked-in key forever, so it keeps updating in place and keeps its history.
+    // play:   "EasyPoker" (cc.easypoker.app) for Google Play. com.pokerchips is taken there.
+    //         History moves over with Export / Import on the history screen.
+    flavorDimensions += "store"
+    productFlavors {
+        create("legacy") {
+            dimension = "store"
+            applicationId = "com.pokerchips"
+            resValue("string", "app_name", "PokerChips")
+            buildConfigField("boolean", "ASK_BATTERY_EXEMPTION", "true")
+            signingConfig = signingConfigs.getByName("shared")
+        }
+        create("play") {
+            dimension = "store"
+            applicationId = "cc.easypoker.app"
+            resValue("string", "app_name", "EasyPoker")
+            buildConfigField("boolean", "ASK_BATTERY_EXEMPTION", "false")
+            signingConfig = signingConfigs.findByName("upload")
+        }
     }
 
     buildTypes {
@@ -35,7 +72,7 @@ android {
         }
         release {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("shared")
+            // Signed per flavor (see productFlavors).
         }
     }
 
@@ -50,6 +87,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     packaging {

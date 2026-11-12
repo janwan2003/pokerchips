@@ -398,6 +398,12 @@ class GameManager(
     suspend fun history(id: String): List<JournalEntry> = withContext(Dispatchers.IO) { store.readAll(id) }
 
     suspend fun listGames(): List<GameSummary> = withContext(Dispatchers.IO) { store.listGames() }
+
+    /** Every game as one zip, taken under the lock so no action is half-written into it. */
+    suspend fun exportHistory(out: java.io.OutputStream): Int = locked { store.exportTo(out) }
+
+    /** Adds games from an export. The game being played is not touched. */
+    suspend fun importHistory(input: java.io.InputStream): GameStore.ImportResult = locked { store.importFrom(input) }
 }
 
 /** The journal could not be written; the action was undone in memory and did not happen. */

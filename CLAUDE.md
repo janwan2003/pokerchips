@@ -25,17 +25,27 @@ This repo is maintained by AI. The owner uses the app; they do not review diffs.
 Gradle 8.9 cannot run on JDK 25 (fails with just the version string `25.0.x` as the error);
 use JDK 21, e.g. `export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`.
 
+Two flavors (since 1.7): **legacy** = the sideloaded `com.pokerchips` "PokerChips" signed with
+`keystore/` (keeps updating owners' phones in place), and **play** = `cc.easypoker.app`
+"EasyPoker" for Google Play (`com.pokerchips` is taken there), signed with the private upload
+key in `~/.config/easypoker/` (never in git). History moves between them with Export/Import.
+Release steps and Console answers: `store/PLAY_RELEASE.md`.
+
 ```bash
-./gradlew testDebugUnitTest assembleRelease
-cp app/build/outputs/apk/release/app-release.apk release/pokerchips.apk
+./gradlew testLegacyDebugUnitTest assembleLegacyRelease bundlePlayRelease
+cp app/build/outputs/apk/legacy/release/app-legacy-release.apk release/pokerchips.apk
+cp app/build/outputs/bundle/playRelease/app-play-release.aab release/easypoker-play.aab
 ~/android-sdk/build-tools/35.0.0/apksigner verify --print-certs release/pokerchips.apk
 ```
 
-Gradle here cannot run on JDK 25 (it fails with just `What went wrong: 25.0.x`). On the
-owner's machine the default `java` is 25, so prefix every Gradle command with
-`JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64`.
+compileSdk/targetSdk 36 need a JDK **with `jlink`**: the distro `java-21-openjdk` here is
+JRE-only. Use `JAVA_HOME=~/.local/share/mise/installs/java/temurin-21.0.13+9.0.LTS`.
 
-The signer must be `CN=PokerChips`, SHA-256
+Gradle here cannot run on JDK 25 (it fails with just `What went wrong: 25.0.x`). On the
+owner's machine the default `java` is 25, so prefix every Gradle command with the JDK 21
+`JAVA_HOME` above.
+
+The legacy APK's signer must be `CN=PokerChips`, SHA-256
 `78c45875d1d1c5a54c0cf1c00f464c16c3e8ade58414a7af0dd0e6bbd0f3d617`.
 
 In a fresh cloud container there is no Android SDK. What worked on 2026-09-28:

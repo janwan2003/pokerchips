@@ -16,7 +16,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.OutlinedButton
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -70,7 +82,45 @@ fun HistoryScreen(
     onOpenGame: (String) -> Unit
 ) {
     var games by remember { mutableStateOf<List<GameSummary>?>(null) }
-    LaunchedEffect(currentGameId) { games = gameManager.listGames() }
+    var reload by remember { mutableStateOf(0) }
+    LaunchedEffect(currentGameId, reload) { games = gameManager.listGames() }
+
+    // Export / import: how history moves to a new phone or to the Play Store app.
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val toast = { text: String -> Toast.makeText(context, text, Toast.LENGTH_LONG).show() }
+    val exporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            runCatching {
+                context.contentResolver.openOutputStream(uri)!!.use { gameManager.exportHistory(it) }
+            }.fold(
+                onSuccess = { toast("Saved $it games") },
+                onFailure = { toast("Export failed: ${it.message}") }
+            )
+        }
+    }
+    val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            runCatching {
+                context.contentResolver.openInputStream(uri)!!.use { gameManager.importHistory(it) }
+            }.fold(
+                onSuccess = { r ->
+                    reload++
+                    toast(
+                        buildString {
+                            append("Added ${r.added} games")
+                            if (r.alreadyHere > 0) append(", ${r.alreadyHere} already here")
+                            if (r.keptBoth > 0) append(", ${r.keptBoth} kept alongside a different copy")
+                            if (r.skipped > 0) append(", ${r.skipped} unreadable files skipped")
+                        }
+                    )
+                },
+                onFailure = { toast("Import failed: ${it.message}") }
+            )
+        }
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -94,6 +144,38 @@ fun HistoryScreen(
             list.isEmpty() -> item { Text("No games yet.", color = TextSecondary) }
             else -> items(list, key = { it.gameId }) { game ->
                 GameCard(game, isCurrent = game.gameId == currentGameId) { onOpenGame(game.gameId) }
+            }
+        }
+        item {
+            Spacer(Modifier.height(8.dp))
+            Text("Move history", fontWeight = FontWeight.SemiBold)
+            Text(
+                "Save every game to one file, then open it in EasyPoker on another phone or after " +
+                    "installing from the Play Store. Importing only adds games; nothing is overwritten.",
+                color = TextSecondary,
+                fontSize = 13.sp
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedButton(
+                    onClick = {
+                        val stamp = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+                        exporter.launch("easypoker-history-$stamp.zip")
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Download, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Export")
+                }
+                OutlinedButton(
+                    onClick = { importer.launch(arrayOf("application/zip", "application/octet-stream")) },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(Icons.Default.Upload, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Import")
+                }
             }
         }
         item { Spacer(Modifier.height(32.dp)) }
@@ -280,7 +362,7 @@ private fun BalancesTable(players: Map<String, Int>) {
 private fun shareText(gameId: String, entries: List<JournalEntry>): String {
     val last = entries.last()
     return buildString {
-        appendLine("PokerChips game $gameId")
+        appendLine("EasyPoker game $gameId")
         appendLine("Started ${formatDateTime(entries.first().timestamp)}, last action ${formatDateTime(last.timestamp)}")
         appendLine("Blinds ${last.smallBlind}/${last.bigBlind}, pot ${last.pot}")
         appendLine()

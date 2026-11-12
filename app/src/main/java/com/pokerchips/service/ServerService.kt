@@ -162,7 +162,7 @@ class ServerService : Service() {
             this, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
         return Notification.Builder(this, CHANNEL_ID)
-            .setContentTitle("PokerChips")
+            .setContentTitle(getString(com.pokerchips.R.string.app_name))
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentIntent(pendingIntent)

@@ -215,6 +215,7 @@ class MainActivity : ComponentActivity() {
     // Doze and OEM battery savers cut a background app's network even with a wake lock.
     // Asking once per start is cheap; the system dialog does not appear once granted.
     private fun requestBatteryExemption() {
+        if (!BuildConfig.ASK_BATTERY_EXEMPTION) return
         val pm = getSystemService(PowerManager::class.java)
         if (pm.isIgnoringBatteryOptimizations(packageName)) return
         runCatching {

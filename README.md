@@ -4,6 +4,9 @@ Poker chips on phones. One Android phone hosts the game (this app); everyone els
 the QR code and plays in the browser on the same Wi-Fi.
 
 **Install:** download [`release/pokerchips.apk`](release/pokerchips.apk) on the host phone.
+The Google Play version is called **EasyPoker** (`cc.easypoker.app`); see
+[`store/PLAY_RELEASE.md`](store/PLAY_RELEASE.md). Move games between the two with
+History → Export / Import.
 
 ## What it does
 
