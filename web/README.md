@@ -21,6 +21,22 @@ browser from anywhere. No app, no sign-up.
   browser's localStorage; "Copy host link" puts it in a `#host=` fragment so the host
   can move to another device. Players are identified by name only, as in the app.
 
+## Analytics
+
+- **Cloudflare Web Analytics** (dashboard: Analytics > Web analytics > easypoker.cc):
+  visitors, countries, referrers, browsers, page load times. Cookie-free. The zone's
+  automatic injection does not reach Worker responses, so `src/main.js` appends the
+  beacon to every HTML page served on easypoker.cc.
+- **Workers Analytics Engine**, dataset `easypoker_events`: `src/main.js` (the Worker
+  entry, wrapping `src/index.js`) writes one row per page view, table created, join,
+  player action and host action, with table code, player name, country/region/city,
+  referrer, device, network operator and a daily-rotating visitor hash. Column layout is
+  at the top of `src/main.js`. Kept 3 months.
+- `npm run stats [days]` prints the usual reports (visitors per day, where from, referrers,
+  pages, tables, players). It needs `CLOUDFLARE_ACCOUNT_ID` and a `CLOUDFLARE_API_TOKEN`
+  with *Account Analytics: Read* in `web/.env` (gitignored).
+- Live request logs: Workers Observability (`"observability"` in `wrangler.jsonc`).
+
 ## Develop, test, deploy
 
 ```bash

@@ -68,6 +68,10 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
   `web/guides/pages.mjs`, run `npm run guides`; `test/guides.test.js` fails if the output
   is stale. The home page only links to them from a small footer below the fold — keep
   the home page itself focused on hosting/joining. Table pages are `noindex`.
+- Analytics: the Worker entry is `web/src/main.js`, which wraps `src/index.js`, writes
+  Analytics Engine rows (dataset `easypoker_events`) and injects the Cloudflare Web
+  Analytics beacon. Keep `wrangler.jsonc` `main` pointing at it, only append columns, and
+  keep `guides/pages.mjs`'s privacy text in step with what is collected. See `web/README.md`.
 - End-to-end check: `npx wrangler dev`, then drive two Playwright browser contexts
   (host + player) against it.
 
