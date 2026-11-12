@@ -526,3 +526,17 @@ body.has-tabs .conn-status { top: 59px; }
 .ep-player .meta { font-size: 0.8rem; font-weight: 600; color: var(--ep-text-3); font-variant-numeric: tabular-nums; text-align: right; }
 .ep-player .meta.up { color: #5fd394; }
 .ep-player .meta.down { color: #ff8da0; }
+
+/* ---------- Home footer: quiet links to the guides ---------- */
+.ep-sitefoot {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 16px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 0.8rem;
+}
+.ep-sitefoot a { color: var(--ep-text-3); text-decoration: none; }
+.ep-sitefoot a:hover { color: var(--ep-text-2); }
+@media (min-width: 880px) { .ep-sitefoot { padding: 0 32px 28px; } }

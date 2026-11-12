@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Chip App: Track Chips on Every Phone, No Download</title>
+    <meta name="description" content="A free poker chip app that runs in the browser. Track every stack, the pot and the blinds on each player's phone. No download, no sign-up.">
+    <link rel="canonical" href="https://easypoker.cc/guides/poker-chip-app">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="EasyPoker">
+    <meta property="og:title" content="Poker Chip App: Track Chips on Every Phone, No Download">
+    <meta property="og:description" content="A free poker chip app that runs in the browser. Track every stack, the pot and the blinds on each player's phone. No download, no sign-up.">
+    <meta property="og:url" content="https://easypoker.cc/guides/poker-chip-app">
+    <meta property="og:image" content="https://easypoker.cc/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#11121d">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400..700&display=swap">
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/guides.css">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"A poker chip app that runs in the browser","description":"A free poker chip app that runs in the browser. Track every stack, the pot and the blinds on each player's phone. No download, no sign-up.","image":"https://easypoker.cc/og.png","dateModified":"2026-11-12","mainEntityOfPage":"https://easypoker.cc/guides/poker-chip-app","author":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"},"publisher":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"EasyPoker","item":"https://easypoker.cc/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://easypoker.cc/guides/"},{"@type":"ListItem","position":3,"name":"A poker chip app that runs in the browser","item":"https://easypoker.cc/guides/poker-chip-app"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there a poker chip app for both iPhone and Android?","acceptedAnswer":{"@type":"Answer","text":"EasyPoker runs in any modern phone browser, so iPhone and Android players can sit at the same table. Nothing needs to be installed."}},{"@type":"Question","name":"Does the poker chip app work without internet?","acceptedAnswer":{"@type":"Answer","text":"The browser version needs a connection, because the stacks sync through the server. Mobile data is enough; each action is a tiny message."}},{"@type":"Question","name":"Can I track buy-ins and re-buys?","acceptedAnswer":{"@type":"Answer","text":"Yes. The host can allow buy-ins of a fixed amount when creating the table, and can also set any player's stack directly."}},{"@type":"Question","name":"Does it deal cards?","acceptedAnswer":{"@type":"Answer","text":"No. It is a chip app: deal a normal deck at the table."}},{"@type":"Question","name":"Is it really free?","acceptedAnswer":{"@type":"Answer","text":"Yes, with no account and no ads in the game."}}]}</script>
+</head>
+<body class="ep-page ep-scope">
+    <header class="ep-doc-top">
+        <a class="ep-brand" href="/"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker</a>
+        <a class="ep-btn ep-btn-red ep-doc-top-cta" href="/">Start a free table</a>
+    </header>
+    <main class="ep-doc">
+        <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a></nav>
+        <article class="ep-prose">
+            <h1>A poker chip app that runs in the browser</h1>
+            <p class="ep-doc-lede">Most poker chip apps make every player download something. EasyPoker runs in the browser: the host opens a table, everyone else scans a QR code, and the chips live on each player's own phone.</p>
+<h2>What a good poker chip app needs to do</h2>
+<p>A poker chip app (sometimes called a poker chip tracker) replaces the chip set in a live game. After many home games, this is the list that matters:</p>
+<ul class="ep-checks">
+  <li><strong>One stack per phone.</strong> Each player controls their own chips. A single shared tablet that everyone has to reach for is slower than real chips.</li>
+  <li><strong>A pot everyone can see.</strong> Bets show up on every screen at once, so nobody asks "what's the pot?"</li>
+  <li><strong>Blinds built in.</strong> The current small and big blind are always visible, and the host can raise them between levels.</li>
+  <li><strong>Mistakes are fixable.</strong> Someone will tap the wrong amount. The host needs to correct a stack or undo the last few moves without restarting.</li>
+  <li><strong>Nothing gets lost.</strong> A dead battery, a closed tab or a dropped Wi-Fi connection must not wipe anyone's chips.</li>
+  <li><strong>Zero setup for guests.</strong> If joining takes more than a minute, people go back to counting coins.</li>
+</ul>
+
+<h2>How EasyPoker covers each one</h2>
+<div class="ep-table-wrap"><table>
+  <thead><tr><th>Need</th><th>EasyPoker</th></tr></thead>
+  <tbody>
+    <tr><td>One stack per phone</td><td>Every player joins from their own phone browser</td></tr>
+    <tr><td>Shared pot</td><td>Live on every screen; updates the moment anyone bets</td></tr>
+    <tr><td>Blinds</td><td>Set at table creation, changeable by the host any time</td></tr>
+    <tr><td>Fixing mistakes</td><td>Host can set any stack or the pot, or restore any earlier moment</td></tr>
+    <tr><td>Not losing chips</td><td>Every action is saved on the server; rejoin with the same name</td></tr>
+    <tr><td>Fast joining</td><td>QR code or link, then type a name</td></tr>
+    <tr><td>Buy-ins</td><td>Optional: the host can allow re-buys of a set amount</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Poker chip app, tracker or counter: what's the difference?</h2>
+<p>People search for all three, and they usually mean slightly different things:</p>
+<ul>
+  <li><strong>Poker chip app</strong>: replaces chips completely. Every player bets on a phone. This is what EasyPoker is.</li>
+  <li><strong>Poker chip tracker</strong>: one person records stacks or buy-ins while the group still uses physical chips. Useful for cash games, but someone has to keep typing.</li>
+  <li><strong>Poker chip counter</strong>: works out what a pile of chips is worth, or how to split a chip set between players. Our <a href="/guides/poker-chip-calculator">poker chip calculator</a> does both, if you are sticking with physical chips.</li>
+</ul>
+
+<h2>Why a browser app instead of an app store download?</h2>
+<p>At a home game, the slowest part of any app is getting everyone to install it. Somebody is on iPhone, somebody is on Android, somebody's storage is full, somebody does not want another account. A browser table avoids all of that: one link, and every phone is in.</p>
+<p>The host also does not need to stay on one device. The host link can be copied to a laptop or another phone, which helps if the host's own battery is running low.</p>
+
+<h2>Set up a game in about a minute</h2>
+<ol>
+  <li>Open <a href="/">EasyPoker</a>, type your name, choose starting chips and blinds, and tap <em>Create table</em>.</li>
+  <li>Put your phone in the middle of the table with the QR code showing.</li>
+  <li>Everyone scans, types a name, and sees their starting stack.</li>
+  <li>Deal.</li>
+</ol>
+        </article>
+        <aside class="ep-cta">
+            <p class="ep-cta-title">Play tonight without a chip set</p>
+            <p>Host a table in your browser, share the link, and everyone bets from their own phone. Free, no app, no sign-up.</p>
+            <a class="ep-btn ep-btn-red ep-btn-lg" href="/">Start a free table</a>
+        </aside>
+        <section class="ep-faq" aria-labelledby="faq-title">
+            <h2 id="faq-title">Frequently asked questions</h2>
+            <details><summary>Is there a poker chip app for both iPhone and Android?</summary><p>EasyPoker runs in any modern phone browser, so iPhone and Android players can sit at the same table. Nothing needs to be installed.</p></details>
+            <details><summary>Does the poker chip app work without internet?</summary><p>The browser version needs a connection, because the stacks sync through the server. Mobile data is enough; each action is a tiny message.</p></details>
+            <details><summary>Can I track buy-ins and re-buys?</summary><p>Yes. The host can allow buy-ins of a fixed amount when creating the table, and can also set any player's stack directly.</p></details>
+            <details><summary>Does it deal cards?</summary><p>No. It is a chip app: deal a normal deck at the table.</p></details>
+            <details><summary>Is it really free?</summary><p>Yes, with no account and no ads in the game.</p></details>
+        </section>
+        <section class="ep-related" aria-labelledby="related-title">
+            <h2 id="related-title">Related guides</h2>
+            <ul><li><a href="/guides/virtual-poker-chips"><strong>Virtual poker chips for your home game</strong><span>Use virtual poker chips on your phones instead of a chip set. Free, no app or sign-up: host a table in the browser and everyone bets from their own phone.</span></a></li><li><a href="/guides/poker-chip-calculator"><strong>Poker chip calculator</strong><span>Free poker chip calculator: work out chip values and how many chips of each colour to give every player, or count what a stack is worth.</span></a></li><li><a href="/guides/home-poker-blind-structure"><strong>Home poker blind structure</strong><span>A simple blind structure for home poker games: blind levels, how long each level should last, and starting stacks for cash games and tournaments.</span></a></li></ul>
+        </section>
+    </main>
+    <footer class="ep-doc-foot">
+        <nav aria-label="Guides"><ul><li><a href="/guides/virtual-poker-chips">Virtual poker chips for your home game</a></li><li><a href="/guides/poker-chip-app">A poker chip app that runs in the browser</a></li><li><a href="/guides/poker-chip-calculator">Poker chip calculator</a></li><li><a href="/guides/poker-without-chips">How to play poker without chips</a></li><li><a href="/guides/online-poker-chips">Online poker chips for playing with friends</a></li><li><a href="/guides/home-poker-blind-structure">Home poker blind structure</a></li><li><a href="/guides/">All guides</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
+        <p>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
+    </footer>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="chip" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e94560"/><circle cx="24" cy="24" r="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="7.5 9.77" transform="rotate(-12 24 24)"/><circle cx="24" cy="24" r="14" fill="#c7364f"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 2.4"/><path d="M24 15.5c-3.2 3.3-7 5.4-7 9 0 2.2 1.7 3.8 3.8 3.8 1 0 2-.4 2.6-1.1-.3 1.6-1 3-2.2 4h5.6c-1.2-1-1.9-2.4-2.2-4 .7.7 1.6 1.1 2.6 1.1 2.1 0 3.8-1.6 3.8-3.8 0-3.6-3.8-5.7-7-9z" fill="#fff"/></symbol>
+    </svg>
+</body>
+</html>

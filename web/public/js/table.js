@@ -411,7 +411,10 @@
         qrDrawn = true;
     }
 
+    // Inside the PokerChips app, share and copy go through the app (see WebGameScreen.kt).
+    const app = window.PokerChipsApp;
     async function copy(text, done) {
+        if (app) { app.copy(text); hostToast(done); return; }
         try {
             await navigator.clipboard.writeText(text);
             hostToast(done);
@@ -420,7 +423,9 @@
         }
     }
     $('#copy-btn').addEventListener('click', () => copy(JOIN_URL, 'Link copied'));
-    if (navigator.share) {
+    if (app) {
+        $('#share-btn').addEventListener('click', () => app.share('Join my poker table: ' + JOIN_URL));
+    } else if (navigator.share) {
         $('#share-btn').addEventListener('click', async () => {
             try { await navigator.share({ title: 'EasyPoker table ' + CODE, text: 'Join my poker table', url: JOIN_URL }); } catch (_) {}
         });
@@ -715,6 +720,8 @@
 
     // ===================== START =====================
     (async function start() {
+        // Handlers are attached by now; tests wait for this before tapping Join.
+        document.documentElement.dataset.ready = '1';
         let res;
         try { res = await request('/state'); } catch (_) { showJoin('Connection error — check your internet and reload.'); return; }
         if (res.status === 404) {

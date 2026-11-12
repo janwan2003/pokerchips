@@ -21,6 +21,24 @@ const json = (body, status = 200) =>
     headers: { 'content-type': 'application/json', 'cache-control': 'no-store' },
   });
 
+// Lets the PokerChips Android app open easypoker.cc table links (Android App Links).
+// The fingerprint is the app's signing key (keystore/, CN=PokerChips), which never changes.
+const ASSET_LINKS = [{
+  relation: ['delegate_permission/common.handle_all_urls'],
+  target: {
+    namespace: 'android_app',
+    package_name: 'com.pokerchips',
+    sha256_cert_fingerprints: ['78:C4:58:75:D1:D1:C5:A5:4C:0C:F1:C0:0F:46:4C:16:C3:E8:AD:E5:84:14:A7:AF:0D:D0:E6:BB:D0:F3:D6:17'],
+  },
+}];
+
+// Table pages are per-game and mostly "no such table": keep them out of search results.
+function noindex(res) {
+  const out = new Response(res.body, res);
+  out.headers.set('x-robots-tag', 'noindex, nofollow');
+  return out;
+}
+
 function roomStub(env, code) {
   return env.ROOMS.get(env.ROOMS.idFromName(code));
 }
@@ -55,10 +73,18 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    if (url.hostname.startsWith('www.')) {
-      url.hostname = url.hostname.slice(4);
+    // One canonical origin: https, no www. The visitor's scheme comes from Cloudflare's
+    // headers: `wrangler dev` rewrites the URL to http://easypoker.cc and sets neither.
+    const isProd = url.hostname === 'easypoker.cc' || url.hostname === 'www.easypoker.cc';
+    const plainHttp = (request.headers.get('cf-visitor') || '').includes('"http"')
+      || request.headers.get('x-forwarded-proto') === 'http';
+    if (url.hostname.startsWith('www.') || (isProd && plainHttp)) {
+      url.hostname = url.hostname.replace(/^www\./, '');
+      if (isProd) url.protocol = 'https:';
       return Response.redirect(url.toString(), 301);
     }
+
+    if (path === '/.well-known/assetlinks.json') return json(ASSET_LINKS);
 
     if (path === '/api/tables') {
       if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
@@ -77,9 +103,16 @@ export default {
       const code = m[1].toUpperCase();
       if (!CODE_RE.test(code)) return env.ASSETS.fetch(request);
       if (path !== `/${code}`) return Response.redirect(new URL(`/${code}`, url).toString(), 302);
-      return env.ASSETS.fetch(new Request(new URL('/table', url), request));
+      return noindex(await env.ASSETS.fetch(new Request(new URL('/table', url), request)));
     }
 
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    if (path === '/table' || path === '/table.html') return noindex(res);
+    if (isProd && res.status === 200 && (res.headers.get('content-type') || '').startsWith('text/html')) {
+      const out = new Response(res.body, res);
+      out.headers.set('strict-transport-security', 'max-age=31536000');
+      return out;
+    }
+    return res;
   },
 };
