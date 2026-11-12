@@ -231,6 +231,7 @@
         if (blindsChanged || !$('#chip-amount').value) $('#chip-amount').value = bigBlind;
 
         renderHost();
+        renderBuyIn();
 
         // The host may have started a new game from a typed-in state, or removed us.
         const me = playerName && s.players[playerName];
@@ -332,6 +333,33 @@
         if (await call('/pot/take-all', { name: playerName }) && navigator.vibrate) navigator.vibrate([30, 60, 30]);
     });
 
+    // Buy-in: not part of the app's markup, so it is added here with the app's button classes.
+    const buyInBtn = document.createElement('button');
+    buyInBtn.id = 'buyin-btn';
+    buyInBtn.className = 'btn btn-success hidden';
+    buyInBtn.style.width = '100%';
+    $('#take-all-btn').after(buyInBtn);
+    let buyInArmed = null;
+    function renderBuyIn() {
+        if (!state) return;
+        buyInBtn.classList.toggle('hidden', !state.allowBuyIn);
+        if (!buyInArmed) buyInBtn.textContent = 'Buy in (+' + (state.buyInAmount || 0).toLocaleString() + ')';
+    }
+    function disarmBuyIn() {
+        clearTimeout(buyInArmed);
+        buyInArmed = null;
+        renderBuyIn();
+    }
+    buyInBtn.addEventListener('click', async () => {
+        if (!buyInArmed) {
+            buyInBtn.textContent = 'Tap again to buy in for ' + (state.buyInAmount || 0).toLocaleString();
+            buyInArmed = setTimeout(disarmBuyIn, 3500);
+            return;
+        }
+        disarmBuyIn();
+        if (await call('/buy-in', { name: playerName }) && navigator.vibrate) navigator.vibrate([30, 60, 30]);
+    });
+
     let toastTimeout = null;
     function showToast(msg) {
         const el = $('#toast');
@@ -361,16 +389,27 @@
     $('#host-code').textContent = CODE;
     $('#invite-link').textContent = JOIN_URL.replace(/^https?:\/\//, '');
 
+    // The QR library is only for the host, so players never wait on a third-party download.
     let qrDrawn = false;
+    let qrLoading = false;
     function drawQr() {
-        if (qrDrawn || typeof window.qrcode !== 'function') return;
+        if (qrDrawn) return;
+        if (typeof window.qrcode !== 'function') {
+            if (qrLoading) return;
+            qrLoading = true;
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+            s.onload = () => { qrLoading = false; drawQr(); };
+            s.onerror = () => { qrLoading = false; };
+            document.head.appendChild(s);
+            return;
+        }
         const qr = window.qrcode(0, 'M');
         qr.addData(JOIN_URL);
         qr.make();
         $('#qr').innerHTML = qr.createSvgTag({ cellSize: 5, margin: 1, scalable: true });
         qrDrawn = true;
     }
-    window.addEventListener('load', () => { if (tab === 'host') drawQr(); });
 
     async function copy(text, done) {
         try {
@@ -447,7 +486,13 @@
             const chips = document.createElement('span');
             chips.className = 'chips';
             chips.textContent = fmt(p.chips);
-            b.append(name, chips);
+            const net = p.chips - (p.invested ?? state.startingChips);
+            const meta = document.createElement('span');
+            meta.className = 'meta' + (net > 0 ? ' up' : net < 0 ? ' down' : '');
+            meta.textContent = (net > 0 ? '+' : net < 0 ? '−' : '±') + fmt(Math.abs(net)) +
+                (p.buyIns ? ' · ' + p.buyIns + (p.buyIns === 1 ? ' buy-in' : ' buy-ins') : '');
+            meta.title = 'Up or down against everything put in (starting chips plus buy-ins)';
+            b.append(name, meta, chips);
             b.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-edit"/></svg>');
             b.setAttribute('aria-label', 'Edit ' + p.name + ', ' + fmt(p.chips) + ' chips');
             b.addEventListener('click', () => openSheet(p));
@@ -466,6 +511,13 @@
             $('#bb-input').value = state.bigBlind;
         }
         if (!editing($('#pot-input'))) $('#pot-input').value = state.pot;
+        $('#host-allow-buyin').checked = !!state.allowBuyIn;
+        $('#host-buyin-state').textContent = state.allowBuyIn ? 'On' : 'Off';
+        if (!editing($('#host-buyin-amount'))) $('#host-buyin-amount').value = state.buyInAmount;
+        if (sheetPlayer && state.players[sheetPlayer]) {
+            renderSheet(state.players[sheetPlayer]);
+            if (!editing($('#sheet-chips'))) $('#sheet-chips').value = state.players[sheetPlayer].chips;
+        }
         if (!editing($('#start-input'))) $('#start-input').value = state.startingChips;
     }
 
@@ -479,7 +531,17 @@
     $('#start-btn').addEventListener('click', (e) => busy(e.currentTarget, async () => {
         if (await hostCall('starting-chips', { amount: num('#start-input') })) hostToast('Starting chips updated');
     }));
-    for (const [input, btn] of [['#pot-input', '#pot-btn'], ['#start-input', '#start-btn'], ['#bb-input', '#blinds-btn'], ['#sb-input', '#blinds-btn']]) {
+    const setBuyIn = (btn) => busy(btn, async () => {
+        const allow = $('#host-allow-buyin').checked;
+        if (await hostCall('buy-in-settings', { allow: allow, amount: num('#host-buyin-amount') })) {
+            hostToast(allow ? 'Buy-ins on: ' + fmt(num('#host-buyin-amount')) : 'Buy-ins off');
+        } else if (state) {
+            $('#host-allow-buyin').checked = !!state.allowBuyIn;
+        }
+    });
+    $('#host-allow-buyin').addEventListener('change', () => setBuyIn($('#host-buyin-btn')));
+    $('#host-buyin-btn').addEventListener('click', (e) => setBuyIn(e.currentTarget));
+    for (const [input, btn] of [['#host-buyin-amount', '#host-buyin-btn'], ['#pot-input', '#pot-btn'], ['#start-input', '#start-btn'], ['#bb-input', '#blinds-btn'], ['#sb-input', '#blinds-btn']]) {
         $(input).addEventListener('keydown', (e) => { if (e.key === 'Enter') $(btn).click(); });
     }
 
@@ -511,9 +573,17 @@
 
     // Player sheet
     let sheetPlayer = null;
+    function renderSheet(player) {
+        const put = player.invested ?? state.startingChips;
+        const net = player.chips - put;
+        $('#sheet-buyin').textContent = 'Give a buy-in (+' + fmt(state.buyInAmount) + ')';
+        $('#sheet-stats').textContent = (player.buyIns || 0) + (player.buyIns === 1 ? ' buy-in' : ' buy-ins') +
+            ' · put in ' + fmt(put) + ' · ' + (net >= 0 ? 'up ' : 'down ') + fmt(Math.abs(net));
+    }
     function openSheet(player) {
         sheetPlayer = player.name;
         $('#sheet-title').textContent = player.name;
+        renderSheet(player);
         $('#sheet-chips').value = player.chips;
         $('#sheet').classList.remove('hidden');
         $('#sheet-chips').focus();
@@ -527,6 +597,13 @@
         if (await hostCall('player-chips', { name: sheetPlayer, chips: num('#sheet-chips') })) closeSheet();
     });
     $('#sheet-save').addEventListener('click', saveSheet);
+    $('#sheet-buyin').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+        if (await hostCall('buy-in', { name: sheetPlayer })) {
+            hostToast(sheetPlayer + ' bought in');
+            const p = state && state.players[sheetPlayer];
+            if (p) $('#sheet-chips').value = p.chips;
+        }
+    }));
     $('#sheet-chips').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveSheet(); });
     twoTap($('#sheet-remove'), 'Tap again', async () => {
         if (await hostCall('remove', { name: sheetPlayer })) closeSheet();
@@ -652,7 +729,9 @@
             } catch (_) {}
         }
         document.title = 'EasyPoker · ' + CODE;
-        try { updateUI(await res.json()); } catch (_) {}
+        // Only paint this first state if nobody joined meanwhile: it predates the join,
+        // so it would say we are not in the game. The socket brings the fresh one.
+        try { const first = await res.json(); if (!joined) updateUI(first); } catch (_) {}
 
         if (hostKey) {
             document.body.classList.add('has-tabs');

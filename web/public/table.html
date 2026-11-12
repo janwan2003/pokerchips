@@ -89,6 +89,17 @@
                     </div>
 
                     <div class="ep-setting">
+                        <span class="ep-setting-label">Buy-ins <span class="ep-hint">players can add chips to their stack</span></span>
+                        <div class="ep-buyin-row">
+                            <label class="ep-switch"><input type="checkbox" id="host-allow-buyin"><span class="ep-switch-ui" aria-hidden="true"></span><span id="host-buyin-state">Off</span></label>
+                            <span class="ep-inline-2">
+                                <input type="number" id="host-buyin-amount" class="ep-input" inputmode="numeric" min="1" aria-label="Buy-in amount">
+                                <button id="host-buyin-btn" class="ep-btn ep-btn-quiet" type="button">Set</button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ep-setting">
                         <label class="ep-field">
                             <span class="ep-setting-label">Starting chips <span class="ep-hint">for new players and new games</span></span>
                             <span class="ep-inline-2">
@@ -127,6 +138,8 @@
             <label class="ep-field"><span class="ep-field-label">Chips</span>
                 <input type="number" id="sheet-chips" class="ep-input ep-input-lg" inputmode="numeric" min="0">
             </label>
+            <button id="sheet-buyin" class="ep-btn ep-btn-gold"></button>
+            <p id="sheet-stats" class="ep-hint ep-num"></p>
             <div class="ep-btn-pair">
                 <button id="sheet-save" class="ep-btn ep-btn-green">Save</button>
                 <button id="sheet-remove" class="ep-btn ep-btn-quiet">Remove</button>
@@ -202,7 +215,6 @@
         <symbol id="i-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></g></symbol>
     </svg>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
     <script src="/js/table.js" defer></script>
 </body>
 </html>

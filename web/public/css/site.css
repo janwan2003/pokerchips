@@ -504,3 +504,25 @@ body.has-tabs .conn-status { top: 59px; }
 @media (prefers-reduced-motion: reduce) {
     .ep-scope *, .ep-scope, .ep-sheet-body, .ep-toast { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Switch & buy-ins ---------- */
+.ep-switch { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; font-weight: 600; cursor: pointer; -webkit-user-select: none; user-select: none; }
+.ep-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ep-switch-ui {
+    position: relative; flex: none; width: 46px; height: 28px; border-radius: 999px;
+    background: var(--ep-surface-3); transition: background-color 0.2s;
+}
+.ep-switch-ui::after {
+    content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ep-text); transition: transform 0.25s var(--ep-ease);
+}
+.ep-switch input:checked + .ep-switch-ui { background: var(--ep-green); }
+.ep-switch input:checked + .ep-switch-ui::after { transform: translateX(18px); }
+.ep-switch input:focus-visible + .ep-switch-ui { outline: 2px solid var(--ep-gold); outline-offset: 2px; }
+.ep-buyin-row { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: end; }
+.ep-buyin-row .ep-input:disabled { opacity: 0.45; }
+.ep-buyin-amount { min-width: 0; }
+.ep-player { grid-template-columns: 1fr auto auto 18px; }
+.ep-player .meta { font-size: 0.8rem; font-weight: 600; color: var(--ep-text-3); font-variant-numeric: tabular-nums; text-align: right; }
+.ep-player .meta.up { color: #5fd394; }
+.ep-player .meta.down { color: #ff8da0; }

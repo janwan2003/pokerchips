@@ -41,6 +41,8 @@ async function createTable(request, env) {
         startingChips: settings.startingChips,
         smallBlind: settings.smallBlind,
         bigBlind: settings.bigBlind,
+        allowBuyIn: settings.allowBuyIn,
+        buyInAmount: settings.buyInAmount,
       }),
     });
     if (res.status !== 409) return res;

@@ -8,7 +8,7 @@ import {
 function table(overrides = {}) {
   return {
     gameId: 'g', createdAt: 0, seq: 0, players: [], pot: 0,
-    startingChips: 1000, smallBlind: 10, bigBlind: 20, ...overrides,
+    startingChips: 1000, smallBlind: 10, bigBlind: 20, allowBuyIn: false, buyInAmount: 1000, ...overrides,
   };
 }
 
@@ -43,7 +43,7 @@ test('bet moves chips into the pot; take and take-all move them back', () => {
   const all = P.takeAll(g, { name: 'Ana' });
   assert.deepEqual(all.result, { taken: 120 });
   assert.equal(g.pot, 0);
-  assert.deepEqual(g.players, [{ name: 'Ana', chips: 1020 }, { name: 'Bo', chips: 980 }]);
+  assert.deepEqual(g.players.map((p) => [p.name, p.chips]), [['Ana', 1020], ['Bo', 980]]);
 });
 
 test('chip actions reject bad amounts and unknown players without changing anything', () => {
@@ -81,9 +81,11 @@ test('host corrections record what changed and skip no-ops', () => {
 });
 
 test('settings default like the app and are validated', () => {
-  assert.deepEqual(validateSettings({}), { startingChips: 1000, smallBlind: 10, bigBlind: 20 });
-  assert.deepEqual(validateSettings({ startingChips: '5000', smallBlind: 50, bigBlind: 100 }),
-    { startingChips: 5000, smallBlind: 50, bigBlind: 100 });
+  assert.deepEqual(validateSettings({}),
+    { startingChips: 1000, smallBlind: 10, bigBlind: 20, allowBuyIn: false, buyInAmount: 1000 });
+  assert.deepEqual(validateSettings({ startingChips: '5000', smallBlind: 50, bigBlind: 100, allowBuyIn: true }),
+    { startingChips: 5000, smallBlind: 50, bigBlind: 100, allowBuyIn: true, buyInAmount: 5000 });
+  rejects(() => validateSettings({ buyInAmount: 0 }), 'Buy-in must be positive');
   rejects(() => validateSettings({ smallBlind: 30, bigBlind: 20 }), 'Small blind cannot exceed big blind');
 });
 
@@ -95,11 +97,34 @@ test('a snapshot round-trips and the public state has the app\'s shape', () => {
   applySnapshot(copy, JSON.parse(JSON.stringify(snapshotOf(g))));
   assert.deepEqual(snapshotOf(copy), snapshotOf(g));
   const s = publicState(g, 'ABCDEF', []);
-  assert.deepEqual(s.players, { Ana: { name: 'Ana', chips: 990 } });
+  assert.deepEqual(s.players, { Ana: { name: 'Ana', chips: 990, invested: 1000, buyIns: 0 } });
   assert.equal(s.pot, 10);
   assert.equal(s.code, 'ABCDEF');
 });
 
 test('game ids sort by time', () => {
   assert.match(newGameId(Date.UTC(2026, 10, 12, 9, 5, 3), () => 0), /^20261112-090503-1000$/);
+});
+
+test('buy-ins: players only when allowed, host always; counted as money put in', () => {
+  const g = table({ allowBuyIn: false, buyInAmount: 500 });
+  P.join(g, { name: 'Ana' });
+  rejects(() => P.buyIn(g, { name: 'Ana' }), 'Buy-ins are off at this table');
+  assert.equal(H.buyIn(g, { name: 'ana' }).message, 'Host gave Ana a buy-in of 500');
+  assert.equal(H.setBuyIn(g, { allow: true, amount: 300 }).message, 'Buy-ins on: 300 each');
+  assert.equal(H.setBuyIn(g, { allow: true, amount: 300 }).message, undefined);
+  assert.equal(P.buyIn(g, { name: 'Ana' }).message, 'Ana bought in for 300');
+  assert.deepEqual(g.players[0], { name: 'Ana', chips: 1800, invested: 1800, buyIns: 2 });
+  assert.equal(H.setBuyIn(g, { allow: false }).message, 'Buy-ins off');
+  const s = publicState(g, 'ABCDEF', []);
+  assert.equal(s.allowBuyIn, false);
+  assert.equal(s.players.Ana.invested, 1800);
+});
+
+test('journal entries written before buy-ins existed still load', () => {
+  const g = table();
+  applySnapshot(g, { players: [{ name: 'Ana', chips: 700 }], pot: 300, startingChips: 1000, smallBlind: 10, bigBlind: 20 });
+  assert.deepEqual(g.players, [{ name: 'Ana', chips: 700, invested: 1000, buyIns: 0 }]);
+  assert.equal(g.allowBuyIn, false);
+  assert.equal(g.buyInAmount, 1000);
 });

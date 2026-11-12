@@ -139,7 +139,7 @@ export class Room extends DurableObject {
       if (path === '/ws') return this.acceptSocket(request);
       if (path === '/state' && request.method === 'GET') return json(this.state());
 
-      if (request.method === 'POST' && path.startsWith('/pot/') || path === '/join') {
+      if (path.startsWith('/pot/') || path === '/join' || path === '/buy-in') {
         if (request.method !== 'POST') return error('Method not allowed', 405);
         const body = await readJson(request);
         const rule = {
@@ -147,6 +147,7 @@ export class Room extends DurableObject {
           '/pot/add': playerActions.bet,
           '/pot/take': playerActions.take,
           '/pot/take-all': playerActions.takeAll,
+          '/buy-in': playerActions.buyIn,
         }[path];
         if (!rule) return error('Not found', 404);
         return json(this.apply(rule, body));
@@ -178,7 +179,8 @@ export class Room extends DurableObject {
       this.setMeta('hostKey', hostKey);
       this.setMeta('createdAt', String(Date.now()));
       this.beginGame([], 0, settings);
-      this.record(`New table: ${settings.startingChips} chips each, blinds ${settings.smallBlind}/${settings.bigBlind}`);
+      this.record(`New table: ${settings.startingChips} chips each, blinds ${settings.smallBlind}/${settings.bigBlind}` +
+        (settings.allowBuyIn ? `, buy-ins ${settings.buyInAmount}` : ''));
     });
     return json({ code, hostKey }, 201);
   }
@@ -211,6 +213,8 @@ export class Room extends DurableObject {
       remove: hostActions.remove,
       blinds: hostActions.setBlinds,
       'starting-chips': hostActions.setStartingChips,
+      'buy-in': hostActions.buyIn,
+      'buy-in-settings': hostActions.setBuyIn,
     }[action];
     if (rule) return json(this.apply(rule, body));
 
@@ -218,8 +222,9 @@ export class Room extends DurableObject {
       // A fresh game with the same players on starting chips. The old one stays in history.
       const g = this.game;
       const names = g.players.map((p) => p.name);
-      this.beginGame(names.map((name) => ({ name, chips: g.startingChips })), 0, {
+      this.beginGame(names.map((name) => ({ name, chips: g.startingChips, invested: g.startingChips, buyIns: 0 })), 0, {
         startingChips: g.startingChips, smallBlind: g.smallBlind, bigBlind: g.bigBlind,
+        allowBuyIn: g.allowBuyIn, buyInAmount: g.buyInAmount,
       });
       this.record(names.length ? `New game: ${names.length} players on ${g.startingChips}` : 'New game');
       this.broadcast();

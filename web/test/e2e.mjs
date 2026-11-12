@@ -75,6 +75,21 @@ await entry.click();
 await player.waitForFunction(() => document.querySelector('#pot-amount').textContent === '50', null, { timeout: 5000 });
 check((await player.textContent('#my-chips')).startsWith('450'), 'restore rewound Bo to 450 and pot 50');
 
+// Buy-ins: off by default, host turns them on, player buys in, host sees the net
+check(await player.isHidden('#buyin-btn'), 'no buy-in button while buy-ins are off');
+await host.click('#tab-host');
+await host.fill('#host-buyin-amount', '200');
+await host.click('.ep-switch:has(#host-allow-buyin)');
+await player.waitForSelector('#buyin-btn:not(.hidden)', { timeout: 5000 });
+check((await player.textContent('#buyin-btn')).includes('200'), 'player sees Buy in (+200)');
+await player.click('#buyin-btn');
+await player.click('#buyin-btn');
+await player.waitForFunction(() => document.querySelector('#my-chips').textContent.startsWith('650'), null, { timeout: 5000 });
+check(true, 'player bought in: 450 + 200 = 650');
+await host.waitForSelector('.ep-player:has-text("Bo") .meta:has-text("1 buy-in")', { timeout: 5000 });
+check((await host.textContent('.ep-player:has-text("Bo") .meta')).startsWith('−50'), 'host sees Bo down 50 with 1 buy-in');
+await host.screenshot({ path: out('7-host-buyin'), fullPage: true });
+
 // Unknown table
 const p3 = await playerCtx.newPage();
 await p3.goto(B + '/ZZZZZZ');

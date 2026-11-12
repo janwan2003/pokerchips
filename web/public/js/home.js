@@ -30,6 +30,8 @@
         if (!name) { $('#host-name').focus(); toast('Enter your name'); return; }
         const [smallBlind, bigBlind] = blinds.value.split('/').map(Number);
         const startingChips = parseInt($('#starting-chips').value, 10);
+        const allowBuyIn = $('#allow-buyin').checked;
+        const buyInAmount = parseInt($('#buyin-amount').value, 10) || startingChips;
         const btn = $('#create-btn');
         btn.disabled = true;
         btn.textContent = 'Creating…';
@@ -37,7 +39,7 @@
             const res = await fetch('/api/tables', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ startingChips, smallBlind, bigBlind })
+                body: JSON.stringify({ startingChips, smallBlind, bigBlind, allowBuyIn, buyInAmount })
             });
             const data = await res.json();
             if (!res.ok) { toast(data.error || 'Could not create the table'); return; }
@@ -54,6 +56,15 @@
             btn.textContent = 'Create table';
         }
     });
+
+    // Buy-in amount follows the starting chips until the host types their own.
+    const syncBuyIn = () => { $('#buyin-amount').placeholder = $('#starting-chips').value || '1000'; };
+    $('#starting-chips').addEventListener('input', syncBuyIn);
+    $('#allow-buyin').addEventListener('change', () => {
+        $('#buyin-amount').disabled = !$('#allow-buyin').checked;
+        if ($('#allow-buyin').checked) $('#buyin-amount').focus();
+    });
+    syncBuyIn();
 
     function joinCode() {
         const code = $('#join-code').value.trim().toUpperCase();

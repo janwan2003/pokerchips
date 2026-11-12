@@ -66,12 +66,20 @@ function requirePlayer(game, name) {
 }
 
 /** Checks table settings for a new table; returns them cleaned. */
-export function validateSettings({ startingChips, smallBlind, bigBlind } = {}) {
+export function validateSettings({ startingChips, smallBlind, bigBlind, allowBuyIn, buyInAmount } = {}) {
   const chips = positive(startingChips ?? DEFAULT_STARTING_CHIPS, 'Starting chips');
   const small = positive(smallBlind ?? DEFAULT_SMALL_BLIND, 'Small blind');
   const big = positive(bigBlind ?? DEFAULT_BIG_BLIND, 'Big blind');
   if (small > big) fail('Small blind cannot exceed big blind');
-  return { startingChips: chips, smallBlind: small, bigBlind: big };
+  const buyIn = positive(buyInAmount ?? chips, 'Buy-in');
+  return { startingChips: chips, smallBlind: small, bigBlind: big, allowBuyIn: allowBuyIn === true, buyInAmount: buyIn };
+}
+
+/** Gives a player one buy-in: chips on top of their stack, counted as money put in. */
+function addBuyIn(game, player) {
+  player.chips = sum(player.chips, game.buyInAmount, 'Chips');
+  player.invested = sum(player.invested ?? 0, game.buyInAmount, 'Buy-ins');
+  player.buyIns = (player.buyIns ?? 0) + 1;
 }
 
 /** Actions any player can take. */
@@ -83,7 +91,7 @@ export const playerActions = {
       return { result: { name: existing.name, chips: existing.chips, isRejoin: true } };
     }
     if (game.players.length >= MAX_PLAYERS) fail('The table is full');
-    game.players.push({ name: clean, chips: game.startingChips });
+    game.players.push({ name: clean, chips: game.startingChips, invested: game.startingChips, buyIns: 0 });
     return {
       message: `${clean} joined with ${game.startingChips}`,
       result: { name: clean, chips: game.startingChips, isRejoin: false },
@@ -106,6 +114,13 @@ export const playerActions = {
     player.chips = sum(player.chips, n, 'Chips');
     game.pot -= n;
     return { message: `${player.name} took ${n} from pot` + (game.pot > 0 ? ` (pot ${game.pot})` : '') };
+  },
+
+  buyIn(game, { name }) {
+    const player = requirePlayer(game, name);
+    if (!game.allowBuyIn) fail('Buy-ins are off at this table');
+    addBuyIn(game, player);
+    return { message: `${player.name} bought in for ${game.buyInAmount}`, result: { chips: player.chips } };
   },
 
   /** The winner takes whatever the pot holds when the request lands. */
@@ -154,6 +169,22 @@ export const hostActions = {
     return { message: `Blinds set to ${s}/${b}` };
   },
 
+  /** The host can hand out a buy-in even when players cannot buy in themselves. */
+  buyIn(game, { name }) {
+    const player = requirePlayer(game, name);
+    addBuyIn(game, player);
+    return { message: `Host gave ${player.name} a buy-in of ${game.buyInAmount}` };
+  },
+
+  setBuyIn(game, { allow, amount }) {
+    const n = positive(amount ?? game.buyInAmount, 'Buy-in');
+    const on = allow === true;
+    if (on === game.allowBuyIn && n === game.buyInAmount) return {};
+    game.allowBuyIn = on;
+    game.buyInAmount = n;
+    return { message: on ? `Buy-ins on: ${n} each` : 'Buy-ins off' };
+  },
+
   setStartingChips(game, { amount }) {
     const n = positive(amount, 'Starting chips');
     if (n === game.startingChips) return {};
@@ -165,26 +196,38 @@ export const hostActions = {
 /** The part of a game that is journaled with every entry. */
 export function snapshotOf(game) {
   return {
-    players: game.players.map((p) => ({ name: p.name, chips: p.chips })),
+    players: game.players.map((p) => ({ name: p.name, chips: p.chips, invested: p.invested, buyIns: p.buyIns })),
     pot: game.pot,
     startingChips: game.startingChips,
     smallBlind: game.smallBlind,
     bigBlind: game.bigBlind,
+    allowBuyIn: game.allowBuyIn,
+    buyInAmount: game.buyInAmount,
   };
 }
 
+/** Reads any journal entry, including ones written before buy-ins existed. */
 export function applySnapshot(game, snap) {
-  game.players = snap.players.map((p) => ({ name: p.name, chips: p.chips }));
-  game.pot = snap.pot;
   game.startingChips = snap.startingChips;
+  game.players = snap.players.map((p) => ({
+    name: p.name,
+    chips: p.chips,
+    invested: p.invested ?? snap.startingChips,
+    buyIns: p.buyIns ?? 0,
+  }));
+  game.pot = snap.pot;
   game.smallBlind = snap.smallBlind;
   game.bigBlind = snap.bigBlind;
+  game.allowBuyIn = snap.allowBuyIn ?? false;
+  game.buyInAmount = snap.buyInAmount ?? snap.startingChips;
 }
 
 /** What every browser sees. Same shape as the Android app's GameState. */
 export function publicState(game, code, log) {
   const players = {};
-  for (const p of game.players) players[p.name] = { name: p.name, chips: p.chips };
+  for (const p of game.players) {
+    players[p.name] = { name: p.name, chips: p.chips, invested: p.invested ?? game.startingChips, buyIns: p.buyIns ?? 0 };
+  }
   return {
     code,
     gameId: game.gameId,
@@ -195,6 +238,8 @@ export function publicState(game, code, log) {
     startingChips: game.startingChips,
     smallBlind: game.smallBlind,
     bigBlind: game.bigBlind,
+    allowBuyIn: !!game.allowBuyIn,
+    buyInAmount: game.buyInAmount ?? game.startingChips,
     log,
   };
 }
