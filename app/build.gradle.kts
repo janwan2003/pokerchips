@@ -13,8 +13,8 @@ android {
         applicationId = "com.pokerchips"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.5"
+        versionCode = 7
+        versionName = "1.6"
     }
 
     // One fixed key, checked in, so every build from any machine can install over the
@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.zxing.core)
+    implementation(libs.zxing.android.embedded)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -26,6 +26,10 @@ import com.pokerchips.ui.screens.ActionRunner
 import com.pokerchips.ui.screens.DashboardScreen
 import com.pokerchips.ui.screens.GameDetailScreen
 import com.pokerchips.ui.screens.HistoryScreen
+import com.pokerchips.ui.screens.HomeScreen
+import com.pokerchips.ui.screens.JoinScreen
+import com.pokerchips.ui.screens.WebGameScreen
+import com.pokerchips.util.JoinTarget
 import com.pokerchips.ui.screens.SetupScreen
 import com.pokerchips.ui.theme.PokerChipsTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +51,12 @@ class MainActivity : ComponentActivity() {
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { _ -> }
+
+    // "home", "dashboard", "history", "setup", "join", "game:<id>" or "web:<url>"
+    private var screen by mutableStateOf("home")
+
+    private val prefs by lazy { getSharedPreferences("pokerchips", MODE_PRIVATE) }
+    private var lastOnlineTable by mutableStateOf<String?>(null)
 
     private val notRunning = MutableStateFlow(false)
     private val noUrl = MutableStateFlow<String?>(null)
@@ -70,22 +80,51 @@ class MainActivity : ComponentActivity() {
         }
 
         val gameManager = (application as PokerChipsApplication).gameManager
+        lastOnlineTable = prefs.getString(KEY_LAST_TABLE, null)
+        screen = savedInstanceState?.getString(KEY_SCREEN) ?: linkScreen(intent) ?: "home"
 
         setContent {
             PokerChipsTheme {
                 val service = serverService
                 val state by gameManager.stateFlow.collectAsStateWithLifecycle()
-                // "dashboard", "history", "setup" or "game:<id>"
-                var screen by rememberSaveable { mutableStateOf("dashboard") }
+                val running by (service?.isRunning ?: notRunning).collectAsStateWithLifecycle()
                 val toDashboard = { screen = "dashboard" }
 
-                if (screen != "dashboard") {
-                    BackHandler {
-                        screen = if (screen.startsWith("game:")) "history" else "dashboard"
-                    }
+                // A phone already serving a game opens straight on its dashboard, as before.
+                var routed by rememberSaveable { mutableStateOf(false) }
+                if (!routed && service != null) {
+                    routed = true
+                    if (running && screen == "home") screen = "dashboard"
                 }
 
                 when {
+                    screen == "dashboard" -> BackHandler { screen = "home" }
+                    screen == "history" || screen == "setup" -> BackHandler { screen = "dashboard" }
+                    screen.startsWith("game:") -> BackHandler { screen = "history" }
+                    screen == "join" -> BackHandler { screen = "home" }
+                }
+
+                when {
+                    screen == "home" -> HomeScreen(
+                        serverRunning = running,
+                        lastOnlineTable = lastOnlineTable,
+                        onHostHere = toDashboard,
+                        onHostOnline = { screen = "web:" + JoinTarget.ONLINE_HOME },
+                        onJoin = { screen = "join" },
+                        onReopenTable = { screen = "web:" + JoinTarget.onlineTableUrl(it) }
+                    )
+                    screen == "join" -> JoinScreen(
+                        onBack = { screen = "home" },
+                        onOpen = { screen = "web:$it" }
+                    )
+                    screen.startsWith("web:") -> WebGameScreen(
+                        url = screen.removePrefix("web:"),
+                        onExit = { screen = "home" },
+                        onTableSeen = { code ->
+                            lastOnlineTable = code
+                            prefs.edit().putString(KEY_LAST_TABLE, code).apply()
+                        }
+                    )
                     screen == "history" -> HistoryScreen(
                         gameManager = gameManager,
                         currentGameId = state.gameId,
@@ -122,6 +161,27 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        linkScreen(intent)?.let { screen = it }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_SCREEN, screen)
+    }
+
+    /** An easypoker.cc table link (from a scanned QR code or a chat) opens that table here. */
+    private fun linkScreen(intent: Intent?): String? {
+        if (intent?.action != Intent.ACTION_VIEW) return null
+        return JoinTarget.parse(intent.dataString ?: return null)?.let { "web:$it" }
+    }
+
+    companion object {
+        private const val KEY_SCREEN = "screen"
+        private const val KEY_LAST_TABLE = "lastOnlineTable"
     }
 
     override fun onStart() {

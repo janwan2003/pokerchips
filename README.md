@@ -7,6 +7,12 @@ the QR code and plays in the browser on the same Wi-Fi.
 
 ## What it does
 
+- **Three ways to play** (start screen): **Host on this phone** (players on the same Wi-Fi,
+  history on this phone, as below), **Host online** (a table on
+  [easypoker.cc](https://easypoker.cc), players join from anywhere), and **Join a game** (scan
+  the host's QR code or type the table code; the game opens inside the app). easypoker.cc
+  table links and QR codes open straight in the app when it is installed.
+
 - **Joining** — scan the QR code, or use Copy / Open / Share under the link on the host
   screen: Open starts the game in the host phone's own browser, Share sends the link to
   a chat.

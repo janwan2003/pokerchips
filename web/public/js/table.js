@@ -746,7 +746,8 @@
             connectWS();
         }
         const saved = store.get(NAME_KEY);
-        $('#name-input').value = saved || store.get('easypoker.name') || '';
+        // Never overwrite what the player already typed while the table was loading.
+        if (!$('#name-input').value) $('#name-input').value = saved || store.get('easypoker.name') || '';
         if (saved) await join(saved);
 
         if (hostKey) {

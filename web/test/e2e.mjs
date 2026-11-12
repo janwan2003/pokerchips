@@ -31,6 +31,7 @@ await host.screenshot({ path: out('2-host'), fullPage: true });
 
 await player.goto(B + '/' + code.toLowerCase());
 await player.waitForSelector('#join-screen:not(.hidden)');
+await player.waitForSelector('html[data-ready]');
 await player.fill('#name-input', 'Bo');
 await player.click('#join-btn');
 await player.waitForSelector('#game-screen:not(.hidden)');

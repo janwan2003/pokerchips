@@ -7,6 +7,7 @@ activity-compose = "1.9.3"
 lifecycle = "2.8.7"
 core-ktx = "1.15.0"
 zxing = "3.5.3"
+zxing-embedded = "4.3.0"
 kotlinx-serialization = "1.7.3"
 coroutines = "1.9.0"
 junit = "4.13.2"
@@ -44,6 +45,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
+zxing-android-embedded = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "zxing-embedded" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
