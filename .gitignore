@@ -9,6 +9,7 @@
 .cxx
 *.apk
 *.aab
+!release/easypoker-play.aab
 *.ap_
 *.dex
 
