@@ -1,7 +1,7 @@
 import { chromium } from 'playwright-core';
 import fs from 'node:fs';
 import { spawn } from 'node:child_process';
-const FPS = 30, DUR = 50.4;
+const FPS = 30, DUR = 60.3;
 const mode = process.argv[2] || 'stills';
 const html = fs.readFileSync('comp.html', 'utf8').replace('__META__', fs.readFileSync('rec/log.json', 'utf8'));
 fs.writeFileSync('comp.built.html', html);

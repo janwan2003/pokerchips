@@ -54,26 +54,29 @@ const RED = ['#e0102b', '#ff4b2b'], BLUE = ['#0a2dff', '#00b3ff'], GOLD = ['#ff9
 // loud: {a,b,loud:colours, phone, motion, lines:[[at(abs), text, size, colour?]], top, emo, rain, logo}
 // calm: {a,b,calm:background, text:[[at(abs), text]], phone, emo, logo, sink}
 const S = [
-  { a: 0.0, b: 3.35, calm: '#151515', text: [[0, 'real poker chips are made of clay.']], logo: 'grey' },
-  { a: 3.35, b: 4.6, calm: '#3b2412', text: [[3.4, 'clay is dirt.']], emo: ['🟫', 300] },
-  { a: 4.6, b: 7.9, loud: RED, lines: [[4.68, 'you are gambling\nwith dirt!', 170], [6.52, 'like a caveman!', 190, '#fff']], top: 90, emo: ['🗿', 420], motion: 'shake' },
-  { a: 7.9, b: 9.5, loud: GOLD, lines: [[8.0, 'easypoker!!!', 230, '#fff']], top: 120, phone: 1.0, motion: 'slam' },
-  { a: 9.5, b: 11.45, loud: BLUE, lines: [[9.6, 'chips made\nof numbers!', 190]], top: 80, phone: 23.5, motion: 'tiltL', rain: true },
-  { a: 11.45, b: 14.8, calm: '#1d1a14', text: [[11.54, 'numbers were invented by the greeks.'], [13.74, 'or the arabs.']], emo: ['🏛️', 280] },
-  { a: 14.8, b: 15.8, loud: PURPLE, lines: [[14.88, 'one of them!', 210]], top: 760 },
-  { a: 15.8, b: 23.0, calm: '#10151f', text: [[15.88, 'it counts the pot for you.'], [17.68, 'for your friends.'], [18.84, 'for marek.'], [19.76, "for marek's new girlfriend,\nwho does not know the rules…"]], phone: [17.4, 24.2] },
-  { a: 23.0, b: 24.4, loud: RED, lines: [[23.1, 'and never\nwill!', 230]], top: 640 },
-  { a: 24.4, b: 27.6, loud: BLUE, lines: [[24.5, 'one link!', 190], [25.5, 'everyone joins!', 160, '#fff'], [26.74, 'no app!', 210]], top: 60, phone: 14.8, motion: 'tiltR' },
-  { a: 27.6, b: 30.4, calm: '#121212', text: [[27.7, 'it works on iphone.'], [28.56, 'it works on android.']], phone: 1.0, motion: 'still' },
-  { a: 30.4, b: 33.9, calm: '#0b3a5c', text: [[30.48, 'it works on the phone you dropped\nin the lake in 2019.']], phone: 1.0, sink: 30.9, emo: ['🫧', 160] },
-  { a: 33.9, b: 36.2, calm: '#000', text: [[33.96, 'probably.'], [34.78, 'we did not test that.']] },
-  { a: 36.2, b: 39.65, loud: RED, lines: [[36.26, 'one tap!', 190, '#fff'], [37.16, 'whole pot!', 190], [38.02, 'the whole\npot!!!', 240, '#fff']], top: 50, phone: [24.3, 26.6], motion: 'shake' },
-  { a: 39.65, b: 42.0, calm: '#151515', text: [[39.76, 'easypoker is not for everyone.']], logo: 'slow' },
-  { a: 42.0, b: 44.6, loud: GOLD, lines: [[42.04, 'it is for people\nwith a phone!', 170]], top: 90, phone: 1.0, motion: 'spinIn' },
-  { a: 44.6, b: 48.2, calm: '#151515', text: [[44.7, 'easypoker.cc'], [45.74, "it's free."], [47.4, 'why is it free?']], logo: 'slow' },
-  { a: 48.2, b: 99, loud: RED, lines: [[48.26, "don't ask\nquestions!!!", 230, '#fff']], top: 300, logo: 'spin' },
+  { a: 0.0, b: 3.1, calm: '#151515', text: [[0, 'real poker chips are made of clay.']], logo: 'grey' },
+  { a: 3.1, b: 5.2, calm: '#3b2412', text: [[3.12, 'clay is dirt.']], emo: ['🟫', 300] },
+  { a: 5.2, b: 8.3, loud: RED, lines: [[5.26, 'you are gambling\nwith dirt!', 170], [6.86, 'like a caveman!', 190, '#fff']], top: 90, emo: ['🗿', 420], motion: 'shake' },
+  { a: 8.3, b: 9.7, loud: GOLD, lines: [[8.38, 'easypoker!!!', 230, '#fff']], top: 120, phone: 1.0, motion: 'slam' },
+  { a: 9.7, b: 11.85, loud: BLUE, lines: [[9.78, 'chips made\nof numbers!', 190]], top: 80, phone: 23.5, motion: 'tiltL', rain: true },
+  { a: 11.85, b: 14.8, calm: '#14181d', text: [[11.88, 'numbers never run out.'], [13.92, 'we checked.']], emo: ['📊', 280] },
+  { a: 14.8, b: 17.0, loud: PURPLE, lines: [[14.82, 'we stopped at\nfour million!', 190]], top: 160, rain: true },
+  { a: 17.0, b: 24.6, calm: '#10151f', text: [[17.06, 'it counts the pot for you.'], [19.14, 'for your friends.'], [20.26, 'for marek.'], [21.52, "for marek's new girlfriend,\nwho does not know the rules…"]], phone: [17.4, 24.2] },
+  { a: 24.6, b: 25.95, loud: RED, lines: [[24.66, 'and never\nwill!', 230]], top: 640 },
+  { a: 25.95, b: 29.3, loud: BLUE, lines: [[26.02, 'one link!', 190], [26.98, 'everyone joins!', 160, '#fff'], [28.32, 'no app!', 210]], top: 60, phone: 14.8, motion: 'tiltR' },
+  { a: 29.3, b: 33.6, calm: '#1a1a12', text: [[29.32, 'it is so simple, a dog can use it.'], [32.06, 'we gave it to a dog.']], emo: ['🐕', 320] },
+  { a: 33.6, b: 35.6, calm: '#1a1a12', text: [[33.62, 'the dog is up 40 chips.']], emo: ['🐕', 320], phone: 26.5 },
+  { a: 35.6, b: 37.3, loud: GREEN, lines: [[35.68, 'nobody\nknows how!', 230]], top: 90, emo: ['🐕', 460], motion: 'shake' },
+  { a: 37.3, b: 40.1, calm: '#121212', text: [[37.36, 'it works on iphone.'], [38.88, 'it works on android.']], phone: 1.0, motion: 'still' },
+  { a: 40.1, b: 43.8, calm: '#0b3a5c', text: [[40.16, 'it works on the phone you dropped\nin the lake in 2019.']], phone: 1.0, sink: 41.5, emo: ['🫧', 160] },
+  { a: 43.8, b: 45.9, calm: '#000', text: [[43.86, 'probably.'], [44.34, 'we did not test that.']] },
+  { a: 45.9, b: 49.2, loud: RED, lines: [[45.94, 'one tap!', 190, '#fff'], [46.8, 'whole pot!', 190], [47.74, 'the whole\npot!!!', 240, '#fff']], top: 50, phone: [24.3, 26.6], motion: 'shake' },
+  { a: 49.2, b: 51.5, calm: '#151515', text: [[49.26, 'easypoker is not for everyone.']], logo: 'slow' },
+  { a: 51.5, b: 53.65, loud: GOLD, lines: [[51.54, 'it is for people\nwith a phone!', 170]], top: 90, phone: 1.0, motion: 'spinIn' },
+  { a: 53.65, b: 58.1, calm: '#151515', text: [[53.7, 'easypoker.cc'], [55.44, "it's free."], [57.08, 'why is it free?']], logo: 'slow' },
+  { a: 58.1, b: 99, loud: RED, lines: [[58.16, "don't ask\nquestions!!!", 230, '#fff']], top: 300, logo: 'spin' },
 ];
-const DUR = 50.4;
+const DUR = 60.3;
 const $ = (id) => document.getElementById(id);
 const img = $('screen'), phone = $('phone'), bg = $('bg'), lines = $('lines'), flash = $('flash'), logo = $('logo'),
   calm = $('calm'), emo = $('emo'), rain = $('rain');
@@ -128,7 +131,7 @@ window.render = async function (t) {
   else {
     emo.style.display = 'block';
     emo.textContent = sc.emo[0]; emo.style.fontSize = sc.emo[1] + 'px';
-    const y = loud ? 340 : 120;
+    const y = loud ? 340 : (sc.phone !== undefined ? -380 : 120);
     emo.style.transform = loud ? `translate(${jit(t, 7) * 30}px, ${y + jit(t, 8) * 30}px) rotate(${jit(t, 9) * 12}deg) scale(${1 + 0.08 * Math.sin(st * 16)})`
       : sc.sink ? `translateY(${-200 - st * 60}px)` : `translateY(${y}px)`;
     emo.style.opacity = sc.sink ? Math.min(1, Math.max(0, (t - sc.sink) * 2)) : 1;
