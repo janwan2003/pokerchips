@@ -5,7 +5,13 @@ below, saved and checked on the public profile. The username can change again fr
 2026-12-12 and the name from 2026-11-19. First video posted 2026-11-12 after the owner's review: promo 3, https://www.tiktok.com/@easypoker.cc/video/7707265053002632470
 (web upload of a 720p copy, "Final Game Showdown" added at -14 dB in TikTok's editor, disclosed
 as "Your brand", labelled AI-generated). Right after posting, Studio showed it as "Content under review" and
-Private. Posts disclosed as commercial content can only be edited in the TikTok app, not on the web. The owner reviews every video before it is posted. The account is not connected to Zernio yet.
+Private. Posts disclosed as commercial content can only be edited in the TikTok app, not on the web. **Removed for a Community Guidelines violation, and the account got a warning (2026-11-12).** The exact
+policy name is in the in-app notice; it is not shown in Studio on the web. The likely cause is TikTok's
+"Regulated Goods, Services, and Commercial Activities" policy, which bans marketing gambling.
+The post was disclosed as promoting a brand, said "YOU ARE GAMBLING", and showed betting and pots.
+Do not re-upload that cut: re-posting removed content is a second violation. Future videos must say
+"no real money" on screen, avoid gambling and betting words, and be checked against the policy
+before posting. The owner reviews every video before it is posted. The account is not connected to Zernio yet.
 
 The account is signed up by hand, because TikTok sign-up needs a date of birth, a password
 and a CAPTCHA. Everything else is ready here to paste.
