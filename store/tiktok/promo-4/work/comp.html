@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EasyPoker voiced cut</title>
+<style>
+@font-face { font-family: Shout; src: url('file:///usr/share/fonts/truetype/noto/NotoSans-ExtraCondensedBlackItalic.ttf'); }
+@font-face { font-family: Emo; src: url('file:///usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+#bg { position: absolute; left: -600px; top: -300px; width: 2280px; height: 2520px; }
+#phone { position: absolute; left: 50%; top: 50%; width: 700px; height: 1244px; margin: -622px 0 0 -350px;
+  border-radius: 64px; border: 18px solid #0b0b0f; box-shadow: 0 0 0 4px #444, 0 40px 120px rgb(0 0 0 / .7); overflow: hidden; background: #000; }
+#phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+#logo { position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; }
+#emo { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-family: Emo; line-height: 1; }
+#rain { position: absolute; inset: 0; font-family: Shout; color: #ffd21f; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+#rain span { position: absolute; }
+#lines { position: absolute; left: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.l { font-family: Shout, Impact, sans-serif; text-transform: uppercase; text-align: center; line-height: .98;
+  color: #ffd21f; -webkit-text-stroke: 14px #000; paint-order: stroke fill; letter-spacing: 1px;
+  text-shadow: 10px 12px 0 #000, 0 0 40px rgb(255 60 60 / .55); white-space: pre-line; }
+/* deadpan captions: small, plain, centred, no effects */
+#calm { position: absolute; left: 90px; right: 90px; text-align: center; font-family: 'Liberation Sans', Arial, sans-serif;
+  font-size: 58px; line-height: 1.3; color: #eee; }
+#foot { position: absolute; left: 0; right: 0; bottom: 330px; text-align: center; font-family: 'Liberation Sans', Arial, sans-serif; font-size: 40px; color: #fff; text-shadow: 0 2px 8px #000; display: none; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+#vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / .55)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div id="rain"></div>
+  <div id="phone"><img id="screen" src="" alt=""></div>
+  <img id="logo" src="icon.png" alt="">
+  <div id="emo"></div>
+  <div id="lines"></div>
+  <div id="calm"></div>
+  <div id="foot">no real money · a free chip counter for game night</div>
+  <div id="vig"></div>
+  <div id="flash"></div>
+</div>
+<script>
+const META = __META__;
+const frames = META.frames.map(([n, ts]) => [n, ts - META.T0]);
+function frameAt(rt) {
+  let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (frames[mid][1] <= rt) lo = mid; else hi = mid - 1; }
+  return frames[lo][0];
+}
+const RED = ['#e0102b', '#ff4b2b'], BLUE = ['#0a2dff', '#00b3ff'], GOLD = ['#ff9d00', '#ffe14d'],
+  GREEN = ['#00a33c', '#7dff5b'], PURPLE = ['#6a00ff', '#ff2bd6'];
+// Times are the voice track's word timings (faster-whisper, small.en).
+// loud: {a,b,loud:colours, phone, motion, lines:[[at(abs), text, size, colour?]], top, emo, rain, logo}
+// calm: {a,b,calm:background, text:[[at(abs), text]], phone, emo, logo, sink}
+const S = [
+  { a: 0.0, b: 3.3, calm: '#151515', text: [[0, 'real poker chips are made of clay.']], logo: 'grey' },
+  { a: 3.3, b: 4.9, calm: '#3b2412', text: [[3.38, 'clay is dirt.']], emo: ['🟫', 300] },
+  { a: 4.9, b: 8.35, loud: RED, lines: [[4.96, 'you are playing\nwith dirt!', 170], [6.72, 'like a caveman!', 190, '#fff']], top: 90, emo: ['🗿', 420], motion: 'shake' },
+  { a: 8.35, b: 10.1, loud: GOLD, lines: [[8.42, 'easypoker!!!', 230, '#fff']], top: 120, phone: 1.0, motion: 'slam' },
+  { a: 10.1, b: 12.2, loud: BLUE, lines: [[10.18, 'chips made\nof numbers!', 190]], top: 80, phone: 23.5, motion: 'tiltL', rain: true },
+  { a: 12.2, b: 14.8, calm: '#14181d', text: [[12.28, 'numbers never run out.'], [13.96, 'we checked.']], emo: ['📊', 280] },
+  { a: 14.8, b: 17.15, loud: PURPLE, lines: [[14.88, 'we stopped at\nfour million!', 190]], top: 160, rain: true },
+  { a: 17.15, b: 24.5, calm: '#10151f', text: [[17.22, 'it counts the pot for you.'], [19.1, 'for your friends.'], [20.36, 'for marek.'], [21.24, "for marek's new girlfriend,\nwho does not know the rules…"]], phone: [17.4, 24.2] },
+  { a: 24.5, b: 25.95, loud: RED, lines: [[24.58, 'and never\nwill!', 230]], top: 640 },
+  { a: 25.95, b: 28.95, loud: BLUE, lines: [[26.02, 'one link!', 190], [27.04, 'everyone joins!', 160, '#fff'], [28.32, 'no app!', 210]], top: 60, phone: 14.8, motion: 'tiltR' },
+  { a: 28.95, b: 34.05, calm: '#1a1a12', text: [[28.98, 'it is so simple, a dog can use it.'], [32.26, 'we gave it to a dog.']], emo: ['🐕', 320] },
+  { a: 34.05, b: 36.2, calm: '#1a1a12', text: [[34.12, 'the dog is up 40 chips.']], emo: ['🐕', 320], phone: 26.5 },
+  { a: 36.2, b: 37.85, loud: GREEN, lines: [[36.28, 'nobody\nknows how!', 230]], top: 90, emo: ['🐕', 460], motion: 'shake' },
+  { a: 37.85, b: 40.65, calm: '#121212', text: [[37.9, 'it works on iphone.'], [39.32, 'it works on android.']], phone: 1.0, motion: 'still' },
+  { a: 40.65, b: 44.1, calm: '#0b3a5c', text: [[40.72, 'it works on the phone you dropped\nin the lake in 2019.']], phone: 1.0, sink: 41.9, emo: ['🫧', 160] },
+  { a: 44.1, b: 46.5, calm: '#000', text: [[44.16, 'probably.'], [45.06, 'we did not test that.']] },
+  { a: 46.5, b: 49.9, loud: RED, lines: [[46.54, 'one tap!', 190, '#fff'], [47.52, 'whole pot!', 190], [48.46, 'the whole\npot!!!', 240, '#fff']], top: 50, phone: [24.3, 26.6], motion: 'shake' },
+  { a: 49.9, b: 52.95, calm: '#0f1a12', text: [[49.98, 'no real money.'], [51.32, 'it just counts the chips.']], emo: ['🧮', 280] },
+  { a: 52.95, b: 55.25, calm: '#151515', text: [[53.0, 'easypoker is not for everyone.']], logo: 'slow' },
+  { a: 55.25, b: 57.6, loud: GOLD, lines: [[55.32, 'it is for people\nwith a phone!', 170]], top: 90, phone: 1.0, motion: 'spinIn' },
+  { a: 57.6, b: 61.75, calm: '#151515', text: [[57.66, 'easypoker.cc'], [59.18, "it's free."], [60.72, 'why is it free?']], logo: 'slow', foot: true },
+  { a: 61.75, b: 99, loud: RED, lines: [[61.8, "don't ask\nquestions!!!", 230, '#fff']], top: 300, logo: 'spin', foot: true },
+];
+const DUR = 64.2;
+const $ = (id) => document.getElementById(id);
+const img = $('screen'), phone = $('phone'), bg = $('bg'), lines = $('lines'), flash = $('flash'), logo = $('logo'),
+  calm = $('calm'), emo = $('emo'), rain = $('rain');
+const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+const jit = (t, k) => Math.sin(t * 91.7 + k * 13.1) * Math.cos(t * 57.3 + k * 7.7);
+let lastKey = '';
+// falling digits for "chips made of numbers"
+for (let i = 0; i < 26; i++) { const s = document.createElement('span'); s.textContent = '0123456789'[i % 10]; rain.appendChild(s); }
+async function showFrame(rt) {
+  const f = `rec/frames/${String(frameAt(rt)).padStart(5, '0')}.jpg`;
+  if (img.getAttribute('src') !== f) { img.setAttribute('src', f); await img.decode().catch(() => {}); }
+}
+window.render = async function (t) {
+  const sc = S.find((s) => t >= s.a && t < s.b) || S[S.length - 1];
+  const st = t - sc.a, len = sc.b - sc.a;
+  const loud = !!sc.loud;
+  // background
+  if (loud) {
+    const rot = (t * 40) % 360;
+    bg.style.background = `repeating-conic-gradient(from ${rot}deg at 50% 50%, ${sc.loud[0]} 0deg 10deg, ${sc.loud[1]} 10deg 20deg)`;
+  } else bg.style.background = sc.calm;
+  $('vig').style.display = loud ? 'block' : 'none';
+  // phone
+  if (sc.phone === undefined) phone.style.display = 'none';
+  else {
+    phone.style.display = 'block';
+    const rt = Array.isArray(sc.phone) ? sc.phone[0] + (sc.phone[1] - sc.phone[0]) * Math.min(1, st / (len * 0.85)) : sc.phone;
+    await showFrame(rt);
+    const p = ease(st / 0.22), m = sc.motion;
+    let tr;
+    if (!loud) {
+      tr = 'translateY(260px) scale(0.72)';
+      if (sc.sink) { const k = Math.max(0, t - sc.sink); tr = `translateY(${260 + k * k * 260}px) scale(0.72) rotate(${k * 18}deg)`; }
+    } else if (m === 'slam') tr = `translateY(${(1 - p) * -1400 + 300}px) scale(${0.8 + 0.06 * Math.sin(st * 9) * (1 - p)}) rotate(${(1 - p) * -25}deg)`;
+    else if (m === 'tiltL') tr = `translateY(330px) translateX(${(1 - p) * 1200}px) scale(${0.78 + st * 0.03}) rotate(-7deg)`;
+    else if (m === 'tiltR') tr = `translateY(340px) translateX(${(1 - p) * -1200}px) scale(${0.78 + st * 0.03}) rotate(6deg)`;
+    else if (m === 'shake') tr = `translate(${jit(t, 1) * 26}px, ${380 + jit(t, 2) * 26}px) scale(${0.84 + 0.04 * Math.abs(Math.sin(st * 14))}) rotate(${jit(t, 3) * 3}deg)`;
+    else if (m === 'spinIn') tr = `translateY(360px) scale(${0.1 + 0.7 * p}) rotate(${(1 - p) * 720}deg)`;
+    else tr = 'translateY(330px) scale(0.8)';
+    phone.style.transform = tr;
+  }
+  // logo
+  if (!sc.logo) logo.style.display = 'none';
+  else {
+    logo.style.display = 'block';
+    if (sc.logo === 'grey') { logo.style.filter = 'grayscale(1) brightness(.75)'; logo.style.transform = `translateY(180px) scale(${0.8 + st * 0.02})`; }
+    else if (sc.logo === 'slow') { logo.style.filter = 'none'; logo.style.transform = `translateY(180px) scale(${0.8 + st * 0.02})`; }
+    else { logo.style.filter = 'none'; logo.style.transform = `translateY(260px) scale(${0.3 + 0.7 * ease(st / 0.3)}) rotate(${st * 400}deg)`; }
+  }
+  // emoji
+  if (!sc.emo) emo.style.display = 'none';
+  else {
+    emo.style.display = 'block';
+    emo.textContent = sc.emo[0]; emo.style.fontSize = sc.emo[1] + 'px';
+    const y = loud ? 340 : (sc.phone !== undefined ? -380 : 120);
+    emo.style.transform = loud ? `translate(${jit(t, 7) * 30}px, ${y + jit(t, 8) * 30}px) rotate(${jit(t, 9) * 12}deg) scale(${1 + 0.08 * Math.sin(st * 16)})`
+      : sc.sink ? `translateY(${-200 - st * 60}px)` : `translateY(${y}px)`;
+    emo.style.opacity = sc.sink ? Math.min(1, Math.max(0, (t - sc.sink) * 2)) : 1;
+  }
+  // number rain
+  rain.style.display = sc.rain ? 'block' : 'none';
+  if (sc.rain) [...rain.children].forEach((s, i) => {
+    const x = (i * 197) % 1040, sp = 900 + (i * 131) % 700, y = ((st * sp + i * 377) % 2200) - 200;
+    s.style.left = x + 'px'; s.style.top = y + 'px'; s.style.fontSize = (90 + (i * 37) % 120) + 'px'; s.style.transform = `rotate(${(i * 47) % 60 - 30}deg)`;
+  });
+  // loud text
+  if (loud) {
+    calm.style.display = 'none'; lines.style.display = 'flex';
+    const shown = sc.lines.filter(([at]) => t >= at);
+    const key = sc.a + ':' + shown.length;
+    if (key !== lastKey) {
+      lines.innerHTML = '';
+      for (const [at, text, size, col] of shown) {
+        const d = document.createElement('div');
+        d.className = 'l'; d.textContent = text; d.style.fontSize = size + 'px'; d.dataset.at = at;
+        if (col) d.style.color = col;
+        lines.appendChild(d);
+        const w = d.scrollWidth; if (w > 980) d.style.fontSize = Math.floor(size * 980 / w) + 'px';
+      }
+      lastKey = key;
+    }
+    lines.style.top = sc.top + 'px';
+    let i = 0;
+    for (const d of lines.children) {
+      const lt = t - Number(d.dataset.at);
+      const s = lt < 0.12 ? 2.6 - 1.6 * ease(lt / 0.12) : 1 + 0.03 * Math.sin(lt * 20);
+      const r = (i % 2 ? 3 : -4) + jit(t, 10 + i) * 1.5;
+      d.style.transform = `translate(${jit(t, 20 + i) * 6}px, ${jit(t, 30 + i) * 6}px) scale(${s}) rotate(${r}deg)`;
+      i++;
+    }
+  } else {
+    lines.style.display = 'none'; calm.style.display = 'block';
+    // deadpan: the latest phrase only, plain, no motion
+    const cur = sc.text.filter(([at]) => t >= at).pop();
+    const txt = cur ? cur[1] : '';
+    if (calm.textContent !== txt) calm.textContent = txt;
+    calm.style.whiteSpace = 'pre-line';
+    calm.style.top = (sc.phone !== undefined || sc.logo ? 300 : 860) + 'px';
+    lastKey = '';
+  }
+  document.getElementById('foot').style.display = sc.foot ? 'block' : 'none';
+  // flash on loud cuts and each stamped line; none on calm scenes
+  if (loud) {
+    const hits = [sc.a, ...sc.lines.map(([at]) => at)].filter((x) => t >= x).map((x) => t - x);
+    const since = Math.min(...hits);
+    flash.style.opacity = since < 0.08 ? 0.75 * (1 - since / 0.08) : 0;
+    const k = st < 0.25 ? (1 - st / 0.25) * 30 : 4;
+    $('stage').style.transform = `translate(${jit(t, 5) * k}px, ${jit(t, 6) * k}px)`;
+  } else { flash.style.opacity = 0; $('stage').style.transform = 'none'; }
+};
+window.DUR = DUR;
+window.ready = document.fonts.load('200px Shout').then(() => document.fonts.load('100px Emo')).then(() => document.fonts.ready).then(() => true);
+</script>
+</body>
+</html>

@@ -11,7 +11,14 @@ policy name is in the in-app notice; it is not shown in Studio on the web. The l
 The post was disclosed as promoting a brand, said "YOU ARE GAMBLING", and showed betting and pots.
 Do not re-upload that cut: re-posting removed content is a second violation. Future videos must say
 "no real money" on screen, avoid gambling and betting words, and be checked against the policy
-before posting. The owner reviews every video before it is posted. The account is not connected to Zernio yet.
+before posting. The owner reviews every video before it is posted.
+
+**Second attempt, 2026-11-12, both posted at the owner's request:** promo 4 (promo 3
+re-voiced without the gambling wording, with "no real money" spoken and on screen),
+https://www.tiktok.com/@easypoker.cc/video/7707269789193915670, and promo 5 (an 18 s product commercial),
+https://www.tiktok.com/@easypoker.cc/video/7707268727930227990. Both passed TikTok's per-post
+"Content check lite" before posting. Right after posting, promo 5 was "Content under review" (normal
+for posts disclosed as brand content). The account is not connected to Zernio yet.
 
 The account is signed up by hand, because TikTok sign-up needs a date of birth, a password
 and a CAPTCHA. Everything else is ready here to paste.

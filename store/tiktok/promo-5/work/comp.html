@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EasyPoker commercial</title>
+<style>
+@font-face { font-family: Brand; font-weight: 900; src: url('file:///usr/share/fonts/truetype/noto/NotoSans-Black.ttf'); }
+@font-face { font-family: Brand; font-weight: 500; src: url('file:///usr/share/fonts/truetype/noto/NotoSans-Medium.ttf'); }
+:root { --navy: #1a1a2e; --navy2: #16213e; --red: #e94560; --gold: #f1c40f; --green: #2ecc71; --mute: #a0a0b0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); }
+#stage { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse 120% 70% at 50% 35%, var(--navy2), var(--navy) 70%); }
+.ph { position: absolute; left: 50%; top: 50%; width: 640px; height: 1137px; margin: -568px 0 0 -320px; border-radius: 60px;
+  border: 16px solid #0b0b12; box-shadow: 0 0 0 3px #2c2c44, 0 60px 120px rgb(0 0 0 / .55); overflow: hidden; background: #000; display: none; }
+.ph img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+#logo { position: absolute; left: 50%; top: 50%; width: 420px; height: 420px; margin: -210px 0 0 -210px; border-radius: 50%; display: none; }
+#head { position: absolute; left: 70px; right: 70px; top: 200px; font-family: Brand; font-weight: 900; color: #fff;
+  font-size: 104px; line-height: 1.04; letter-spacing: -2px; }
+#head .w { display: inline-block; }
+#head .gold { color: var(--gold); }
+#head .red { color: var(--red); }
+#sub { position: absolute; left: 70px; right: 70px; font-family: Brand; font-weight: 500; color: var(--mute); font-size: 46px; line-height: 1.3; }
+#end { position: absolute; inset: 0; display: none; text-align: center; font-family: Brand; }
+#end .name { position: absolute; left: 0; right: 0; top: 1000px; font-weight: 900; font-size: 130px; color: #fff; letter-spacing: -3px; }
+#end .url { position: absolute; left: 0; right: 0; top: 1170px; font-weight: 900; font-size: 64px; color: var(--gold); }
+#end .tags { position: absolute; left: 0; right: 0; top: 1280px; font-weight: 500; font-size: 44px; color: #fff; }
+#end .fine { position: absolute; left: 80px; right: 80px; top: 1400px; font-weight: 500; font-size: 36px; color: var(--mute); }
+#bar { position: absolute; left: 70px; height: 12px; border-radius: 6px; background: var(--red); top: 160px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="ph" id="p1"><img alt=""></div>
+  <div class="ph" id="p2"><img alt=""></div>
+  <img id="logo" src="icon.png" alt="">
+  <div id="bar"></div>
+  <div id="head"></div>
+  <div id="sub"></div>
+  <div id="end"><div class="name">EasyPoker</div><div class="url">easypoker.cc</div>
+    <div class="tags">Free · No app · No sign-up</div>
+    <div class="fine">No real money. Just a chip counter for game night.</div></div>
+</div>
+<script>
+const META = __META__;
+const frames = META.frames.map(([n, ts]) => [n, ts - META.T0]);
+function frameAt(rt) {
+  let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (frames[mid][1] <= rt) lo = mid; else hi = mid - 1; }
+  return frames[lo][0];
+}
+const DUR = 18.5;
+const clamp = (x) => Math.min(1, Math.max(0, x));
+const eo = (x) => 1 - Math.pow(1 - clamp(x), 4);              // ease out quart
+const eio = (x) => { x = clamp(x); return x < .5 ? 8 * x ** 4 : 1 - Math.pow(-2 * x + 2, 4) / 2; };
+// headline words: [text, class]; sub line; phone sources (rec seconds, or [from, to])
+const SC = [
+  { a: 0.0, b: 2.3, head: [['Game', ''], ['night.', 'gold']], head2: [1.0, [['Forgot', ''], ['the', ''], ['chips?', 'red']]] },
+  { a: 2.3, b: 4.7, head: [['Every', ''], ['phone', ''], ['is', ''], ['a', ''], ['chip', 'gold'], ['stack.', 'gold']], logo: true },
+  { a: 4.7, b: 7.5, head: [['Host', ''], ['a', ''], ['table', ''], ['in', ''], ['seconds.', 'gold']], sub: 'Right in your browser.', p1: 1.0 },
+  { a: 7.5, b: 10.3, head: [['Friends', ''], ['join', ''], ['with', ''], ['one', ''], ['link.', 'gold']], sub: 'Scan the code. Type a name. Play.', p1: 7.6, p2: 14.8 },
+  { a: 10.3, b: 13.5, head: [['The', ''], ['pot', ''], ['counts', ''], ['itself.', 'gold']], sub: 'Every phone updates at once.', p1: [17.4, 24.2], zoom: true },
+  { a: 13.5, b: 15.7, head: [['Winner', ''], ['takes', ''], ['it', ''], ['in', ''], ['one', ''], ['tap.', 'red']], p1: [24.3, 26.6] },
+  { a: 15.7, b: 99, end: true },
+];
+const $ = (id) => document.getElementById(id);
+const head = $('head'), sub = $('sub'), p1 = $('p1'), p2 = $('p2'), logo = $('logo'), end = $('end'), bar = $('bar');
+let key = '';
+async function setImg(ph, rt) {
+  const im = ph.querySelector('img');
+  const f = `rec/frames/${String(frameAt(rt)).padStart(5, '0')}.jpg`;
+  if (im.getAttribute('src') !== f) { im.setAttribute('src', f); await im.decode().catch(() => {}); }
+}
+function words(list) { return list.map(([w, c]) => `<span class="w ${c}">${w}</span>`).join(' '); }
+window.render = async function (t) {
+  const sc = SC.find((s) => t >= s.a && t < s.b);
+  const st = t - sc.a, len = sc.b - sc.a;
+  const out = clamp((st - (len - 0.3)) / 0.3);          // last 0.3 s: fade/slide out
+  // headline
+  let h = sc.head, at0 = 0;
+  if (sc.head2 && st >= sc.head2[0]) { h = sc.head2[1]; at0 = sc.head2[0]; }
+  const k = sc.a + ':' + (h ? h.length : 0) + ':' + at0;
+  if (k !== key) { head.innerHTML = h ? words(h) : ''; key = k; }
+  [...head.children].forEach((w, i) => {
+    const p = eo((st - at0 - i * 0.07) / 0.45);
+    w.style.opacity = p * (1 - out);
+    w.style.transform = `translateY(${(1 - p) * 70 - out * 40}px)`;
+  });
+  head.style.display = sc.end ? 'none' : 'block';
+  // red bar grows under nothing — a brand accent above the headline
+  bar.style.width = sc.end ? '0px' : (180 * eo(st / 0.5)) + 'px';
+  bar.style.opacity = 1 - out;
+  // sub line
+  if (sc.sub) { sub.textContent = sc.sub; const p = eo((st - 0.5) / 0.5); sub.style.opacity = p * (1 - out); sub.style.top = (200 + 112 * Math.ceil(head.offsetHeight / 112) + 30) + 'px'; sub.style.transform = `translateY(${(1 - p) * 30}px)`; }
+  else sub.style.opacity = 0;
+  // phones
+  const rt = (src) => Array.isArray(src) ? src[0] + (src[1] - src[0]) * clamp(st / (len * 0.85)) : src;
+  if (sc.p1 !== undefined) {
+    p1.style.display = 'block'; await setImg(p1, rt(sc.p1));
+    const p = eio(st / 0.7);
+    if (sc.p2 !== undefined) {
+      p2.style.display = 'block'; await setImg(p2, sc.p2);
+      const q = eio((st - 0.35) / 0.7);
+      p1.style.transform = `translate(${-170 - (1 - p) * 700}px, ${300 + (1 - p) * 200}px) scale(.72) rotate(-6deg)`;
+      p2.style.transform = `translate(${190 + (1 - q) * 700}px, ${390 + (1 - q) * 200}px) scale(.72) rotate(5deg)`;
+      p1.style.opacity = p2.style.opacity = 1 - out;
+    } else {
+      p2.style.display = 'none';
+      const s = sc.zoom ? 0.9 + 0.2 * eio((st - 0.6) / 1.6) : 0.78;
+      const y = sc.zoom ? 340 + 260 * eio((st - 0.6) / 1.6) : 340;
+      p1.style.transform = `translateY(${y + (1 - p) * 900}px) scale(${s}) rotate(${(1 - p) * 8}deg)`;
+      p1.style.opacity = 1 - out;
+    }
+  } else { p1.style.display = 'none'; p2.style.display = 'none'; }
+  // logo
+  if (sc.logo || sc.end) {
+    logo.style.display = 'block';
+    if (sc.end) { const p = eo(st / 0.6); logo.style.transform = `translateY(${-260 + (1 - p) * 120}px) scale(${0.85 + 0.15 * p}) rotate(${(1 - p) * -90}deg)`; logo.style.opacity = p; }
+    else {
+      // drops in and bounces
+      const d = clamp(st / 0.6), bounce = d < 1 ? (1 - eo(d)) * -900 : Math.sin((st - 0.6) * 9) * Math.exp(-(st - 0.6) * 4) * -40;
+      logo.style.transform = `translateY(${300 + bounce}px) rotate(${st * 40}deg)`; logo.style.opacity = 1 - out;
+    }
+  } else logo.style.display = 'none';
+  // end card
+  end.style.display = sc.end ? 'block' : 'none';
+  if (sc.end) [...end.children].forEach((c, i) => { const p = eo((st - 0.3 - i * 0.15) / 0.5); c.style.opacity = p; c.style.transform = `translateY(${(1 - p) * 40}px)`; });
+};
+window.DUR = DUR;
+window.ready = document.fonts.load('900 100px Brand').then(() => document.fonts.load('500 40px Brand')).then(() => document.fonts.ready).then(() => true);
+</script>
+</body>
+</html>
