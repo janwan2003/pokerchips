@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EasyPoker voiced cut</title>
+<style>
+@font-face { font-family: Shout; src: url('file:///usr/share/fonts/truetype/noto/NotoSans-ExtraCondensedBlackItalic.ttf'); }
+@font-face { font-family: Emo; src: url('file:///usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+#bg { position: absolute; left: -600px; top: -300px; width: 2280px; height: 2520px; }
+#phone { position: absolute; left: 50%; top: 50%; width: 700px; height: 1244px; margin: -622px 0 0 -350px;
+  border-radius: 64px; border: 18px solid #0b0b0f; box-shadow: 0 0 0 4px #444, 0 40px 120px rgb(0 0 0 / .7); overflow: hidden; background: #000; }
+#phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+#logo { position: absolute; left: 50%; top: 50%; width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; }
+#emo { position: absolute; left: 0; right: 0; top: 50%; text-align: center; font-family: Emo; line-height: 1; }
+#rain { position: absolute; inset: 0; font-family: Shout; color: #ffd21f; -webkit-text-stroke: 8px #000; paint-order: stroke fill; }
+#rain span { position: absolute; }
+#lines { position: absolute; left: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.l { font-family: Shout, Impact, sans-serif; text-transform: uppercase; text-align: center; line-height: .98;
+  color: #ffd21f; -webkit-text-stroke: 14px #000; paint-order: stroke fill; letter-spacing: 1px;
+  text-shadow: 10px 12px 0 #000, 0 0 40px rgb(255 60 60 / .55); white-space: pre-line; }
+/* deadpan captions: small, plain, centred, no effects */
+#calm { position: absolute; left: 90px; right: 90px; text-align: center; font-family: 'Liberation Sans', Arial, sans-serif;
+  font-size: 58px; line-height: 1.3; color: #eee; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+#vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / .55)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div id="rain"></div>
+  <div id="phone"><img id="screen" src="" alt=""></div>
+  <img id="logo" src="icon.png" alt="">
+  <div id="emo"></div>
+  <div id="lines"></div>
+  <div id="calm"></div>
+  <div id="vig"></div>
+  <div id="flash"></div>
+</div>
+<script>
+const META = __META__;
+const frames = META.frames.map(([n, ts]) => [n, ts - META.T0]);
+function frameAt(rt) {
+  let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (frames[mid][1] <= rt) lo = mid; else hi = mid - 1; }
+  return frames[lo][0];
+}
+const RED = ['#e0102b', '#ff4b2b'], BLUE = ['#0a2dff', '#00b3ff'], GOLD = ['#ff9d00', '#ffe14d'],
+  GREEN = ['#00a33c', '#7dff5b'], PURPLE = ['#6a00ff', '#ff2bd6'];
+// Times are the voice track's word timings (faster-whisper, small.en).
+// loud: {a,b,loud:colours, phone, motion, lines:[[at(abs), text, size, colour?]], top, emo, rain, logo}
+// calm: {a,b,calm:background, text:[[at(abs), text]], phone, emo, logo, sink}
+const S = [
+  { a: 0.0, b: 3.35, calm: '#151515', text: [[0, 'real poker chips are made of clay.']], logo: 'grey' },
+  { a: 3.35, b: 4.6, calm: '#3b2412', text: [[3.4, 'clay is dirt.']], emo: ['🟫', 300] },
+  { a: 4.6, b: 7.9, loud: RED, lines: [[4.68, 'you are gambling\nwith dirt!', 170], [6.52, 'like a caveman!', 190, '#fff']], top: 90, emo: ['🗿', 420], motion: 'shake' },
+  { a: 7.9, b: 9.5, loud: GOLD, lines: [[8.0, 'easypoker!!!', 230, '#fff']], top: 120, phone: 1.0, motion: 'slam' },
+  { a: 9.5, b: 11.45, loud: BLUE, lines: [[9.6, 'chips made\nof numbers!', 190]], top: 80, phone: 23.5, motion: 'tiltL', rain: true },
+  { a: 11.45, b: 14.8, calm: '#1d1a14', text: [[11.54, 'numbers were invented by the greeks.'], [13.74, 'or the arabs.']], emo: ['🏛️', 280] },
+  { a: 14.8, b: 15.8, loud: PURPLE, lines: [[14.88, 'one of them!', 210]], top: 760 },
+  { a: 15.8, b: 23.0, calm: '#10151f', text: [[15.88, 'it counts the pot for you.'], [17.68, 'for your friends.'], [18.84, 'for marek.'], [19.76, "for marek's new girlfriend,\nwho does not know the rules…"]], phone: [17.4, 24.2] },
+  { a: 23.0, b: 24.4, loud: RED, lines: [[23.1, 'and never\nwill!', 230]], top: 640 },
+  { a: 24.4, b: 27.6, loud: BLUE, lines: [[24.5, 'one link!', 190], [25.5, 'everyone joins!', 160, '#fff'], [26.74, 'no app!', 210]], top: 60, phone: 14.8, motion: 'tiltR' },
+  { a: 27.6, b: 30.4, calm: '#121212', text: [[27.7, 'it works on iphone.'], [28.56, 'it works on android.']], phone: 1.0, motion: 'still' },
+  { a: 30.4, b: 33.9, calm: '#0b3a5c', text: [[30.48, 'it works on the phone you dropped\nin the lake in 2019.']], phone: 1.0, sink: 30.9, emo: ['🫧', 160] },
+  { a: 33.9, b: 36.2, calm: '#000', text: [[33.96, 'probably.'], [34.78, 'we did not test that.']] },
+  { a: 36.2, b: 39.65, loud: RED, lines: [[36.26, 'one tap!', 190, '#fff'], [37.16, 'whole pot!', 190], [38.02, 'the whole\npot!!!', 240, '#fff']], top: 50, phone: [24.3, 26.6], motion: 'shake' },
+  { a: 39.65, b: 42.0, calm: '#151515', text: [[39.76, 'easypoker is not for everyone.']], logo: 'slow' },
+  { a: 42.0, b: 44.6, loud: GOLD, lines: [[42.04, 'it is for people\nwith a phone!', 170]], top: 90, phone: 1.0, motion: 'spinIn' },
+  { a: 44.6, b: 48.2, calm: '#151515', text: [[44.7, 'easypoker.cc'], [45.74, "it's free."], [47.4, 'why is it free?']], logo: 'slow' },
+  { a: 48.2, b: 99, loud: RED, lines: [[48.26, "don't ask\nquestions!!!", 230, '#fff']], top: 300, logo: 'spin' },
+];
+const DUR = 50.4;
+const $ = (id) => document.getElementById(id);
+const img = $('screen'), phone = $('phone'), bg = $('bg'), lines = $('lines'), flash = $('flash'), logo = $('logo'),
+  calm = $('calm'), emo = $('emo'), rain = $('rain');
+const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+const jit = (t, k) => Math.sin(t * 91.7 + k * 13.1) * Math.cos(t * 57.3 + k * 7.7);
+let lastKey = '';
+// falling digits for "chips made of numbers"
+for (let i = 0; i < 26; i++) { const s = document.createElement('span'); s.textContent = '0123456789'[i % 10]; rain.appendChild(s); }
+async function showFrame(rt) {
+  const f = `rec/frames/${String(frameAt(rt)).padStart(5, '0')}.jpg`;
+  if (img.getAttribute('src') !== f) { img.setAttribute('src', f); await img.decode().catch(() => {}); }
+}
+window.render = async function (t) {
+  const sc = S.find((s) => t >= s.a && t < s.b) || S[S.length - 1];
+  const st = t - sc.a, len = sc.b - sc.a;
+  const loud = !!sc.loud;
+  // background
+  if (loud) {
+    const rot = (t * 40) % 360;
+    bg.style.background = `repeating-conic-gradient(from ${rot}deg at 50% 50%, ${sc.loud[0]} 0deg 10deg, ${sc.loud[1]} 10deg 20deg)`;
+  } else bg.style.background = sc.calm;
+  $('vig').style.display = loud ? 'block' : 'none';
+  // phone
+  if (sc.phone === undefined) phone.style.display = 'none';
+  else {
+    phone.style.display = 'block';
+    const rt = Array.isArray(sc.phone) ? sc.phone[0] + (sc.phone[1] - sc.phone[0]) * Math.min(1, st / (len * 0.85)) : sc.phone;
+    await showFrame(rt);
+    const p = ease(st / 0.22), m = sc.motion;
+    let tr;
+    if (!loud) {
+      tr = 'translateY(260px) scale(0.72)';
+      if (sc.sink) { const k = Math.max(0, t - sc.sink); tr = `translateY(${260 + k * k * 260}px) scale(0.72) rotate(${k * 18}deg)`; }
+    } else if (m === 'slam') tr = `translateY(${(1 - p) * -1400 + 300}px) scale(${0.8 + 0.06 * Math.sin(st * 9) * (1 - p)}) rotate(${(1 - p) * -25}deg)`;
+    else if (m === 'tiltL') tr = `translateY(330px) translateX(${(1 - p) * 1200}px) scale(${0.78 + st * 0.03}) rotate(-7deg)`;
+    else if (m === 'tiltR') tr = `translateY(340px) translateX(${(1 - p) * -1200}px) scale(${0.78 + st * 0.03}) rotate(6deg)`;
+    else if (m === 'shake') tr = `translate(${jit(t, 1) * 26}px, ${380 + jit(t, 2) * 26}px) scale(${0.84 + 0.04 * Math.abs(Math.sin(st * 14))}) rotate(${jit(t, 3) * 3}deg)`;
+    else if (m === 'spinIn') tr = `translateY(360px) scale(${0.1 + 0.7 * p}) rotate(${(1 - p) * 720}deg)`;
+    else tr = 'translateY(330px) scale(0.8)';
+    phone.style.transform = tr;
+  }
+  // logo
+  if (!sc.logo) logo.style.display = 'none';
+  else {
+    logo.style.display = 'block';
+    if (sc.logo === 'grey') { logo.style.filter = 'grayscale(1) brightness(.75)'; logo.style.transform = `translateY(180px) scale(${0.8 + st * 0.02})`; }
+    else if (sc.logo === 'slow') { logo.style.filter = 'none'; logo.style.transform = `translateY(180px) scale(${0.8 + st * 0.02})`; }
+    else { logo.style.filter = 'none'; logo.style.transform = `translateY(260px) scale(${0.3 + 0.7 * ease(st / 0.3)}) rotate(${st * 400}deg)`; }
+  }
+  // emoji
+  if (!sc.emo) emo.style.display = 'none';
+  else {
+    emo.style.display = 'block';
+    emo.textContent = sc.emo[0]; emo.style.fontSize = sc.emo[1] + 'px';
+    const y = loud ? 340 : 120;
+    emo.style.transform = loud ? `translate(${jit(t, 7) * 30}px, ${y + jit(t, 8) * 30}px) rotate(${jit(t, 9) * 12}deg) scale(${1 + 0.08 * Math.sin(st * 16)})`
+      : sc.sink ? `translateY(${-200 - st * 60}px)` : `translateY(${y}px)`;
+    emo.style.opacity = sc.sink ? Math.min(1, Math.max(0, (t - sc.sink) * 2)) : 1;
+  }
+  // number rain
+  rain.style.display = sc.rain ? 'block' : 'none';
+  if (sc.rain) [...rain.children].forEach((s, i) => {
+    const x = (i * 197) % 1040, sp = 900 + (i * 131) % 700, y = ((st * sp + i * 377) % 2200) - 200;
+    s.style.left = x + 'px'; s.style.top = y + 'px'; s.style.fontSize = (90 + (i * 37) % 120) + 'px'; s.style.transform = `rotate(${(i * 47) % 60 - 30}deg)`;
+  });
+  // loud text
+  if (loud) {
+    calm.style.display = 'none'; lines.style.display = 'flex';
+    const shown = sc.lines.filter(([at]) => t >= at);
+    const key = sc.a + ':' + shown.length;
+    if (key !== lastKey) {
+      lines.innerHTML = '';
+      for (const [at, text, size, col] of shown) {
+        const d = document.createElement('div');
+        d.className = 'l'; d.textContent = text; d.style.fontSize = size + 'px'; d.dataset.at = at;
+        if (col) d.style.color = col;
+        lines.appendChild(d);
+        const w = d.scrollWidth; if (w > 980) d.style.fontSize = Math.floor(size * 980 / w) + 'px';
+      }
+      lastKey = key;
+    }
+    lines.style.top = sc.top + 'px';
+    let i = 0;
+    for (const d of lines.children) {
+      const lt = t - Number(d.dataset.at);
+      const s = lt < 0.12 ? 2.6 - 1.6 * ease(lt / 0.12) : 1 + 0.03 * Math.sin(lt * 20);
+      const r = (i % 2 ? 3 : -4) + jit(t, 10 + i) * 1.5;
+      d.style.transform = `translate(${jit(t, 20 + i) * 6}px, ${jit(t, 30 + i) * 6}px) scale(${s}) rotate(${r}deg)`;
+      i++;
+    }
+  } else {
+    lines.style.display = 'none'; calm.style.display = 'block';
+    // deadpan: the latest phrase only, plain, no motion
+    const cur = sc.text.filter(([at]) => t >= at).pop();
+    const txt = cur ? cur[1] : '';
+    if (calm.textContent !== txt) calm.textContent = txt;
+    calm.style.whiteSpace = 'pre-line';
+    calm.style.top = (sc.phone !== undefined || sc.logo ? 300 : 860) + 'px';
+    lastKey = '';
+  }
+  // flash on loud cuts and each stamped line; none on calm scenes
+  if (loud) {
+    const hits = [sc.a, ...sc.lines.map(([at]) => at)].filter((x) => t >= x).map((x) => t - x);
+    const since = Math.min(...hits);
+    flash.style.opacity = since < 0.08 ? 0.75 * (1 - since / 0.08) : 0;
+    const k = st < 0.25 ? (1 - st / 0.25) * 30 : 4;
+    $('stage').style.transform = `translate(${jit(t, 5) * k}px, ${jit(t, 6) * k}px)`;
+  } else { flash.style.opacity = 0; $('stage').style.transform = 'none'; }
+};
+window.DUR = DUR;
+window.ready = document.fonts.load('200px Shout').then(() => document.fonts.load('100px Emo')).then(() => document.fonts.ready).then(() => true);
+</script>
+</body>
+</html>
