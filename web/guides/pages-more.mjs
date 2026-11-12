@@ -19,7 +19,7 @@ export const more = [
     related: ['texas-holdem-rules', 'poker-terms-glossary', 'home-poker-house-rules'],
     body: `
 <h2>The ten poker hands in order</h2>
-<p>From strongest to weakest. The odds are for being dealt that exact hand in five cards from a 52-card deck, out of 2,598,960 possible hands (the standard combinatorics, as tabulated in <a href="https://en.wikipedia.org/wiki/Poker_probability" rel="noopener">Wikipedia's poker probability article</a>).</p>
+<p>From strongest to weakest. The odds are for being dealt that exact hand in five cards from a 52-card deck, out of 2,598,960 possible hands (exact counts, as computed by mathematician Brian Alspach in his <a href="http://people.math.sfu.ca/~alspach/computations" rel="noopener">poker computations</a>).</p>
 <div class="ep-table-wrap"><table>
   <thead><tr><th>Rank</th><th>Hand</th><th>Example</th><th>Ways to make it</th><th>Chance in 5 cards</th></tr></thead>
   <tbody>

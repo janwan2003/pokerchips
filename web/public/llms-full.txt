@@ -215,7 +215,7 @@ Total: 0
 
 ## Standard poker chip colours and values
 
-There is no official rule, but most home sets and many casinos in the US follow this pattern. If your set has different colours, keep the order: lighter colours for smaller values.
+There is no rule for home sets, but many follow the colours US casinos use. New Jersey, for example, fixes the primary colour of each casino chip by regulation (N.J.A.C. 13:69E-1.3): white $1, red $5, green $25, black $100, purple $500 and orange $1,000. If your set has different colours, keep the order: lighter colours for smaller values.
 
 | Colour | Common value | Used for |
 |---|---|---|
@@ -224,7 +224,7 @@ There is no official rule, but most home sets and many casinos in the US follow 
 | Green | 25 | Standard bets and raises |
 | Black | 100 | Bigger bets, later levels |
 | Purple | 500 | Tournaments with deep stacks |
-| Yellow | 1,000 | Late tournament levels |
+| Orange (yellow in many home sets) | 1,000 | Late tournament levels |
 
 ## How many chips per player?
 
@@ -249,6 +249,12 @@ In physical chips, each player needs about **20 to 50 chips**, enough small ones
 
 If the maths above is the part of poker night you dread, use virtual chips instead. With [EasyPoker](https://easypoker.cc/), every player's stack is an exact number on their own phone: no colours, no change, no counting at the end. [How virtual poker chips work](https://easypoker.cc/guides/virtual-poker-chips).
 
+## Sources
+
+- [New Jersey Administrative Code 13:69E-1.3, Value gaming chips: regulated chip colours](https://www.nj.gov/lps/ge/docs/Regulations/CHAPTER69E.pdf)
+
+Chips per player and set sizes are common guidance for home sets, not a rule.
+
 ## Frequently asked questions
 
 ### How many poker chips do I need for 6 players?
@@ -261,7 +267,7 @@ Between 50 and 100 big blinds. With 5/10 blinds, a 1,000-chip starting stack is 
 
 ### What are the standard poker chip colour values?
 
-A common convention is white 1, red 5, green 25, black 100, purple 500 and yellow 1,000. Home sets vary, so agree on values before the first hand.
+A common convention, matching US casino chips such as New Jersey's regulated colours, is white 1, red 5, green 25, black 100, purple 500 and orange 1,000 (many home sets use yellow for 1,000). Agree on values before the first hand.
 
 ### How do I count a stack of poker chips quickly?
 
@@ -455,9 +461,11 @@ EasyPoker supports both: set fixed blinds for a cash game, or have the host rais
 
 ## Sources
 
-- [Wikipedia: Blind (poker)](https://en.wikipedia.org/wiki/Blind_(poker))
-- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
-- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1: Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations](https://www.pokertda.com/view-poker-tda-rules/)
+
+Level timings are common home-game choices, not rules.
 
 ## Frequently asked questions
 
@@ -488,7 +496,7 @@ A royal flush beats everything; high card beats nothing. In between are eight mo
 
 ## The ten poker hands in order
 
-From strongest to weakest. The odds are for being dealt that exact hand in five cards from a 52-card deck, out of 2,598,960 possible hands (the standard combinatorics, as tabulated in [Wikipedia's poker probability article](https://en.wikipedia.org/wiki/Poker_probability)).
+From strongest to weakest. The odds are for being dealt that exact hand in five cards from a 52-card deck, out of 2,598,960 possible hands (exact counts, as computed by mathematician Brian Alspach in his [poker computations](http://people.math.sfu.ca/~alspach/computations)).
 
 | Rank | Hand | Example | Ways to make it | Chance in 5 cards |
 |---|---|---|---|---|
@@ -538,9 +546,9 @@ Splitting a pot is easy with [EasyPoker](https://easypoker.cc/): each winner tap
 
 ## Sources
 
-- [Wikipedia: List of poker hands (ranking order and tie-breaking)](https://en.wikipedia.org/wiki/List_of_poker_hands)
-- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [John McLeod, Pagat: Poker hand ranking (order, equal suits, the wheel, kickers, split pots)](https://www.pagat.com/poker/rules/ranking.html)
+- [Brian Alspach (Simon Fraser University), Poker Computations: exact hand counts and probabilities](http://people.math.sfu.ca/~alspach/computations)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
 
 ## Frequently asked questions
 
@@ -620,10 +628,10 @@ With EasyPoker, everyone's stack is on their own phone. To bet or call, pick the
 
 ## Sources
 
-- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
-- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
-- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
+- [John McLeod, Pagat: Texas Hold'em rules (deal, burn cards, betting order, showdown)](https://www.pagat.com/poker/variants/texasholdem.html)
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1: Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations](https://www.pokertda.com/view-poker-tda-rules/)
 
 ## Frequently asked questions
 
@@ -702,8 +710,8 @@ Total 1,000, which matches 50 + 150 + 400 + 400. Always check the pots add up to
 
 ## Sources
 
-- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
 
 ## Frequently asked questions
 
@@ -777,9 +785,9 @@ At the end, write down each player's final stack before anyone leaves. If you pl
 
 ## Sources
 
-- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
-- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1: Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations](https://www.pokertda.com/view-poker-tda-rules/)
+- [John McLeod, Pagat: Texas Hold'em rules (deal, burn cards, betting order, showdown)](https://www.pagat.com/poker/variants/texasholdem.html)
 
 ## Frequently asked questions
 
@@ -857,8 +865,9 @@ EasyPoker only tracks chips and never handles money; settle real stakes between 
 
 ## Sources
 
-- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
-- [Wikipedia: Independent Chip Model](https://en.wikipedia.org/wiki/Independent_Chip_Model)
+- [Harville, "Assigning Probabilities to the Outcomes of Multi-Entry Competitions", JASA 68(342), 1973: the model ICM is built on](https://doi.org/10.1080/01621459.1973.10482425)
+
+Payout percentages are home-game conventions; neither the TDA rules nor Robert's Rules set them. The chip-chop example is arithmetic shown on the page.
 
 ## Frequently asked questions
 
@@ -933,8 +942,8 @@ Agreeing in advance what counts as a misdeal turns an argument into a reshuffle.
 
 ## Sources
 
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
-- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1: Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations](https://www.pokertda.com/view-poker-tda-rules/)
 
 ## Frequently asked questions
 
@@ -1029,8 +1038,9 @@ Playing without a chip set? With [EasyPoker](https://easypoker.cc/), the blinds,
 
 ## Sources
 
-- [Wikipedia: Glossary of poker terms](https://en.wikipedia.org/wiki/Glossary_of_poker_terms)
-- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [John McLeod, Pagat: Texas Hold'em rules (deal, burn cards, betting order, showdown)](https://www.pagat.com/poker/variants/texasholdem.html)
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
 
 ## Frequently asked questions
 
@@ -1172,8 +1182,8 @@ At a home game, the arithmetic is easier when the pot is an exact number in fron
 
 ## Sources
 
-- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
-- [Wikipedia: Pot odds](https://en.wikipedia.org/wiki/Pot_odds)
+- [Brian Alspach (Simon Fraser University), Poker Computations: exact hand counts and probabilities](http://people.math.sfu.ca/~alspach/computations)
+- David Sklansky, The Theory of Poker (Two Plus Two Publishing, 1987): pot odds and implied odds
 
 ## Frequently asked questions
 
@@ -1250,8 +1260,8 @@ The hardest part of pot odds at a live table is knowing the pot. With [EasyPoker
 
 ## Sources
 
-- [Wikipedia: Pot odds](https://en.wikipedia.org/wiki/Pot_odds)
-- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
+- David Sklansky, The Theory of Poker (Two Plus Two Publishing, 1987): pot odds and implied odds
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
 
 ## Frequently asked questions
 
@@ -1321,8 +1331,10 @@ Players who act later see what everyone else did first. That makes marginal hand
 
 ## Sources
 
-- [Wikipedia: Texas hold 'em starting hands (169 distinct hands, 1,326 combinations, pair frequency)](https://en.wikipedia.org/wiki/Texas_hold_%27em_starting_hands)
-- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
+- [Brian Alspach, "Counting Starting Poker Hands": 169 starting hands from 1,326 combinations](http://people.math.sfu.ca/~alspach/art3.pdf)
+- [Brian Alspach (Simon Fraser University), Poker Computations: exact hand counts and probabilities](http://people.math.sfu.ca/~alspach/computations)
+
+The tier list is a simplified guideline, not a published chart; the counts and odds are exact.
 
 ## Frequently asked questions
 
@@ -1402,8 +1414,10 @@ Use any object as the dealer button and move it one seat left after every hand; 
 
 ## Sources
 
-- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
-- [Wikipedia: Blind (poker)](https://en.wikipedia.org/wiki/Blind_(poker))
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [John McLeod, Pagat: Texas Hold'em rules (deal, burn cards, betting order, showdown)](https://www.pagat.com/poker/variants/texasholdem.html)
+
+Seat names such as lojack, hijack and cutoff are player slang with no rulebook definition; the sources cover the button, the blinds and the order of action.
 
 ## Frequently asked questions
 
@@ -1475,9 +1489,9 @@ Deal four cards each, so a full deck supports up to 10 players with room for bur
 
 ## Sources
 
-- [Wikipedia: Omaha hold 'em (four hole cards, exactly two from hand and three from board)](https://en.wikipedia.org/wiki/Omaha_hold_%27em)
-- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
-- [Wikipedia: List of poker hands (ranking order and tie-breaking)](https://en.wikipedia.org/wiki/List_of_poker_hands)
+- [John McLeod, Pagat: Omaha rules (four hole cards, exactly two plus three, pot-limit)](https://www.pagat.com/poker/variants/omaha.html)
+- [John McLeod, Pagat: Poker betting (blinds, no-limit and pot-limit maximums, all-ins and side pots)](https://www.pagat.com/poker/rules/betting.html)
+- [John McLeod, Pagat: Poker hand ranking (order, equal suits, the wheel, kickers, split pots)](https://www.pagat.com/poker/rules/ranking.html)
 
 ## Frequently asked questions
 
@@ -1552,9 +1566,9 @@ In a home game the dealer usually also keeps the game moving: says whose turn it
 
 ## Sources
 
-- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
-- [Wikipedia: Shuffling (riffle shuffles and the "seven shuffles" result of Bayer and Diaconis)](https://en.wikipedia.org/wiki/Shuffling)
-- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
+- [Robert's Rules of Poker, Bob Ciaffone: string raises, oversized chip, showdown, misdeals, burn cards, button and blinds, glossary](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Bayer and Diaconis, "Trailing the Dovetail Shuffle to its Lair", Annals of Applied Probability 2(2), 1992](https://doi.org/10.1214/aoap/1177005705)
+- [John McLeod, Pagat: Texas Hold'em rules (deal, burn cards, betting order, showdown)](https://www.pagat.com/poker/variants/texasholdem.html)
 
 ## Frequently asked questions
 

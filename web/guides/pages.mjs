@@ -168,7 +168,7 @@ const basePages = [
 </section>
 
 <h2>Standard poker chip colours and values</h2>
-<p>There is no official rule, but most home sets and many casinos in the US follow this pattern. If your set has different colours, keep the order: lighter colours for smaller values.</p>
+<p>There is no rule for home sets, but many follow the colours US casinos use. New Jersey, for example, fixes the primary colour of each casino chip by regulation (N.J.A.C. 13:69E-1.3): white $1, red $5, green $25, black $100, purple $500 and orange $1,000. If your set has different colours, keep the order: lighter colours for smaller values.</p>
 <div class="ep-table-wrap"><table>
   <thead><tr><th>Colour</th><th>Common value</th><th>Used for</th></tr></thead>
   <tbody>
@@ -177,7 +177,7 @@ const basePages = [
     <tr><td><span class="ep-dot" style="--c:#1f9d5a"></span>Green</td><td>25</td><td>Standard bets and raises</td></tr>
     <tr><td><span class="ep-dot" style="--c:#2b2b2b"></span>Black</td><td>100</td><td>Bigger bets, later levels</td></tr>
     <tr><td><span class="ep-dot" style="--c:#8e44ad"></span>Purple</td><td>500</td><td>Tournaments with deep stacks</td></tr>
-    <tr><td><span class="ep-dot" style="--c:#f1c40f"></span>Yellow</td><td>1,000</td><td>Late tournament levels</td></tr>
+    <tr><td><span class="ep-dot" style="--c:#f07c1b"></span>Orange (yellow in many home sets)</td><td>1,000</td><td>Late tournament levels</td></tr>
   </tbody>
 </table></div>
 
@@ -207,7 +207,7 @@ const basePages = [
     faq: [
       ['How many poker chips do I need for 6 players?', 'About 300 chips is enough for six players at a cash game, which gives each player roughly 50 chips. For a tournament with re-buys, 500 is more comfortable.'],
       ['What should the starting stack be in a home game?', 'Between 50 and 100 big blinds. With 5/10 blinds, a 1,000-chip starting stack is a common choice.'],
-      ['What are the standard poker chip colour values?', 'A common convention is white 1, red 5, green 25, black 100, purple 500 and yellow 1,000. Home sets vary, so agree on values before the first hand.'],
+      ['What are the standard poker chip colour values?', 'A common convention, matching US casino chips such as New Jersey\'s regulated colours, is white 1, red 5, green 25, black 100, purple 500 and orange 1,000 (many home sets use yellow for 1,000). Agree on values before the first hand.'],
       ['How do I count a stack of poker chips quickly?', 'Count each colour in stacks of 20, multiply by the chip value, and add the colours together. The chip counter on this page does the multiplication for you.'],
     ],
   },
