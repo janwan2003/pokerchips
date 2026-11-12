@@ -64,6 +64,10 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
   `web/public/table.html` embeds the app's join/game markup verbatim (`web/test/parity.test.js`
   fails if they drift — re-copy). Host features live in a separate Host tab styled by
   `web/public/css/site.css` (all `ep-` prefixed).
+- SEO pages (`/guides/*`, `/privacy`, `sitemap.xml`) are generated: edit
+  `web/guides/pages.mjs`, run `npm run guides`; `test/guides.test.js` fails if the output
+  is stale. The home page only links to them from a small footer below the fold — keep
+  the home page itself focused on hosting/joining. Table pages are `noindex`.
 - End-to-end check: `npx wrangler dev`, then drive two Playwright browser contexts
   (host + player) against it.
 
