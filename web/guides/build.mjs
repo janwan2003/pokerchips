@@ -2,7 +2,7 @@
 // public/sitemap.xml. Run `npm run guides` after editing pages.mjs; test/guides.test.js
 // fails when the committed output is stale.
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { pages, hub, privacy, UPDATED } from './pages.mjs';
+import { pages, hub, privacy, about, UPDATED } from './pages.mjs';
 
 const ORIGIN = 'https://easypoker.cc';
 const OG_IMAGE = `${ORIGIN}/og.png`;
@@ -57,7 +57,7 @@ function footer() {
   const links = pages.map((p) => `<li><a href="/guides/${p.slug}">${esc(p.h1)}</a></li>`).join('');
   return `
     <footer class="ep-doc-foot">
-        <nav aria-label="Guides"><ul>${links}<li><a href="/guides/">All guides</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
+        <nav aria-label="Guides"><ul>${links}<li><a href="/guides/">All guides</a></li><li><a href="/about">About</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
         <p>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
     </footer>`;
 }
@@ -91,6 +91,14 @@ function renderGuide(p) {
     },
     crumbs([['EasyPoker', `${ORIGIN}/`], ['Guides', `${ORIGIN}/guides/`], [p.h1, canonical]]),
   ];
+  if (p.howto) {
+    schema.push({
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: p.howto.name,
+      step: p.howto.steps.map(([name, text], i) => ({ '@type': 'HowToStep', position: i + 1, name, text })),
+    });
+  }
   if (p.faq?.length) {
     schema.push({
       '@context': 'https://schema.org',
@@ -116,6 +124,7 @@ ${p.faq.map(([q, a]) => `            <details><summary>${esc(q)}</summary><p>${e
         <article class="ep-prose">
             <h1>${esc(p.h1)}</h1>
             <p class="ep-doc-lede">${esc(p.lede)}</p>
+            <p class="ep-muted ep-small">Last updated <time datetime="${UPDATED}">${UPDATED}</time></p>
 ${p.body.trim()}
         </article>${cta}${faq}
         <section class="ep-related" aria-labelledby="related-title">
@@ -182,11 +191,114 @@ ${privacy.body.trim()}
 `;
 }
 
+function renderAbout() {
+  const canonical = `${ORIGIN}/about`;
+  const schema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: about.h1,
+      url: canonical,
+      dateModified: UPDATED,
+      mainEntity: {
+        '@type': 'WebApplication',
+        '@id': `${ORIGIN}/#app`,
+        name: 'EasyPoker',
+        alternateName: 'easypoker.cc',
+        url: `${ORIGIN}/`,
+        description: strip(about.body).split('. ')[0] + '.',
+        applicationCategory: 'GameApplication',
+        operatingSystem: 'Any (web browser)',
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      },
+    },
+    crumbs([['EasyPoker', `${ORIGIN}/`], ['About', canonical]]),
+  ];
+  return `${head({ title: about.title, description: about.description, canonical, type: 'website', schema })}
+<body class="ep-page ep-scope">${topbar}
+    <main class="ep-doc">
+        <article class="ep-prose">
+            <h1>${esc(about.h1)}</h1>
+            <p class="ep-muted ep-small">Last updated ${UPDATED}</p>
+${about.body.trim()}
+        </article>
+    </main>${footer()}
+    ${CHIP_SYMBOL}
+</body>
+</html>
+`;
+}
+
+// Plain-markdown rendering of a page body, for llms-full.txt.
+function toMarkdown(html) {
+  const abs = (h) => (h.startsWith('/') ? ORIGIN + h : h);
+  let md = html
+    .replace(/<tr>([\s\S]*?)<\/tr>/g, (_, row) => '| ' + [...row.matchAll(/<t[hd][^>]*>([\s\S]*?)<\/t[hd]>/g)].map((c) => c[1]).join(' | ') + ' |\n')
+    .replace(/<\/thead>/g, '|---|\n')
+    .replace(/<h2[^>]*>([\s\S]*?)<\/h2>/g, '\n## $1\n')
+    .replace(/<h3[^>]*>([\s\S]*?)<\/h3>/g, '\n### $1\n')
+    .replace(/<dt>([\s\S]*?)<\/dt><dd>([\s\S]*?)<\/dd>/g, '- **$1**: $2\n')
+    .replace(/<li>([\s\S]*?)<\/li>/g, '- $1\n')
+    .replace(/<strong>([\s\S]*?)<\/strong>/g, '**$1**')
+    .replace(/<a href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g, (_, h, t) => `[${t}](${abs(h)})`)
+    .replace(/<p[^>]*>([\s\S]*?)<\/p>/g, '\n$1\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&');
+  // The header separator row must match the column count of the header above it.
+  md = md.replace(/(\| .* \|)\n\|---\|/g, (_, hdr) => `${hdr}\n|${'---|'.repeat(hdr.split(' | ').length)}`);
+  md = md.replace(/^[ \t]+/gm, '').replace(/\n{3,}/g, '\n\n');
+  // Rows of a table and items of a list must not be separated by blank lines.
+  for (let prev = ''; prev !== md; ) {
+    prev = md;
+    md = md.replace(/^(\|.*\|)\n\n(?=\|)/gm, '$1\n').replace(/^((?:-|\d+\.) .*)\n\n(?=- )/gm, '$1\n');
+  }
+  return md.trim();
+}
+
+const LLMS_INTRO = `# EasyPoker (easypoker.cc)
+
+> EasyPoker is a free, browser-based poker chip tracker for live home games. The host creates a table, players join from their own phones by link or QR code, and every bet, pot and payout updates on every phone at once. No app, no sign-up, no payment. Players still deal a real deck of cards.
+
+- Up to 30 players per table; host sets starting chips and blinds (presets 1/2 to 1,000/2,000) and can allow fixed buy-ins.
+- Every action is saved on the server; a closed tab or dead battery loses nothing. The host can correct any stack or the pot and restore any earlier moment.
+- It does not deal cards, decide winners, compute side pots automatically, or handle money.
+- easypoker.cc is independent and not affiliated with the "Poker with Friends – EasyPoker" app or easy.poker.`;
+
+function renderLlms() {
+  const list = pages.map((p) => `- [${p.h1}](${url(p.slug)}): ${p.description}`).join('\n');
+  return `${LLMS_INTRO}
+
+## App
+
+- [Start or join a table](${ORIGIN}/): host a free table or join one with a 6-character code
+- [About EasyPoker](${ORIGIN}/about): what it does and does not do
+- [Privacy](${ORIGIN}/privacy): what is stored
+
+## Guides
+
+${list}
+
+## Optional
+
+- [All guides as one text file](${ORIGIN}/llms-full.txt)
+`;
+}
+
+function renderLlmsFull() {
+  const sections = pages.map((p) => {
+    const faq = p.faq.map(([q, a]) => `### ${q}\n\n${a}`).join('\n\n');
+    return `# ${p.h1}\n\nSource: ${url(p.slug)}\nLast updated: ${UPDATED}\n\n${p.lede}\n\n${toMarkdown(p.body)}\n\n## Frequently asked questions\n\n${faq}`;
+  });
+  return `${LLMS_INTRO}\n\n---\n\n# About EasyPoker\n\nSource: ${ORIGIN}/about\n\n${toMarkdown(about.body)}\n\n---\n\n${sections.join('\n\n---\n\n')}\n`;
+}
+
 function renderSitemap() {
   const entries = [
     [`${ORIGIN}/`, '1.0'],
     [`${ORIGIN}/guides/`, '0.6'],
     ...pages.map((p) => [url(p.slug), '0.8']),
+    [`${ORIGIN}/about`, '0.4'],
     [`${ORIGIN}/privacy`, '0.2'],
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -198,7 +310,14 @@ ${entries.map(([loc, pr]) => `  <url><loc>${loc}</loc><lastmod>${UPDATED}</lastm
 
 /** Every generated file, path relative to web/public. */
 export function render() {
-  const out = { 'guides/index.html': renderHub(), 'privacy.html': renderPrivacy(), 'sitemap.xml': renderSitemap() };
+  const out = {
+    'guides/index.html': renderHub(),
+    'privacy.html': renderPrivacy(),
+    'about.html': renderAbout(),
+    'sitemap.xml': renderSitemap(),
+    'llms.txt': renderLlms(),
+    'llms-full.txt': renderLlmsFull(),
+  };
   for (const p of pages) out[`guides/${p.slug}.html`] = renderGuide(p);
   return out;
 }

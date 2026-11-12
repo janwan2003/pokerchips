@@ -3,11 +3,15 @@
 // rendered files are stale). Each page targets one search intent; keep them distinct,
 // factual about what EasyPoker does, and useful on their own.
 
+import { more, about } from './pages-more.mjs';
+
+export { about };
+
 export const UPDATED = '2026-11-12';
 
 const CTA_LINK = '<a href="/">EasyPoker</a>';
 
-export const pages = [
+const basePages = [
   {
     slug: 'virtual-poker-chips',
     title: 'Virtual Poker Chips: Free Digital Chips for Home Games',
@@ -381,6 +385,8 @@ export const pages = [
     ],
   },
 ];
+
+export const pages = [...basePages, ...more];
 
 export const hub = {
   slug: '',

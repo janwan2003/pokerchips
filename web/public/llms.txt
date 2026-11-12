@@ -1,0 +1,35 @@
+# EasyPoker (easypoker.cc)
+
+> EasyPoker is a free, browser-based poker chip tracker for live home games. The host creates a table, players join from their own phones by link or QR code, and every bet, pot and payout updates on every phone at once. No app, no sign-up, no payment. Players still deal a real deck of cards.
+
+- Up to 30 players per table; host sets starting chips and blinds (presets 1/2 to 1,000/2,000) and can allow fixed buy-ins.
+- Every action is saved on the server; a closed tab or dead battery loses nothing. The host can correct any stack or the pot and restore any earlier moment.
+- It does not deal cards, decide winners, compute side pots automatically, or handle money.
+- easypoker.cc is independent and not affiliated with the "Poker with Friends – EasyPoker" app or easy.poker.
+
+## App
+
+- [Start or join a table](https://easypoker.cc/): host a free table or join one with a 6-character code
+- [About EasyPoker](https://easypoker.cc/about): what it does and does not do
+- [Privacy](https://easypoker.cc/privacy): what is stored
+
+## Guides
+
+- [Virtual poker chips for your home game](https://easypoker.cc/guides/virtual-poker-chips): Use virtual poker chips on your phones instead of a chip set. Free, no app or sign-up: host a table in the browser and everyone bets from their own phone.
+- [A poker chip app that runs in the browser](https://easypoker.cc/guides/poker-chip-app): A free poker chip app that runs in the browser. Track every stack, the pot and the blinds on each player's phone. No download, no sign-up.
+- [Poker chip calculator](https://easypoker.cc/guides/poker-chip-calculator): Free poker chip calculator: work out chip values and how many chips of each colour to give every player, or count what a stack is worth.
+- [How to play poker without chips](https://easypoker.cc/guides/poker-without-chips): No poker chips? Seven ways to play anyway: a free phone chip app, pen and paper, coins, a second deck of cards and more, with the pros and cons of each.
+- [Online poker chips for playing with friends](https://easypoker.cc/guides/online-poker-chips): Online poker chips that sync between your friends' phones: free, no download. Track stacks, pot and blinds online while you play with real cards.
+- [Home poker blind structure](https://easypoker.cc/guides/home-poker-blind-structure): A simple blind structure for home poker games: blind levels, how long each level should last, and starting stacks for cash games and tournaments.
+- [Poker hand rankings, from best to worst](https://easypoker.cc/guides/poker-hand-rankings): All ten poker hands ranked from royal flush to high card, with examples, how often each is dealt in five cards, and how ties and kickers are decided.
+- [Texas Hold'em rules for a home game](https://easypoker.cc/guides/texas-holdem-rules): Texas Hold'em rules for a home game: blinds, the four betting rounds, what check, call, raise and fold mean, the showdown, and minimum raise sizes.
+- [How side pots work in poker](https://easypoker.cc/guides/side-pots): How side pots work when a player is all-in for less: build the main pot and each side pot step by step, who can win which, and how to pay them out.
+- [How to host a poker night](https://easypoker.cc/guides/how-to-host-a-poker-night): Everything to host a home poker night: what to buy, how many players, buy-ins, blinds, house rules, food, and how to settle up at the end of the night.
+- [How to split a home poker tournament prize pool](https://easypoker.cc/guides/poker-tournament-payouts): How to split a home poker tournament prize pool: payout percentages by number of players, a worked example, and how chop deals at the final table work.
+- [Home poker house rules](https://easypoker.cc/guides/home-poker-house-rules): A ready-to-share list of home poker house rules: acting in turn, string bets, misdeals, showing cards, re-buys and settling up, with the reason for each rule.
+- [Poker terms glossary](https://easypoker.cc/guides/poker-terms-glossary): Plain-English definitions of the poker terms you hear at a home game: blinds, button, flop, turn, river, kicker, all-in, side pot, nuts, tilt and more.
+- [Poker chip apps for home games, compared](https://easypoker.cc/guides/best-poker-chip-apps): Poker chip apps for live home games compared: EasyPoker, Chips of Fury, PartyPot and pokerchips.io, with platform, side pots and settle-up features.
+
+## Optional
+
+- [All guides as one text file](https://easypoker.cc/llms-full.txt)

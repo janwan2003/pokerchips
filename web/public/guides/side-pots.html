@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Side Pots Explained With a Worked Example</title>
+    <meta name="description" content="How side pots work when a player is all-in for less: build the main pot and each side pot step by step, who can win which, and how to pay them out.">
+    <link rel="canonical" href="https://easypoker.cc/guides/side-pots">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="EasyPoker">
+    <meta property="og:title" content="Poker Side Pots Explained With a Worked Example">
+    <meta property="og:description" content="How side pots work when a player is all-in for less: build the main pot and each side pot step by step, who can win which, and how to pay them out.">
+    <meta property="og:url" content="https://easypoker.cc/guides/side-pots">
+    <meta property="og:image" content="https://easypoker.cc/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#11121d">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400..700&display=swap">
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/guides.css">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How side pots work in poker","description":"How side pots work when a player is all-in for less: build the main pot and each side pot step by step, who can win which, and how to pay them out.","image":"https://easypoker.cc/og.png","dateModified":"2026-11-12","mainEntityOfPage":"https://easypoker.cc/guides/side-pots","author":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"},"publisher":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"EasyPoker","item":"https://easypoker.cc/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://easypoker.cc/guides/"},{"@type":"ListItem","position":3,"name":"How side pots work in poker","item":"https://easypoker.cc/guides/side-pots"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is a side pot in poker?","acceptedAnswer":{"@type":"Answer","text":"A separate pot for chips that an all-in player could not match. Only the players who put chips into a side pot can win it."}},{"@type":"Question","name":"Can an all-in player win more than they bet?","acceptedAnswer":{"@type":"Answer","text":"They can win the main pot, which holds their own all-in plus the same amount from every caller, but nothing from the side pots."}},{"@type":"Question","name":"Who wins the side pot if the all-in player has the best hand?","acceptedAnswer":{"@type":"Answer","text":"The all-in player takes the main pot; the side pot goes to the best hand among the other players who contributed to it."}},{"@type":"Question","name":"How do you calculate a side pot?","acceptedAnswer":{"@type":"Answer","text":"Take the smallest all-in amount from every player for the main pot, then repeat with the next all-in amount for each side pot, until all chips are assigned."}}]}</script>
+</head>
+<body class="ep-page ep-scope">
+    <header class="ep-doc-top">
+        <a class="ep-brand" href="/"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker</a>
+        <a class="ep-btn ep-btn-red ep-doc-top-cta" href="/">Start a free table</a>
+    </header>
+    <main class="ep-doc">
+        <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a></nav>
+        <article class="ep-prose">
+            <h1>How side pots work in poker</h1>
+            <p class="ep-doc-lede">A side pot is created when a player goes all-in for less than the others are betting. The all-in player can only win the main pot, which holds what they could match from each player; everything above that goes into a side pot that only the other players can win.</p>
+            <p class="ep-muted ep-small">Last updated <time datetime="2026-11-12">2026-11-12</time></p>
+<h2>The rule in one sentence</h2>
+<p>A player can only win from each opponent as much as they themselves put in. Side pots are simply the bookkeeping for that rule.</p>
+
+<h2>Worked example: three players, one short stack</h2>
+<p>Ana has 100 chips, Ben has 300, Cleo has 500. Ana goes all-in for 100, Ben calls and raises to 300 (all-in), Cleo calls 300.</p>
+<div class="ep-table-wrap"><table>
+  <thead><tr><th>Pot</th><th>How it is built</th><th>Size</th><th>Who can win it</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Main pot</strong></td><td>100 from each of Ana, Ben, Cleo</td><td>300</td><td>Ana, Ben or Cleo</td></tr>
+    <tr><td><strong>Side pot</strong></td><td>The next 200 from each of Ben and Cleo</td><td>400</td><td>Ben or Cleo only</td></tr>
+  </tbody>
+</table></div>
+<p>Cleo bet 300 and keeps her other 200; nothing above 300 goes in because nobody can match it.</p>
+<p><strong>At showdown</strong>, compare hands for each pot separately, starting with the side pot:</p>
+<ul>
+  <li>If Ana has the best hand overall, she wins the main pot (300). The better of Ben and Cleo wins the side pot (400).</li>
+  <li>If Ben has the best hand, he wins both pots (700).</li>
+  <li>If Cleo beats Ben but loses to Ana: Ana takes 300, Cleo takes 400.</li>
+</ul>
+
+<h2>How to build side pots step by step</h2>
+<ol>
+  <li>Find the smallest all-in amount. Take that much from every player in the hand: that is the main pot.</li>
+  <li>From what is left, find the next-smallest all-in amount and take that much from every player who still has chips in: that is side pot 1.</li>
+  <li>Repeat until every chip is in a pot. Any amount a single player put in that nobody could match goes back to that player.</li>
+  <li>Each pot is won by the best hand among the players who contributed to it.</li>
+</ol>
+
+<h2>Two all-ins: a second example</h2>
+<p>Four players. Dev is all-in for 50, Eli is all-in for 150, Fay and Gus both bet 400.</p>
+<div class="ep-table-wrap"><table>
+  <thead><tr><th>Pot</th><th>Calculation</th><th>Size</th><th>Eligible</th></tr></thead>
+  <tbody>
+    <tr><td>Main pot</td><td>50 × 4</td><td>200</td><td>Dev, Eli, Fay, Gus</td></tr>
+    <tr><td>Side pot 1</td><td>(150 − 50) × 3</td><td>300</td><td>Eli, Fay, Gus</td></tr>
+    <tr><td>Side pot 2</td><td>(400 − 150) × 2</td><td>500</td><td>Fay, Gus</td></tr>
+  </tbody>
+</table></div>
+<p>Total 1,000, which matches 50 + 150 + 400 + 400. Always check the pots add up to everything that was bet.</p>
+
+<h2>Paying side pots out with EasyPoker</h2>
+<p><a href="/">EasyPoker</a> keeps one pot on the table and does not split it into side pots automatically. Work out the pots as above, then pay them out in order: the winner of each smaller pot taps <em>Take</em> and enters that pot's size, and the last winner taps <em>Take whole pot</em> for whatever is left. If anyone takes the wrong amount, the host can set the pot and the stacks directly, or restore the table to the moment before.</p>
+        </article>
+        <aside class="ep-cta">
+            <p class="ep-cta-title">Play tonight without a chip set</p>
+            <p>Host a table in your browser, share the link, and everyone bets from their own phone. Free, no app, no sign-up.</p>
+            <a class="ep-btn ep-btn-red ep-btn-lg" href="/">Start a free table</a>
+        </aside>
+        <section class="ep-faq" aria-labelledby="faq-title">
+            <h2 id="faq-title">Frequently asked questions</h2>
+            <details><summary>What is a side pot in poker?</summary><p>A separate pot for chips that an all-in player could not match. Only the players who put chips into a side pot can win it.</p></details>
+            <details><summary>Can an all-in player win more than they bet?</summary><p>They can win the main pot, which holds their own all-in plus the same amount from every caller, but nothing from the side pots.</p></details>
+            <details><summary>Who wins the side pot if the all-in player has the best hand?</summary><p>The all-in player takes the main pot; the side pot goes to the best hand among the other players who contributed to it.</p></details>
+            <details><summary>How do you calculate a side pot?</summary><p>Take the smallest all-in amount from every player for the main pot, then repeat with the next all-in amount for each side pot, until all chips are assigned.</p></details>
+        </section>
+        <section class="ep-related" aria-labelledby="related-title">
+            <h2 id="related-title">Related guides</h2>
+            <ul><li><a href="/guides/texas-holdem-rules"><strong>Texas Hold'em rules for a home game</strong><span>Texas Hold'em rules for a home game: blinds, the four betting rounds, what check, call, raise and fold mean, the showdown, and minimum raise sizes.</span></a></li><li><a href="/guides/home-poker-house-rules"><strong>Home poker house rules</strong><span>A ready-to-share list of home poker house rules: acting in turn, string bets, misdeals, showing cards, re-buys and settling up, with the reason for each rule.</span></a></li><li><a href="/guides/poker-terms-glossary"><strong>Poker terms glossary</strong><span>Plain-English definitions of the poker terms you hear at a home game: blinds, button, flop, turn, river, kicker, all-in, side pot, nuts, tilt and more.</span></a></li></ul>
+        </section>
+    </main>
+    <footer class="ep-doc-foot">
+        <nav aria-label="Guides"><ul><li><a href="/guides/virtual-poker-chips">Virtual poker chips for your home game</a></li><li><a href="/guides/poker-chip-app">A poker chip app that runs in the browser</a></li><li><a href="/guides/poker-chip-calculator">Poker chip calculator</a></li><li><a href="/guides/poker-without-chips">How to play poker without chips</a></li><li><a href="/guides/online-poker-chips">Online poker chips for playing with friends</a></li><li><a href="/guides/home-poker-blind-structure">Home poker blind structure</a></li><li><a href="/guides/poker-hand-rankings">Poker hand rankings, from best to worst</a></li><li><a href="/guides/texas-holdem-rules">Texas Hold'em rules for a home game</a></li><li><a href="/guides/side-pots">How side pots work in poker</a></li><li><a href="/guides/how-to-host-a-poker-night">How to host a poker night</a></li><li><a href="/guides/poker-tournament-payouts">How to split a home poker tournament prize pool</a></li><li><a href="/guides/home-poker-house-rules">Home poker house rules</a></li><li><a href="/guides/poker-terms-glossary">Poker terms glossary</a></li><li><a href="/guides/best-poker-chip-apps">Poker chip apps for home games, compared</a></li><li><a href="/guides/">All guides</a></li><li><a href="/about">About</a></li><li><a href="/privacy">Privacy</a></li></ul></nav>
+        <p>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
+    </footer>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="chip" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e94560"/><circle cx="24" cy="24" r="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="7.5 9.77" transform="rotate(-12 24 24)"/><circle cx="24" cy="24" r="14" fill="#c7364f"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 2.4"/><path d="M24 15.5c-3.2 3.3-7 5.4-7 9 0 2.2 1.7 3.8 3.8 3.8 1 0 2-.4 2.6-1.1-.3 1.6-1 3-2.2 4h5.6c-1.2-1-1.9-2.4-2.2-4 .7.7 1.6 1.1 2.6 1.1 2.1 0 3.8-1.6 3.8-3.8 0-3.6-3.8-5.7-7-9z" fill="#fff"/></symbol>
+    </svg>
+</body>
+</html>

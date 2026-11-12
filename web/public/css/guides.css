@@ -126,3 +126,12 @@
 .ep-doc-foot ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; }
 .ep-doc-foot a { color: var(--ep-text-2); text-decoration: none; }
 .ep-doc-foot a:hover { color: var(--ep-gold); }
+
+/* Glossary definition lists */
+.ep-glossary { display: grid; grid-template-columns: minmax(7.5rem, max-content) 1fr; gap: 10px 20px; margin: 8px 0 24px; }
+.ep-glossary dt { font-weight: 600; color: var(--ep-text); }
+.ep-glossary dd { margin: 0; color: var(--ep-text-2); }
+@media (max-width: 520px) {
+    .ep-glossary { grid-template-columns: 1fr; gap: 2px; }
+    .ep-glossary dd { margin-bottom: 10px; }
+}

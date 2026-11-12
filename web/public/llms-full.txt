@@ -1,0 +1,1074 @@
+# EasyPoker (easypoker.cc)
+
+> EasyPoker is a free, browser-based poker chip tracker for live home games. The host creates a table, players join from their own phones by link or QR code, and every bet, pot and payout updates on every phone at once. No app, no sign-up, no payment. Players still deal a real deck of cards.
+
+- Up to 30 players per table; host sets starting chips and blinds (presets 1/2 to 1,000/2,000) and can allow fixed buy-ins.
+- Every action is saved on the server; a closed tab or dead battery loses nothing. The host can correct any stack or the pot and restore any earlier moment.
+- It does not deal cards, decide winners, compute side pots automatically, or handle money.
+- easypoker.cc is independent and not affiliated with the "Poker with Friends – EasyPoker" app or easy.poker.
+
+---
+
+# About EasyPoker
+
+Source: https://easypoker.cc/about
+
+**EasyPoker (easypoker.cc) is a free, browser-based poker chip tracker for live home games.** The host creates a table, players join from their own phones with a link or QR code, and every bet, pot and payout updates on every phone at once. Players still deal a real deck of cards.
+
+## What it does
+
+- Keeps each player's chip stack on their own phone, with a live shared pot.
+- Lets the host set the starting stack and the blinds (presets from 1/2 to 1,000/2,000) and optionally allow buy-ins of a fixed amount.
+- Seats up to 30 players at one table.
+- Saves every action on the server as it happens, so a closed tab or dead battery loses nothing.
+- Lets the host correct any stack or the pot, change blinds, remove a player, and restore the table to any earlier moment.
+
+## What it does not do
+
+- It does not deal cards or decide who wins a hand.
+- It does not work out side pots automatically.
+- It does not handle money, sell chips, or offer real-money gambling.
+
+## Cost and accounts
+
+Free. There are no accounts, no app download and no ads. See the [privacy page](https://easypoker.cc/privacy) for exactly what is stored.
+
+## Not the same as
+
+EasyPoker at easypoker.cc is an independent project. It is not affiliated with the "Poker with Friends – EasyPoker" mobile app or the easy.poker website, which is a separate product that deals virtual cards.
+
+## Start a game
+
+[Create a free table](https://easypoker.cc/), or read the [home poker guides](https://easypoker.cc/guides/).
+
+---
+
+# Virtual poker chips for your home game
+
+Source: https://easypoker.cc/guides/virtual-poker-chips
+Last updated: 2026-11-12
+
+Real cards on the table, chips on every phone. Virtual poker chips keep exact stacks, a live pot and the blinds for you, so nobody counts, nobody makes change and nobody argues about who owes what.
+
+## What are virtual poker chips?
+
+Virtual poker chips (also called digital poker chips) replace the physical chip set in a live poker game. You still deal real cards and play at a real table. The only thing that moves to the phones is the money: each player sees their own stack, taps to bet, and the pot updates on every phone at the same moment.
+
+They are not play money for an online poker site, and nothing is bought or sold. They are a scoreboard for the chips you would otherwise push across the felt.
+
+## How virtual chips work at EasyPoker
+
+- **The host creates a table** at [EasyPoker](https://easypoker.cc/) and picks the starting stack and the blinds (for example 1,000 chips with 5/10 blinds).
+- **Everyone joins** by scanning the QR code on the host's screen or opening the shared link, then types a name. No app to install, no account.
+- **Players bet from their own phone.** Pick an amount, tap Bet, and the chips leave your stack and land in the pot.
+- **The winner taps Take whole pot** (or takes part of it for a split pot). Every phone shows the new stacks instantly.
+
+Every action is saved the moment it happens. If a phone dies or someone closes the tab, they open the link again and their stack is exactly where they left it.
+
+## Virtual chips vs. a physical chip set
+
+|  | Physical chips | Virtual chips |
+|---|---|---|
+| Cost | A decent 300 to 500 chip set costs real money | Free |
+| Setup | Count and hand out stacks by colour | Under a minute: share one link |
+| Making change | Constant, and slows every hand | Never: bet any exact amount |
+| Counting the pot | By eye, with mistakes | Always exact, on every phone |
+| Mistakes | Hard to prove, hard to undo | Host can fix any stack or rewind |
+| Travel | Heavy case, chips go missing | Nothing to carry |
+| Feel | The clack of chips is great | You lose the shuffle and the stacking |
+
+Physical chips still win on feel. Virtual chips win on everything that slows a home game down.
+
+## When digital chips make the most sense
+
+- **You do not own a chip set**, or it is at someone else's house.
+- **You are travelling**: holidays, cabins, camping, a hotel room. A deck of cards fits in a pocket; a chip case does not.
+- **The group is big.** Eight or nine players drain a 300-chip set fast, and colours run out.
+- **You keep losing track** of rebuys, side bets or who put what in the pot.
+- **New players are at the table.** Nobody needs to learn what a green chip is worth.
+
+## What virtual chips do not do
+
+EasyPoker does not deal cards and does not handle real money. Deal a normal deck at the table, and settle any real stakes between yourselves at the end of the night if your group plays for them. The app only tracks the chips.
+
+## Frequently asked questions
+
+### Are virtual poker chips free?
+
+Yes. Creating a table and joining one is free, with no account and no app download.
+
+### Do all players need the app?
+
+No. Everyone plays in their phone browser by opening the table link or scanning the QR code.
+
+### What happens if my phone battery dies?
+
+Every action is saved on the server as it happens. Open the link again on any device, enter the same name, and your stack is still there.
+
+### Can the host correct a mistake?
+
+Yes. The host can set any player's stack, set the pot, change the blinds, remove a player, or restore the table to any earlier moment.
+
+### How many players can join?
+
+A normal home game of two to ten players works well. Each player only needs a phone with a browser.
+
+---
+
+# A poker chip app that runs in the browser
+
+Source: https://easypoker.cc/guides/poker-chip-app
+Last updated: 2026-11-12
+
+Most poker chip apps make every player download something. EasyPoker runs in the browser: the host opens a table, everyone else scans a QR code, and the chips live on each player's own phone.
+
+## What a good poker chip app needs to do
+
+A poker chip app (sometimes called a poker chip tracker) replaces the chip set in a live game. After many home games, this is the list that matters:
+
+- **One stack per phone.** Each player controls their own chips. A single shared tablet that everyone has to reach for is slower than real chips.
+- **A pot everyone can see.** Bets show up on every screen at once, so nobody asks "what's the pot?"
+- **Blinds built in.** The current small and big blind are always visible, and the host can raise them between levels.
+- **Mistakes are fixable.** Someone will tap the wrong amount. The host needs to correct a stack or undo the last few moves without restarting.
+- **Nothing gets lost.** A dead battery, a closed tab or a dropped Wi-Fi connection must not wipe anyone's chips.
+- **Zero setup for guests.** If joining takes more than a minute, people go back to counting coins.
+
+## How EasyPoker covers each one
+
+| Need | EasyPoker |
+|---|---|
+| One stack per phone | Every player joins from their own phone browser |
+| Shared pot | Live on every screen; updates the moment anyone bets |
+| Blinds | Set at table creation, changeable by the host any time |
+| Fixing mistakes | Host can set any stack or the pot, or restore any earlier moment |
+| Not losing chips | Every action is saved on the server; rejoin with the same name |
+| Fast joining | QR code or link, then type a name |
+| Buy-ins | Optional: the host can allow re-buys of a set amount |
+
+## Poker chip app, tracker or counter: what's the difference?
+
+People search for all three, and they usually mean slightly different things:
+
+- **Poker chip app**: replaces chips completely. Every player bets on a phone. This is what EasyPoker is.
+- **Poker chip tracker**: one person records stacks or buy-ins while the group still uses physical chips. Useful for cash games, but someone has to keep typing.
+- **Poker chip counter**: works out what a pile of chips is worth, or how to split a chip set between players. Our [poker chip calculator](https://easypoker.cc/guides/poker-chip-calculator) does both, if you are sticking with physical chips.
+
+## Why a browser app instead of an app store download?
+
+At a home game, the slowest part of any app is getting everyone to install it. Somebody is on iPhone, somebody is on Android, somebody's storage is full, somebody does not want another account. A browser table avoids all of that: one link, and every phone is in.
+
+The host also does not need to stay on one device. The host link can be copied to a laptop or another phone, which helps if the host's own battery is running low.
+
+## Set up a game in about a minute
+
+- Open [EasyPoker](https://easypoker.cc/), type your name, choose starting chips and blinds, and tap Create table.
+- Put your phone in the middle of the table with the QR code showing.
+- Everyone scans, types a name, and sees their starting stack.
+- Deal.
+
+## Frequently asked questions
+
+### Is there a poker chip app for both iPhone and Android?
+
+EasyPoker runs in any modern phone browser, so iPhone and Android players can sit at the same table. Nothing needs to be installed.
+
+### Does the poker chip app work without internet?
+
+The browser version needs a connection, because the stacks sync through the server. Mobile data is enough; each action is a tiny message.
+
+### Can I track buy-ins and re-buys?
+
+Yes. The host can allow buy-ins of a fixed amount when creating the table, and can also set any player's stack directly.
+
+### Does it deal cards?
+
+No. It is a chip app: deal a normal deck at the table.
+
+### Is it really free?
+
+Yes, with no account and no ads in the game.
+
+---
+
+# Poker chip calculator
+
+Source: https://easypoker.cc/guides/poker-chip-calculator
+Last updated: 2026-11-12
+
+Split a chip set fairly between players, pick sensible chip values for your blinds, or count up what a stack is worth. Everything runs in your browser.
+
+## Chip distribution calculator
+
+How many chips of each colour should every player start with?
+
+Players
+Starting stack (chips)
+Small blind
+Chip colours
+345
+
+## Poker chip counter
+
+Type how many chips of each value you have; the total updates as you type.
+
+Total: 0
+
+## Standard poker chip colours and values
+
+There is no official rule, but most home sets and many casinos in the US follow this pattern. If your set has different colours, keep the order: lighter colours for smaller values.
+
+| Colour | Common value | Used for |
+|---|---|---|
+| White | 1 | Small blinds in low-stakes games |
+| Red | 5 | Blinds and small bets |
+| Green | 25 | Standard bets and raises |
+| Black | 100 | Bigger bets, later levels |
+| Purple | 500 | Tournaments with deep stacks |
+| Yellow | 1,000 | Late tournament levels |
+
+## How many chips per player?
+
+A comfortable starting stack is **50 to 100 big blinds**. With 5/10 blinds that is 500 to 1,000 chips in value. Shorter stacks make the game faster and more all-in; deeper stacks give more room to play.
+
+In physical chips, each player needs about **20 to 50 chips**, enough small ones to post blinds and make change. That is why chip sets come in these sizes:
+
+| Chip set | Comfortable for |
+|---|---|
+| 300 chips | 4 to 6 players |
+| 500 chips | 6 to 8 players |
+| 750 to 1,000 chips | 8 to 10 players, or tournaments with re-buys |
+
+## Tips for choosing chip values
+
+- **Make the smallest chip equal the small blind.** Anything smaller is never used; anything bigger forces change on every hand.
+- **Keep each colour 4 to 5 times the one below** (5, 25, 100, 500). Fewer colours with big jumps cause change problems; tiny jumps waste colours.
+- **Give more small chips than you think.** Running out of small chips is the most common home-game slowdown.
+- **Colour up as blinds rise.** In a tournament, swap the smallest chips for bigger ones once the small blind outgrows them.
+
+## Skip the counting entirely
+
+If the maths above is the part of poker night you dread, use virtual chips instead. With [EasyPoker](https://easypoker.cc/), every player's stack is an exact number on their own phone: no colours, no change, no counting at the end. [How virtual poker chips work](https://easypoker.cc/guides/virtual-poker-chips).
+
+## Frequently asked questions
+
+### How many poker chips do I need for 6 players?
+
+About 300 chips is enough for six players at a cash game, which gives each player roughly 50 chips. For a tournament with re-buys, 500 is more comfortable.
+
+### What should the starting stack be in a home game?
+
+Between 50 and 100 big blinds. With 5/10 blinds, a 1,000-chip starting stack is a common choice.
+
+### What are the standard poker chip colour values?
+
+A common convention is white 1, red 5, green 25, black 100, purple 500 and yellow 1,000. Home sets vary, so agree on values before the first hand.
+
+### How do I count a stack of poker chips quickly?
+
+Count each colour in stacks of 20, multiply by the chip value, and add the colours together. The chip counter on this page does the multiplication for you.
+
+---
+
+# How to play poker without chips
+
+Source: https://easypoker.cc/guides/poker-without-chips
+Last updated: 2026-11-12
+
+You have a deck of cards and a group of friends, but no chip set. Here are seven ways to keep score, from the fastest to the most improvised.
+
+## 1. Use your phones as chips
+
+The quickest fix, because everyone already has a phone. With [EasyPoker](https://easypoker.cc/), one person creates a table in the browser and shows a QR code. Everyone else scans it, types a name and gets a starting stack. Bets go into a pot that every phone can see, and the winner taps to collect it.
+
+- Exact stacks, no counting, no change
+- Free, no app download, no sign-up
+- Survives dead batteries and closed tabs; the host can fix mistakes
+- Needs a phone with a browser and some signal for each player
+
+## 2. Pen and paper ledger
+
+Make a column for each player on a sheet of paper and give everyone the same starting number. One person acts as banker and writes down every bet and every pot. It works, but it is slow: each hand needs several lines of arithmetic, and one mistake throws off every number below it.
+
+**Tip:** only update the sheet at the end of each hand. Players announce bets out loud during the hand, and the banker writes the final pot result.
+
+## 3. Coins
+
+Raid the coin jar. Use the coin's face value or agree your own values (for example, small coins are 1, large coins are 5). Coins stack and clack like chips, which keeps the feel of the game. The downside: you need a lot of them, and everyone has to remember what each coin is worth.
+
+## 4. A second deck of cards
+
+Deal a second deck as currency: number cards are worth 1, face cards 5, aces 10, or whatever values you agree. It is surprisingly playable for small groups. Keep the second deck visibly different (another back colour) so it never gets mixed into the deck in play.
+
+## 5. Small objects: matches, sweets, beans, pasta
+
+Anything small and countable works: matchsticks, dried beans, pasta shapes, wrapped sweets. Use two or three different objects for different values. It is fun for a casual game and terrible for a serious one, because the objects get lost, eaten or knocked over.
+
+## 6. Board game money
+
+Paper money from a board game has printed values, which helps. It is fiddly to handle, though: notes blow away, stick together and are hard to count at a glance.
+
+## 7. Paper chips
+
+Cut squares of paper or card and write a value on each, or use coloured sticky notes for different values. It takes ten minutes of preparation and gives you something closer to real chips than coins or beans.
+
+## Which option should you choose?
+
+| Option | Setup time | Accuracy | Best for |
+|---|---|---|---|
+| Phones (EasyPoker) | 1 minute | Exact | Any game, any size |
+| Pen and paper | 2 minutes | Error-prone | 2 to 4 players, few hands |
+| Coins | 5 minutes | Good | Casual games |
+| Second deck | 2 minutes | Good | Small groups |
+| Small objects | 5 minutes | Fair | Very casual games |
+| Board game money | 5 minutes | Fair | If you have it nearby |
+| Paper chips | 10+ minutes | Good | Planned game nights |
+
+If everyone has a phone, start with the phones: it is the only option that is both fast to set up and exact. If you want the feel of chips in your hand, coins or paper chips are the best stand-ins.
+
+## Frequently asked questions
+
+### Can you play poker without chips?
+
+Yes. Chips only track who has what. You can use phones, a written ledger, coins, a second deck of cards or any small objects instead.
+
+### What can I use instead of poker chips?
+
+The most practical replacement is a phone chip app, since everyone has a phone. Coins, a second deck of cards, paper chips and a pen-and-paper ledger also work.
+
+### How do you play poker with friends without chips?
+
+Give everyone the same starting amount, agree on the blinds, and keep score with one of the methods above. With EasyPoker, the stacks and pot are tracked on each phone automatically.
+
+### Is pen and paper good enough for poker?
+
+For a few hands with two to four players, yes. For a full evening it gets slow, and one arithmetic mistake affects every number after it.
+
+---
+
+# Online poker chips for playing with friends
+
+Source: https://easypoker.cc/guides/online-poker-chips
+Last updated: 2026-11-12
+
+Your cards stay real; the chips go online. Each friend's stack lives on the internet and shows on their phone, so the pot is always right and nobody loses chips between hands or between nights.
+
+## Two very different things called "online poker chips"
+
+When people search for online poker chips they usually mean one of two things:
+
+- **Play-money chips on poker sites and social casino games.** These are a site's own currency for its online card tables. EasyPoker has nothing to do with those, and does not sell chips of any kind.
+- **Chips for a real game with friends, kept online.** You play with a physical deck, and an online table keeps everyone's stack in sync on their phones. This page is about that.
+
+## Why keep your chips online?
+
+- **Every phone shows the same numbers.** A bet on one phone shows up on all the others at once.
+- **Nothing is lost.** Each action is saved on the server as it happens. A phone can die, a tab can close, Wi-Fi can drop: reopen the link and the stack is still there.
+- **The whole night is on record.** The host can see every move and restore the table to an earlier point if something went wrong.
+- **No equipment.** A deck of cards and the phones you already carry are enough.
+
+## How to start an online chip table
+
+- Open [EasyPoker](https://easypoker.cc/) and choose a starting stack and blinds.
+- Share the table link in your group chat, or show the QR code.
+- Each friend opens it, types a name and gets their chips.
+- Deal a real deck. Bet, call and raise from your phones.
+
+## Playing poker with friends who are not in the room
+
+Because the chips are online, the table link works from anywhere. The tricky part of a remote game is the cards, not the chips: everyone needs private hole cards. EasyPoker only tracks chips and does not deal cards, so for a remote game you need your own way of dealing, and EasyPoker keeps the money side honest. For games around one table, the setup above is all you need.
+
+## What it costs
+
+Nothing. There is no account, no subscription and no in-game purchase. The chips have no cash value: if your group plays for real stakes, settle up between yourselves at the end of the night.
+
+## Frequently asked questions
+
+### Can I buy online poker chips here?
+
+No. EasyPoker does not sell chips. It tracks chips for a game you play with friends using a real deck of cards.
+
+### Do online poker chips work on any phone?
+
+Yes. EasyPoker runs in the browser on iPhone, Android and laptops, all at the same table.
+
+### Can friends join from different places?
+
+Yes, the table link works from anywhere with an internet connection. EasyPoker does not deal cards, so a remote game needs its own way to deal private hands.
+
+### Are the chips saved if we stop and continue later?
+
+Yes. The table and its full history are kept, so you can come back to the same link later.
+
+---
+
+# Home poker blind structure
+
+Source: https://easypoker.cc/guides/home-poker-blind-structure
+Last updated: 2026-11-12
+
+Blinds decide how fast a home game moves. Here is a structure that works for most groups, with levels, timings and starting stacks you can copy tonight.
+
+## What blinds are for
+
+The small blind and big blind are forced bets that start the pot before any cards are seen. Without them, nobody has a reason to play a hand. In a cash game the blinds usually stay the same all night. In a tournament they go up at fixed intervals, so stacks shrink relative to the blinds and the game eventually ends.
+
+## Recommended blind levels for a 1,000-chip stack
+
+These levels match the blind options when you create a table on [EasyPoker](https://easypoker.cc/), and suit a home tournament where everyone starts with 1,000 chips.
+
+| Level | Small blind | Big blind | Starting stack in big blinds |
+|---|---|---|---|
+| 1 | 5 | 10 | 100 |
+| 2 | 10 | 20 | 50 |
+| 3 | 20 | 40 | 25 |
+| 4 | 50 | 100 | 10 |
+| 5 | 100 | 200 | 5 |
+| 6 | 200 | 400 | 2.5 |
+| 7 | 500 | 1,000 | 1 |
+
+For a longer game, start at 1/2 blinds. For a short one, start at 10/20.
+
+## How long should each blind level be?
+
+- **15 minutes**: a fast game, about 2 hours with 6 to 8 players.
+- **20 minutes**: the usual home-game choice, about 2.5 to 3 hours.
+- **30 minutes**: a slow, deep game for a long evening.
+
+Count hands instead of minutes if your group plays slowly: raising the blinds every 10 to 12 hands works well.
+
+## Cash game or tournament?
+
+|  | Cash game | Tournament |
+|---|---|---|
+| Blinds | Fixed all night | Go up every level |
+| Starting stack | 100 big blinds is standard | 50 to 100 big blinds |
+| Running out of chips | Buy in again any time | You are out (unless re-buys are allowed) |
+| Ends | When people want to stop | When one player has every chip |
+
+EasyPoker supports both: set fixed blinds for a cash game, or have the host raise the blinds between levels. Turn on buy-ins when you create the table if your group allows re-buys.
+
+## Common blind mistakes in home games
+
+- **Raising the blinds too fast.** If stacks are under 10 big blinds within an hour, the game turns into an all-in lottery.
+- **Forgetting to raise them at all.** A tournament with flat blinds can last until 4 a.m. Set a timer.
+- **Blinds that don't match the chips.** If the small blind is 5, you need 5-value chips. Use the [chip calculator](https://easypoker.cc/guides/poker-chip-calculator) to match chip values to your blinds, or use virtual chips and skip the problem.
+
+## Frequently asked questions
+
+### What are good blinds for a home poker game?
+
+With a 1,000-chip starting stack, start at 5/10 and raise every 15 to 20 minutes: 10/20, 20/40, 50/100, 100/200 and so on.
+
+### How often should blinds go up in a home tournament?
+
+Every 15 to 20 minutes for most groups, or every 10 to 12 hands if play is slow.
+
+### What is the big blind usually in relation to the small blind?
+
+The big blind is normally twice the small blind, for example 5/10 or 50/100.
+
+### Can I change the blinds in EasyPoker during a game?
+
+Yes. The host can change the blinds at any time from the Host tab.
+
+---
+
+# Poker hand rankings, from best to worst
+
+Source: https://easypoker.cc/guides/poker-hand-rankings
+Last updated: 2026-11-12
+
+A royal flush beats everything; high card beats nothing. In between are eight more hands, and the rarer a hand is, the higher it ranks. Here is the full order with an example of each, how often it is dealt, and how ties are broken.
+
+## The ten poker hands in order
+
+From strongest to weakest. The odds are for being dealt that exact hand in five cards from a 52-card deck, out of 2,598,960 possible hands (the standard combinatorics, as tabulated in [Wikipedia's poker probability article](https://en.wikipedia.org/wiki/Poker_probability)).
+
+| Rank | Hand | Example | Ways to make it | Chance in 5 cards |
+|---|---|---|---|---|
+| 1 | **Royal flush** | A♠ K♠ Q♠ J♠ 10♠ | 4 | 0.00015% |
+| 2 | **Straight flush** | 9♥ 8♥ 7♥ 6♥ 5♥ | 36 | 0.0014% |
+| 3 | **Four of a kind** | Q♣ Q♦ Q♥ Q♠ 7♦ | 624 | 0.024% |
+| 4 | **Full house** | J♠ J♥ J♦ 4♣ 4♠ | 3,744 | 0.14% |
+| 5 | **Flush** | K♦ 10♦ 8♦ 6♦ 3♦ | 5,108 | 0.20% |
+| 6 | **Straight** | 8♣ 7♦ 6♠ 5♥ 4♣ | 10,200 | 0.39% |
+| 7 | **Three of a kind** | 7♠ 7♥ 7♣ K♦ 2♠ | 54,912 | 2.1% |
+| 8 | **Two pair** | A♣ A♦ 9♠ 9♥ 5♣ | 123,552 | 4.8% |
+| 9 | **One pair** | 10♥ 10♠ K♣ 6♦ 2♥ | 1,098,240 | 42.3% |
+| 10 | **High card** | A♦ J♣ 8♠ 5♥ 3♦ | 1,302,540 | 50.1% |
+
+In Texas Hold'em you make the best five-card hand from seven cards (your two plus five on the board), so every hand above high card turns up far more often than these five-card figures suggest.
+
+## What each hand means
+
+- **Royal flush**: ace, king, queen, jack and ten of the same suit. The best possible hand.
+- **Straight flush**: five cards in a row, all one suit. A higher top card wins.
+- **Four of a kind** (quads): four cards of the same rank.
+- **Full house**: three of one rank plus a pair of another. The three cards decide which full house is higher.
+- **Flush**: any five cards of one suit. Compare the highest card, then the next, and so on.
+- **Straight**: five cards in a row of mixed suits. An ace can be high (A-K-Q-J-10) or low (5-4-3-2-A, "the wheel"), but a straight cannot wrap around (Q-K-A-2-3 is not a straight).
+- **Three of a kind** (trips or a set): three cards of the same rank.
+- **Two pair**: two different pairs. The higher pair decides, then the lower pair, then the fifth card.
+- **One pair**: two cards of the same rank.
+- **High card**: none of the above; the highest card plays.
+
+## How ties are broken
+
+When two players have the same kind of hand, compare the cards that make the hand first, then the leftover cards (the kickers), from highest to lowest. Only five cards ever count.
+
+- Pair of kings with an ace kicker beats pair of kings with a queen kicker.
+- If all five cards match in rank, the pot is split equally. **Suits never break a tie** in standard poker.
+- In Hold'em, if the board itself is the best hand for everyone ("playing the board"), everyone still in the hand splits the pot.
+
+Splitting a pot is easy with [EasyPoker](https://easypoker.cc/): each winner taps Take for their share of the pot instead of taking the whole thing.
+
+## Five hands people get wrong
+
+- **A flush beats a straight.** Flushes are rarer.
+- **A full house beats a flush.**
+- **Two pair of aces and twos loses to two pair of kings and queens?** No: the highest pair decides first, so aces-up wins.
+- **"Three pair" does not exist.** With seven cards, only the best two pairs count.
+- **The cards speak.** At showdown, a hand is worth what it is, even if the player calls it wrong.
+
+## Frequently asked questions
+
+### What is the order of poker hands from best to worst?
+
+Royal flush, straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, one pair, high card.
+
+### Does a flush beat a straight?
+
+Yes. A flush beats a straight because it is rarer: 5,108 five-card flushes against 10,200 straights.
+
+### Does a full house beat a flush?
+
+Yes. A full house ranks above a flush and below four of a kind.
+
+### Which suit is highest in poker?
+
+None. In standard poker all suits are equal; two hands that match in rank split the pot.
+
+### Is ace high or low in poker?
+
+Both. An ace is the highest card, but it can also be the low end of a straight: 5-4-3-2-A.
+
+### What are the odds of a royal flush?
+
+In five cards, 4 in 2,598,960, or about 1 in 649,740.
+
+---
+
+# Texas Hold'em rules for a home game
+
+Source: https://easypoker.cc/guides/texas-holdem-rules
+Last updated: 2026-11-12
+
+Each player gets two private cards, five shared cards are dealt face up in three stages, and there are four rounds of betting. The best five-card hand at the end, or the last player who has not folded, wins the pot.
+
+## What you need
+
+- A standard 52-card deck, no jokers.
+- 2 to 10 players (6 to 9 is ideal).
+- Chips, or a phone each: [EasyPoker](https://easypoker.cc/) keeps every stack and the pot on the players' phones.
+- A dealer button: any object that marks who deals. It moves one seat left after every hand.
+
+## One hand, step by step
+
+- **Blinds.** The player left of the button posts the small blind; the next player posts the big blind (normally twice the small blind, e.g. 10/20). Blinds are bets made before seeing cards, so every pot has something to win.
+- **Hole cards and pre-flop betting.** Everyone gets two cards face down. The player left of the big blind acts first and must call the big blind, raise or fold. Action goes clockwise; the big blind acts last and may check if nobody raised.
+- **The flop.** The dealer burns (discards) one card and deals three community cards face up. Betting starts with the first active player left of the button.
+- **The turn.** Burn one, deal a fourth community card, another betting round.
+- **The river.** Burn one, deal the fifth and final community card, the last betting round.
+- **Showdown.** Players still in show their cards. Each makes the best five-card hand from their two cards and the five on the board, using any combination (both, one or none of their own). See the [hand rankings](https://easypoker.cc/guides/poker-hand-rankings).
+
+If everyone but one player folds at any point, that player wins the pot immediately and does not have to show.
+
+## Your options when it is your turn
+
+| Action | When you can | What it does |
+|---|---|---|
+| **Check** | Nobody has bet this round | Pass without betting; stay in the hand |
+| **Bet** | Nobody has bet this round | Put chips in; others must match to stay in |
+| **Call** | Someone has bet | Match the current bet |
+| **Raise** | Someone has bet | Match it and add more |
+| **Fold** | Any time it is your turn | Give up the hand and anything you already put in |
+| **All-in** | Any time | Bet every chip you have left |
+
+A betting round ends when every remaining player has put in the same amount (or is all-in) and everyone has had a chance to act.
+
+## How much can you bet?
+
+- **No-limit** (the usual home game): any amount up to your whole stack. The minimum bet is the big blind.
+- **Minimum raise**: at least the size of the previous bet or raise. If someone bets 20, a raise must make it at least 40.
+- **Pot-limit** and **fixed-limit** variants cap the bet at the pot size or a set amount.
+
+## Running the chips with phones
+
+With EasyPoker, everyone's stack is on their own phone. To bet or call, pick the amount and tap Bet: it leaves your stack and joins the pot that every phone shows. Checks and folds need no tap at all. At showdown the winner taps Take whole pot; for a split pot, each winner takes their share. The host changes the blinds between levels from the Host tab.
+
+## Frequently asked questions
+
+### How many cards do you get in Texas Hold'em?
+
+Two private hole cards each, plus five community cards shared by everyone.
+
+### Who goes first in Texas Hold'em?
+
+Before the flop, the player to the left of the big blind. On the flop, turn and river, the first active player to the left of the dealer button.
+
+### Can you use only the board in Hold'em?
+
+Yes. Your best five cards can use both, one or none of your hole cards. If the board is everyone's best hand, the pot is split.
+
+### What is the minimum raise in no-limit poker?
+
+A raise must be at least as big as the previous bet or raise in that round. If the bet is 20, the minimum raise is to 40.
+
+### What happens if everyone checks?
+
+The next card is dealt (or, after the river, the hand goes to showdown) without anything added to the pot.
+
+---
+
+# How side pots work in poker
+
+Source: https://easypoker.cc/guides/side-pots
+Last updated: 2026-11-12
+
+A side pot is created when a player goes all-in for less than the others are betting. The all-in player can only win the main pot, which holds what they could match from each player; everything above that goes into a side pot that only the other players can win.
+
+## The rule in one sentence
+
+A player can only win from each opponent as much as they themselves put in. Side pots are simply the bookkeeping for that rule.
+
+## Worked example: three players, one short stack
+
+Ana has 100 chips, Ben has 300, Cleo has 500. Ana goes all-in for 100, Ben calls and raises to 300 (all-in), Cleo calls 300.
+
+| Pot | How it is built | Size | Who can win it |
+|---|---|---|---|
+| **Main pot** | 100 from each of Ana, Ben, Cleo | 300 | Ana, Ben or Cleo |
+| **Side pot** | The next 200 from each of Ben and Cleo | 400 | Ben or Cleo only |
+
+Cleo bet 300 and keeps her other 200; nothing above 300 goes in because nobody can match it.
+
+**At showdown**, compare hands for each pot separately, starting with the side pot:
+
+- If Ana has the best hand overall, she wins the main pot (300). The better of Ben and Cleo wins the side pot (400).
+- If Ben has the best hand, he wins both pots (700).
+- If Cleo beats Ben but loses to Ana: Ana takes 300, Cleo takes 400.
+
+## How to build side pots step by step
+
+- Find the smallest all-in amount. Take that much from every player in the hand: that is the main pot.
+- From what is left, find the next-smallest all-in amount and take that much from every player who still has chips in: that is side pot 1.
+- Repeat until every chip is in a pot. Any amount a single player put in that nobody could match goes back to that player.
+- Each pot is won by the best hand among the players who contributed to it.
+
+## Two all-ins: a second example
+
+Four players. Dev is all-in for 50, Eli is all-in for 150, Fay and Gus both bet 400.
+
+| Pot | Calculation | Size | Eligible |
+|---|---|---|---|
+| Main pot | 50 × 4 | 200 | Dev, Eli, Fay, Gus |
+| Side pot 1 | (150 − 50) × 3 | 300 | Eli, Fay, Gus |
+| Side pot 2 | (400 − 150) × 2 | 500 | Fay, Gus |
+
+Total 1,000, which matches 50 + 150 + 400 + 400. Always check the pots add up to everything that was bet.
+
+## Paying side pots out with EasyPoker
+
+[EasyPoker](https://easypoker.cc/) keeps one pot on the table and does not split it into side pots automatically. Work out the pots as above, then pay them out in order: the winner of each smaller pot taps Take and enters that pot's size, and the last winner taps Take whole pot for whatever is left. If anyone takes the wrong amount, the host can set the pot and the stacks directly, or restore the table to the moment before.
+
+## Frequently asked questions
+
+### What is a side pot in poker?
+
+A separate pot for chips that an all-in player could not match. Only the players who put chips into a side pot can win it.
+
+### Can an all-in player win more than they bet?
+
+They can win the main pot, which holds their own all-in plus the same amount from every caller, but nothing from the side pots.
+
+### Who wins the side pot if the all-in player has the best hand?
+
+The all-in player takes the main pot; the side pot goes to the best hand among the other players who contributed to it.
+
+### How do you calculate a side pot?
+
+Take the smallest all-in amount from every player for the main pot, then repeat with the next all-in amount for each side pot, until all chips are assigned.
+
+---
+
+# How to host a poker night
+
+Source: https://easypoker.cc/guides/how-to-host-a-poker-night
+Last updated: 2026-11-12
+
+To host a poker night you need a table, a couple of decks of cards, a way to track chips, an agreed buy-in and blind structure, and a short list of house rules. Sort those out before people arrive and the game runs itself.
+
+## 1. Choose the format
+
+|  | Cash game | Tournament |
+|---|---|---|
+| Best for | Casual nights, people arriving and leaving | A fixed start time and a clear winner |
+| Blinds | Fixed all night | Rise every 15 to 20 minutes |
+| Running out of chips | Buy in again | You are out, unless re-buys are allowed |
+| Length | As long as you like | About 2.5 to 3.5 hours for 8 players |
+
+For a first poker night, a tournament is easier to explain and has a natural end.
+
+## 2. Invite the right number of people
+
+Six to nine players is the sweet spot for one table of Texas Hold'em. Fewer than five gets repetitive; more than ten means long waits between hands, so split into two tables. Invite one or two more than you need, because someone always cancels.
+
+## 3. Shopping list
+
+- **Two decks of cards** with different backs, so one can be shuffled while the other is dealt.
+- **Chips**: about 50 per player for a set, or none at all if everyone uses a phone with [EasyPoker](https://easypoker.cc/).
+- **A dealer button**: a coin or bottle cap works.
+- **A table** big enough to reach the middle, ideally with a cloth so cards slide.
+- **A timer** for tournament blind levels (any phone clock).
+- **Food that is not greasy**: finger food leaves marks on the cards. Bowls and napkins away from the felt.
+
+## 4. Set the stacks and blinds
+
+Start everyone with **50 to 100 big blinds**. A common home setup is 1,000 chips with 5/10 blinds, raising to 10/20, 20/40, 50/100 and so on. The [blind structure guide](https://easypoker.cc/guides/home-poker-blind-structure) has a full schedule, and the [chip calculator](https://easypoker.cc/guides/poker-chip-calculator) works out how many chips of each colour to hand out if you use a physical set.
+
+## 5. Agree the house rules before the first hand
+
+Five minutes of rules saves an hour of arguments. Decide on re-buys, the minimum raise, whether you can show one card, and what happens on a misdeal. Our [home poker house rules](https://easypoker.cc/guides/home-poker-house-rules) page is a list you can read out or send to the group chat.
+
+## 6. Run the night
+
+- Start on time; latecomers can join a cash game or buy in during the first level of a tournament.
+- Rotate the deal every hand, with the button moving left.
+- Take a short break every hour or two.
+- Keep phones for chips only if you are using them as chips; otherwise keep them off the table.
+
+## 7. Settle up
+
+At the end, write down each player's final stack before anyone leaves. If you play for stakes, convert chips back at the same rate as the buy-in and settle between yourselves. For tournaments, see [how to split a tournament prize pool](https://easypoker.cc/guides/poker-tournament-payouts). EasyPoker never handles money, but every stack and every action of the night stays on record for the host.
+
+## Frequently asked questions
+
+### How many people do you need for a poker night?
+
+Six to nine players is ideal for one table. Five works; above ten, use two tables.
+
+### What do I need to host a poker night?
+
+Two decks of cards, a dealer button, a table, and chips or a phone chip app. Add a timer for tournaments.
+
+### How long does a home poker tournament last?
+
+With eight players, 1,000-chip stacks and 20-minute blind levels, about two and a half to three and a half hours.
+
+### What is a good buy-in for a home game?
+
+One that nobody minds losing. Agree it in the invite so there are no surprises.
+
+### Do I need a poker chip set?
+
+No. Everyone can keep their stack on their own phone with a free browser table like EasyPoker.
+
+---
+
+# How to split a home poker tournament prize pool
+
+Source: https://easypoker.cc/guides/poker-tournament-payouts
+Last updated: 2026-11-12
+
+Most home tournaments pay the top 20 to 30 percent of players. A common split is 65/35 for up to 7 players, 50/30/20 for 8 to 10, and 40/30/20/10 for 11 to 20. Agree the split before the first hand.
+
+## Common payout structures
+
+These are widely used home-game conventions, not official rules. Any split works if everyone agrees to it before play starts.
+
+| Players | Places paid | 1st | 2nd | 3rd | 4th |
+|---|---|---|---|---|---|
+| 2 to 4 | 1 | 100% |  |  |  |
+| 5 to 7 | 2 | 65% | 35% |  |  |
+| 8 to 10 | 3 | 50% | 30% | 20% |  |
+| 11 to 20 | 4 | 40% | 30% | 20% | 10% |
+
+## Worked example: 9 players, 20 each
+
+The prize pool is 9 × 20 = 180. With a 50/30/20 split:
+
+- 1st place: 50% of 180 = **90**
+- 2nd place: 30% of 180 = **54**
+- 3rd place: 20% of 180 = **36**
+
+Round to amounts that are easy to pay. A popular home tweak is to give the bubble (the first player out of the money) their buy-in back from first place's share.
+
+## Re-buys and add-ons
+
+If re-buys are allowed, every re-buy goes into the prize pool, so recalculate the payouts once the re-buy period closes. Tell players when re-buys end (often at the end of the first hour or the third blind level). In [EasyPoker](https://easypoker.cc/), turn on buy-ins when you create the table and the host can see every buy-in in the table's history.
+
+## Chopping at the final table
+
+When a few players are left, they may agree to stop and split the remaining money (a "chop"). Three common ways:
+
+- **Even chop**: split what is left equally. Fair only when stacks are close.
+- **Chip chop**: every remaining player is guaranteed the last unpaid prize, and the rest of the money is split in proportion to chip stacks.
+- **ICM chop**: the Independent Chip Model estimates each stack's chance of finishing in each place. It is the fairest for uneven stacks but needs a calculator.
+
+**Chip chop example:** three players remain and 180 is left to pay, with prizes of 90, 54 and 36. Everyone is guaranteed 36 (third place), which uses 108. The other 72 is split by chips: stacks of 5,000, 3,000 and 1,000 (9,000 total) get 72 × 5/9 = 40, 72 × 3/9 = 24 and 72 × 1/9 = 8. Final: 76, 60 and 44.
+
+## Keep it friendly
+
+- Write the payout split in the invite or the group chat.
+- Collect buy-ins before the first hand.
+- Record final positions as players bust out.
+
+EasyPoker only tracks chips and never handles money; settle real stakes between yourselves, as allowed where you live.
+
+## Frequently asked questions
+
+### How many places should a home poker tournament pay?
+
+Usually the top 20 to 30 percent: one place for up to 4 players, two for 5 to 7, three for 8 to 10, four for 11 to 20.
+
+### What is a standard payout for three places?
+
+50 percent to first, 30 percent to second and 20 percent to third.
+
+### What is a chip chop?
+
+Each remaining player is guaranteed the lowest unpaid prize, and the rest of the money is split in proportion to chip stacks.
+
+### Do re-buys go into the prize pool?
+
+Yes, normally every re-buy and add-on is added to the prize pool, so payouts are recalculated after the re-buy period.
+
+---
+
+# Home poker house rules
+
+Source: https://easypoker.cc/guides/home-poker-house-rules
+Last updated: 2026-11-12
+
+Most home-game arguments come from rules nobody agreed on. Read this list out before the first hand, or paste it into the group chat, and change anything your group does differently.
+
+## The short list
+
+- **Act in turn.** Wait for the player before you. Acting early gives information away and can be unfair to others.
+- **Verbal declarations are binding.** If you say "call" or "raise to 100", that is your action.
+- **No string bets.** Say "raise" first, or put the whole amount in at once. Adding chips in several trips after seeing reactions is not allowed.
+- **One-chip rule.** A single oversized chip without saying "raise" is a call. (With phone chips, the amount you tap is the amount you bet.)
+- **Minimum raise.** A raise must be at least the size of the previous bet or raise.
+- **Cards speak.** At showdown the hand is what the cards show, whatever the player calls it.
+- **Show one, show all.** If you show your cards to one player, everyone at the table may see them.
+- **Protect your hand.** Keep a chip or your hand on your cards. If they get mucked by accident, they are dead.
+- **Misdeals.** If the first or second card dealt is exposed, or a player gets the wrong number of cards, reshuffle and redeal.
+- **Exposed card later in the deal.** It is replaced after the deal and used as the burn card.
+- **Re-buys**: say when they are allowed, for how much, and until when.
+- **Leaving early** in a cash game: you cash out your stack. In a tournament, your blinds keep being posted until you are out, or you forfeit.
+- **Settle up before anyone leaves.** Write down final stacks.
+
+## Why these rules matter
+
+### String bets and the one-chip rule
+
+Both stop a player from fishing for a reaction before deciding how much to bet. They also make the bet amount clear to everyone. When bets are made by tapping an exact number on a phone, as with [EasyPoker](https://easypoker.cc/), the amount is never ambiguous, which removes the most common home-game dispute.
+
+### Cards speak
+
+New players misread hands. "Cards speak" means nobody loses a pot because they did not notice their own flush, and nobody wins one by calling a hand they do not have.
+
+### Misdeals
+
+Agreeing in advance what counts as a misdeal turns an argument into a reshuffle. Keep it simple: if in doubt, redeal.
+
+## House rules for the chips themselves
+
+- **Chips stay on the table** (or in the app) during a cash game: no pocketing chips mid-game.
+- **Agree a fixer.** With EasyPoker the host can correct any stack or the pot, and restore the table to any earlier moment, so mistakes are fixed rather than argued about.
+- **Pot splits.** On a tie, split the pot evenly; an odd chip goes to the first winner left of the button.
+- **Side pots.** Work them out before showing down. See [how side pots work](https://easypoker.cc/guides/side-pots).
+
+## Optional rules some groups add
+
+- **Straddle**: the player left of the big blind may put in a voluntary double big blind before cards are dealt.
+- **Run it twice**: when players are all-in, deal the remaining board twice and split the pot by each result.
+- **Seven-deuce bonus**: winning a pot with 7-2 earns a small bonus from every player.
+- **Dealer's choice**: the dealer picks the variant (Hold'em, Omaha, etc.) for each orbit.
+
+## Frequently asked questions
+
+### What is a string bet in poker?
+
+Putting chips in over several movements without first saying "raise". Most games do not allow it; the first movement counts as the bet.
+
+### What does "cards speak" mean?
+
+At showdown the hand is judged by the cards, not by what the player says it is.
+
+### What happens if a card is exposed during the deal?
+
+If one of the first two cards is exposed, it is a misdeal and the hand is redealt. Later, the exposed card is replaced and used as a burn card.
+
+### What is the one-chip rule?
+
+Putting a single larger chip in without saying "raise" counts as a call.
+
+### Who gets the odd chip in a split pot?
+
+By common convention, the winner closest to the left of the dealer button.
+
+---
+
+# Poker terms glossary
+
+Source: https://easypoker.cc/guides/poker-terms-glossary
+Last updated: 2026-11-12
+
+Short, plain definitions of the words you will hear at a home poker game, from "ante" to "under the gun". Each one is a single sentence you can read out at the table.
+
+## Betting and the pot
+
+- **All-in**: Betting every chip you have left.
+- **Ante**: A small forced bet every player puts in before a hand, used in some games and late tournament levels.
+- **Bet**: The first chips put in during a betting round.
+- **Big blind**: The larger of the two forced bets, posted by the player two seats left of the button.
+- **Buy-in**: The amount you pay or receive to start playing, or to start again after losing your chips.
+- **Call**: Matching the current bet.
+- **Check**: Passing without betting when nobody has bet yet in the round.
+- **Fold**: Giving up your hand and any chips you have already put in.
+- **Main pot**: The pot every player in the hand can win, including a player who is all-in.
+- **Pot**: All the chips bet in the current hand, won by the best hand or the last player left.
+- **Raise**: Matching the current bet and adding more.
+- **Re-buy**: Buying more chips after running out, if the game allows it.
+- **Side pot**: A separate pot for chips an all-in player could not match; only players who contributed to it can win it.
+- **Small blind**: The smaller forced bet, posted by the player directly left of the button.
+- **Stack**: The chips a player has in front of them.
+- **Straddle**: An optional, voluntary blind of twice the big blind, posted before the cards are dealt.
+
+## Cards and the deal
+
+- **Board**: The community cards face up in the middle of the table.
+- **Burn card**: The card discarded face down before the flop, turn and river are dealt.
+- **Button**: The marker showing who is the dealer for the hand; it moves one seat left every hand.
+- **Community cards**: Cards dealt face up that every player can use.
+- **Flop**: The first three community cards, dealt together.
+- **Hole cards**: Your private cards, dealt face down.
+- **Kicker**: A card that is not part of your made hand but breaks ties.
+- **Muck**: The pile of folded and discarded cards; also, to throw your hand away.
+- **River**: The fifth and last community card.
+- **Showdown**: When the remaining players reveal their hands to decide who wins.
+- **Turn**: The fourth community card.
+
+## Hands and strategy
+
+- **Bluff**: Betting with a weak hand to make better hands fold.
+- **Draw**: A hand that needs more cards to become strong, such as four cards to a flush.
+- **Nuts**: The best possible hand given the board.
+- **Outs**: The cards left in the deck that would improve your hand to a likely winner.
+- **Pocket pair**: Two hole cards of the same rank.
+- **Set**: Three of a kind made with a pocket pair and one matching board card.
+- **Tilt**: Playing badly because you are frustrated or angry.
+- **Wheel**: The lowest straight: 5-4-3-2-A.
+
+## Positions at the table
+
+- **Cutoff**: The seat directly right of the button.
+- **Early position**: The first seats to act before the flop, which act with the least information.
+- **In position**: Acting after your opponent in a betting round, which is an advantage.
+- **Under the gun**: The player directly left of the big blind, who acts first before the flop.
+
+## Formats
+
+- **Cash game**: A game where chips stand for a fixed amount and players can join, re-buy or leave at any time.
+- **Chop**: Splitting a pot or a tournament prize pool by agreement.
+- **No-limit**: Betting rules where you may bet any amount up to your whole stack.
+- **Tournament**: A game with rising blinds where players are eliminated until one has every chip.
+
+Playing without a chip set? With [EasyPoker](https://easypoker.cc/), the blinds, stacks and pot are on every player's phone. See [how virtual poker chips work](https://easypoker.cc/guides/virtual-poker-chips).
+
+## Frequently asked questions
+
+### What does "the nuts" mean in poker?
+
+The best possible hand given the community cards on the board.
+
+### What is the difference between the flop, turn and river?
+
+The flop is the first three community cards, the turn is the fourth and the river is the fifth and last.
+
+### What does "under the gun" mean?
+
+The player directly to the left of the big blind, who acts first before the flop.
+
+### What is a kicker?
+
+A card that is not part of your pair or other made hand, used to break ties between equal hands.
+
+---
+
+# Poker chip apps for home games, compared
+
+Source: https://easypoker.cc/guides/best-poker-chip-apps
+Last updated: 2026-11-12
+
+Several free apps replace a physical chip set while you play with real cards. They differ mainly in whether players must install an app, whether side pots are automatic, and whether the app works out who owes whom at the end.
+
+## The comparison
+
+Details for other apps are taken from each product's own website, checked on 12 November 2026. Features change, so check their sites before relying on one.
+
+|  | EasyPoker | Chips of Fury (Chips Only Mode) | PartyPot | pokerchips.io |
+|---|---|---|---|---|
+| Runs on | Any phone browser | App | iOS and Android app | Web: create a game, share the link |
+| Player install needed | No | See their site | Yes (app) | No |
+| Account needed | No | No, per their site | No, per their site | Not stated |
+| Price | Free | Free, per their site | Free, no ads or subscription, per their site | Not stated |
+| Automatic side pots | No: pots are paid out manually | Yes, per their site | Not stated | Not stated |
+| Who-owes-whom settlement | No | Cash-outs, per their site | Yes ("Smart Settlement") | Not stated |
+| Host can fix stacks and rewind | Yes, to any earlier moment | Not stated | Transaction history, per their site | Not stated |
+
+## Which one to pick
+
+- **Mixed iPhone and Android group, nobody wants to install anything**: a browser app. EasyPoker joins with a QR code and a name.
+- **Lots of all-ins and side pots**: an app with automatic side pots saves arithmetic. With EasyPoker you work side pots out by hand (see [side pots explained](https://easypoker.cc/guides/side-pots)) and each winner takes their share.
+- **Cash game where the main job is who owes whom**: an app with a settlement feature, such as PartyPot's.
+- **The host needs to undo mistakes**: EasyPoker keeps every action and lets the host restore the table to any earlier moment.
+
+## What all of them have in common
+
+- You still deal a real deck; none of these replace the cards or the dealer.
+- Each player sees their own stack on their own phone, and the pot updates live.
+- None of them handle real money in a home game. Settle any stakes between yourselves.
+
+## What makes a poker chip app good at a real table
+
+- **Joining in under a minute.** If guests have to download and register, the night starts late.
+- **Exact, visible pot.** Everyone sees the same number.
+- **Mistakes are fixable** without restarting the game.
+- **Nothing is lost** when a phone dies or a tab closes.
+- **Works on every phone** at the table, iPhone and Android alike.
+
+You can try EasyPoker in about a minute at [EasyPoker](https://easypoker.cc/): create a table, show the QR code, deal.
+
+## Not to be confused with
+
+EasyPoker at easypoker.cc is an independent browser chip tracker. It is not the "Poker with Friends – EasyPoker" mobile app, which deals virtual cards and is a separate product from a different developer.
+
+## Frequently asked questions
+
+### What is the best free poker chip app?
+
+It depends on the group. For no installs on mixed phones, a browser app like EasyPoker. For automatic side pots or a who-owes-whom settlement, an installed app with that feature.
+
+### Is there a poker chip app that works without downloading?
+
+Yes. EasyPoker runs in the phone browser: the host shares a link or QR code and players join with a name.
+
+### Do poker chip apps handle side pots?
+
+Some do automatically. EasyPoker does not: you work the side pots out and each winner takes their share of the pot.
+
+### Is easypoker.cc the same as the EasyPoker app?
+
+No. easypoker.cc is an independent browser chip tracker for games played with real cards. The "Poker with Friends – EasyPoker" app is a separate product.
