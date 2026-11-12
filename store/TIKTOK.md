@@ -19,7 +19,7 @@ and a CAPTCHA. Everything else is ready here to paste.
 | Website | `https://easypoker.cc` (TikTok shows bio links only at 1,000 followers; until then put the link in the bio text: `easypoker.cc`) | |
 | Photo | `store/icon-512.png` (the chip is centred, so the circle crop keeps all of it) | |
 
-Bio before 1,000 followers (68 characters): `Free poker chips on every phone 🃏 Host a home game at easypoker.cc`
+Bio before 1,000 followers (67 characters): `Free poker chips on every phone 🃏 Host a home game at easypoker.cc`
 
 ## First five videos
 
