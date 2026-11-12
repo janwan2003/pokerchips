@@ -1,5 +1,10 @@
 # TikTok: @easypoker.cc
 
+**Live since 2026-11-12:** https://www.tiktok.com/@easypoker.cc, with the name, bio and photo
+below, saved and checked on the public profile. The username can change again from
+2026-12-12 and the name from 2026-11-19. No video is posted yet: the owner reviews each
+one first. The account is not connected to Zernio yet.
+
 The account is signed up by hand, because TikTok sign-up needs a date of birth, a password
 and a CAPTCHA. Everything else is ready here to paste.
 
@@ -23,7 +28,8 @@ Bio before 1,000 followers (67 characters): `Free poker chips on every phone �
 
 ## First five videos
 
-A finished one is in `tiktok/promo-1/`: a silent 28.5 s cut. Attach a Commercial Music
+Finished: `tiktok/promo-1/` (calm screen recording, 28.5 s) and `tiktok/promo-2/`
+(loud 16 s cut), both silent. Attach a Commercial Music
 Library sound when posting, or the post can never be promoted (see its README).
 
 Vertical 1080×1920. The `store/screenshot-*.png` files are already 1080×1920 and can be

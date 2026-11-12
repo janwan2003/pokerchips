@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EasyPoker loud cut</title>
+<style>
+@font-face { font-family: Shout; src: url('file:///usr/share/fonts/truetype/noto/NotoSans-ExtraCondensedBlackItalic.ttf'); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+#bg { position: absolute; left: -600px; top: -300px; width: 2280px; height: 2520px; }
+#phone { position: absolute; left: 50%; top: 50%; width: 700px; height: 1244px; margin: -622px 0 0 -350px;
+  border-radius: 64px; border: 18px solid #0b0b0f; box-shadow: 0 0 0 4px #444, 0 40px 120px rgb(0 0 0 / .7); overflow: hidden; background: #000; }
+#phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+#logo { position: absolute; left: 50%; top: 230px; width: 520px; height: 520px; margin-left: -260px; border-radius: 50%; display: none; }
+#lines { position: absolute; left: 40px; right: 40px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.l { font-family: Shout, Impact, sans-serif; text-transform: uppercase; text-align: center; line-height: .98;
+  color: #ffd21f; -webkit-text-stroke: 14px #000; paint-order: stroke fill; letter-spacing: 1px;
+  text-shadow: 10px 12px 0 #000, 0 0 40px rgb(255 60 60 / .55); white-space: pre-line; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+#vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / .55)); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div id="phone"><img id="screen" src="" alt=""></div>
+  <img id="logo" src="icon.png" alt="">
+  <div id="lines"></div>
+  <div id="vig"></div>
+  <div id="flash"></div>
+</div>
+<script>
+const META = __META__;
+const frames = META.frames.map(([n, ts]) => [n, ts - META.T0]);
+function frameAt(rt) {
+  let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (frames[mid][1] <= rt) lo = mid; else hi = mid - 1; }
+  return frames[lo][0];
+}
+// Each scene: [start, end, background colours, phone source, phone motion, lines, line block top]
+// phone source: a recording second, or [recFrom, recTo] played across the scene, or null.
+// lines: [appearAt (scene-relative), text, font size px, colour?]
+const RED = ['#e0102b', '#ff4b2b'], BLUE = ['#0a2dff', '#00b3ff'], GOLD = ['#ff9d00', '#ffe14d'],
+  GREEN = ['#00a33c', '#7dff5b'], PURPLE = ['#6a00ff', '#ff2bd6'], BLACK = ['#111', '#333'];
+const SCENES = [
+  [0.0, 1.7, RED, null, 'none', [[0.0, 'forgot\nthe chips?!', 230]], 600],
+  [1.7, 3.5, GOLD, 1.0, 'slam', [[0.25, 'easypoker!', 210, '#fff']], 110],
+  [3.5, 5.4, BLUE, 7.6, 'tiltL', [[0.1, 'one link!', 190], [0.75, 'everyone joins!', 150, '#fff']], 90],
+  [5.4, 7.4, PURPLE, 14.8, 'tiltR', [[0.0, 'no app!', 190], [0.55, 'no sign-up!', 170, '#fff'], [1.1, 'no mercy!', 200]], 60],
+  [7.4, 9.6, GREEN, [17.4, 24.2], 'push', [[0.1, 'it counts\nthe pot!', 170], [1.2, 'no arguing!!', 150, '#fff']], 80],
+  [9.6, 11.6, RED, [24.3, 26.6], 'shake', [[0.0, 'take whole pot!', 170], [0.9, 'one tap!!!', 210, '#fff']], 80],
+  [11.6, 13.2, BLUE, 1.0, 'spinIn', [[0.0, 'works on\nevery phone', 160], [0.75, "even grandma's", 140, '#fff']], 80],
+  [13.2, 16.0, GOLD, null, 'logo', [[0.0, 'easypoker.cc', 200, '#fff'], [0.7, 'free!', 150], [1.15, 'free!!', 190], [1.6, 'free!!!', 240]], 120],
+];
+const DUR = 16.0;
+const $ = (id) => document.getElementById(id);
+const img = $('screen'), phone = $('phone'), bg = $('bg'), lines = $('lines'), flash = $('flash'), logo = $('logo');
+const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
+// deterministic jitter so every render of the same t is identical
+const jit = (t, k) => Math.sin(t * 91.7 + k * 13.1) * Math.cos(t * 57.3 + k * 7.7);
+let lastKey = '';
+window.render = async function (t) {
+  const sc = SCENES.find(([a, b]) => t >= a && t < b) || SCENES[SCENES.length - 1];
+  const [a, b, cols, src, motion, ls, top] = sc;
+  const st = t - a, len = b - a;
+  // background: rotating starburst
+  const rot = (t * 40) % 360;
+  bg.style.background = `repeating-conic-gradient(from ${rot}deg at 50% 50%, ${cols[0]} 0deg 10deg, ${cols[1]} 10deg 20deg)`;
+  // phone
+  if (src === null) phone.style.display = 'none';
+  else {
+    phone.style.display = 'block';
+    const rt = Array.isArray(src) ? src[0] + (src[1] - src[0]) * Math.min(1, st / (len * 0.85)) : src;
+    const f = `rec/frames/${String(frameAt(rt)).padStart(5, '0')}.jpg`;
+    if (img.getAttribute('src') !== f) { img.setAttribute('src', f); await img.decode().catch(() => {}); }
+    const p = ease(st / 0.22);
+    let tr = '';
+    if (motion === 'slam') tr = `translateY(${(1 - p) * -1400 + 300}px) scale(${0.8 + 0.06 * Math.sin(st * 9) * (1 - p)}) rotate(${(1 - p) * -25}deg)`;
+    else if (motion === 'tiltL') tr = `translateY(330px) translateX(${(1 - p) * 1200}px) scale(${0.78 + st * 0.03}) rotate(-7deg)`;
+    else if (motion === 'tiltR') tr = `translateY(340px) translateX(${(1 - p) * -1200}px) scale(${0.78 + st * 0.03}) rotate(6deg)`;
+    else if (motion === 'push') tr = `translateY(${380 - st * 30}px) scale(${0.8 + st * 0.06})`;
+    else if (motion === 'shake') tr = `translate(${jit(t, 1) * 26}px, ${380 + jit(t, 2) * 26}px) scale(${0.84 + 0.04 * Math.abs(Math.sin(st * 14))}) rotate(${jit(t, 3) * 3}deg)`;
+    else if (motion === 'spinIn') tr = `translateY(360px) scale(${0.1 + 0.7 * p}) rotate(${(1 - p) * 720}deg)`;
+    phone.style.transform = tr;
+  }
+  // logo on the end card
+  if (motion === 'logo') {
+    logo.style.display = 'block';
+    const p = ease(st / 0.3);
+    logo.style.transform = `scale(${0.2 + 0.8 * p}) rotate(${st * 220}deg)`;
+  } else logo.style.display = 'none';
+  // text: each line stamps in big, then shakes a little
+  const key = a + ':' + ls.filter(([at]) => st >= at).length;
+  if (key !== lastKey) {
+    lines.innerHTML = '';
+    for (const [at, text, size, col] of ls) {
+      if (st < at) continue;
+      const d = document.createElement('div');
+      d.className = 'l'; d.textContent = text; d.style.fontSize = size + 'px'; d.dataset.at = at;
+      if (col) d.style.color = col;
+      lines.appendChild(d);
+      const w = d.scrollWidth; if (w > 980) d.style.fontSize = Math.floor(size * 980 / w) + 'px';
+    }
+    lastKey = key;
+  }
+  lines.style.top = top + 'px';
+  if (motion === 'logo') lines.style.top = '830px';
+  let i = 0;
+  for (const d of lines.children) {
+    const lt = st - Number(d.dataset.at);
+    const s = lt < 0.12 ? 2.6 - 1.6 * ease(lt / 0.12) : 1 + 0.03 * Math.sin(lt * 20);
+    const r = (i % 2 ? 3 : -4) + jit(t, 10 + i) * 1.5;
+    d.style.transform = `translate(${jit(t, 20 + i) * 6}px, ${jit(t, 30 + i) * 6}px) scale(${s}) rotate(${r}deg)`;
+    i++;
+  }
+  // white flash at every scene cut and every new line
+  const hits = [0, ...ls.map(([at]) => at)].filter((x) => st >= x).map((x) => st - x);
+  const since = Math.min(...hits);
+  flash.style.opacity = since < 0.08 ? 0.75 * (1 - since / 0.08) : 0;
+  // camera shake on the whole stage for the first 0.25 s of a scene
+  const k = st < 0.25 ? (1 - st / 0.25) * 30 : 4;
+  $('stage').style.transform = `translate(${jit(t, 5) * k}px, ${jit(t, 6) * k}px)`;
+};
+window.DUR = DUR;
+window.ready = document.fonts.load('200px Shout').then(() => document.fonts.ready).then(() => true);
+</script>
+</body>
+</html>
