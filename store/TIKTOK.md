@@ -23,6 +23,9 @@ Bio before 1,000 followers (67 characters): `Free poker chips on every phone �
 
 ## First five videos
 
+A finished one is in `tiktok/promo-1/`: a silent 28.5 s cut. Attach a Commercial Music
+Library sound when posting, or the post can never be promoted (see its README).
+
 Vertical 1080×1920. The `store/screenshot-*.png` files are already 1080×1920 and can be
 used as full-frame shots. Hook in the first second, 10–20 seconds long, on-screen text
 for viewers watching muted.

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EasyPoker screen recording</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#screen { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+/* Plain app-style text: white on a translucent black box, the default look of in-app captions. */
+#cap { position: absolute; left: 80px; right: 80px; top: 1400px; display: flex; justify-content: center; }
+#cap span { font-family: 'Liberation Sans', Arial, sans-serif; font-weight: 700; font-size: 54px; line-height: 1.28;
+  color: #fff; background: rgb(0 0 0 / .72); padding: 14px 26px 16px; border-radius: 16px; text-align: center;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+</style>
+</head>
+<body>
+<img id="screen" src="" alt="">
+<div id="cap"><span id="capText"></span></div>
+<script>
+const META = __META__;
+// Edit list in recording seconds: [recStart, recEnd]. Output time runs through them back to back.
+const EDIT = [[0.9, 27.05]];
+const CAPS = [
+  [0.0, 3.0, 'we always forget the poker chips, so i built this', 1400],
+  [3.2, 5.2, 'you make a table in your browser', 1400],
+  [5.5, 8.6, 'send the link to the group chat', 1190],
+  [8.8, 12.0, 'everyone joins on their own phone. no app, no sign up', 1190],
+  [12.0, 14.2, 'no app, no sign up', 1440],
+  [14.5, 19.0, 'every bet lands in the pot', 128],
+  [19.2, 23.3, 'it does the maths for you', 128],
+  [23.5, 26.0, 'winner takes the pot in one tap', 128],
+  [26.2, 99, "it's free btw: easypoker.cc", 128],
+];
+const frames = META.frames.map(([n, ts]) => [n, ts - META.T0]);
+function recTime(t) {
+  let acc = 0;
+  for (const [a, b] of EDIT) { if (t < acc + (b - a)) return a + (t - acc); acc += b - a; }
+  const [a, b] = EDIT[EDIT.length - 1]; return b;
+}
+function frameAt(rt) {
+  let lo = 0, hi = frames.length - 1;
+  while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (frames[mid][1] <= rt) lo = mid; else hi = mid - 1; }
+  return frames[lo][0];
+}
+const img = document.getElementById('screen'), cap = document.getElementById('cap'), txt = document.getElementById('capText');
+window.render = async function (t) {
+  const s = `rec/frames/${String(frameAt(recTime(t))).padStart(5, '0')}.jpg`;
+  if (img.getAttribute('src') !== s) { img.setAttribute('src', s); await img.decode().catch(() => {}); }
+  const c = CAPS.find(([a, b]) => t >= a && t < b);
+  cap.style.visibility = c ? 'visible' : 'hidden';
+  if (c && txt.textContent !== c[2]) { txt.textContent = c[2]; cap.style.top = c[3] + 'px'; }
+};
+window.ready = document.fonts.ready.then(() => true);
+</script>
+</body>
+</html>
