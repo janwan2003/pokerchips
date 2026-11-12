@@ -242,7 +242,8 @@ html:has(body.ep-page) { scroll-padding-top: calc(var(--ep-top-h) + 16px); }
 @media (max-width: 560px) {
     .ep-cta { grid-template-columns: 1fr; padding: 24px 22px; }
     .ep-cta-stack { position: absolute; right: -18px; top: -14px; opacity: 0.35; transform: scale(0.8); }
-    .ep-cta-copy { position: relative; }
+    .ep-cta-copy { position: relative; z-index: 1; }
+    .ep-cta-stack { z-index: 0; }
 }
 
 /* ---------- FAQ ---------- */
@@ -316,3 +317,13 @@ html:has(body.ep-page) { scroll-padding-top: calc(var(--ep-top-h) + 16px); }
 @media (prefers-reduced-motion: reduce) {
     .ep-scope *, .ep-scope *::before, .ep-scope *::after { transition-duration: 0.01ms !important; }
 }
+
+/* ---------- Sources ---------- */
+.ep-sources { display: grid; gap: 12px; font-size: 0.92rem; color: var(--ep-text-2); }
+.ep-sources h2 { font-family: var(--ep-display); font-size: 1.2rem; font-weight: 750; color: var(--ep-text); letter-spacing: -0.015em; }
+.ep-sources ol { padding-left: 1.4em; display: grid; gap: 8px; }
+.ep-sources li::marker { color: var(--ep-text-3); font-variant-numeric: tabular-nums; }
+.ep-sources a { color: var(--ep-text); text-decoration-color: var(--ep-line-strong); text-underline-offset: 3px; }
+.ep-sources a:hover { color: var(--ep-gold); text-decoration-color: currentColor; }
+.ep-sources li span { color: var(--ep-text-3); font-size: 0.85em; margin-left: 4px; }
+.ep-sources p { color: var(--ep-text-3); font-size: 0.85rem; }

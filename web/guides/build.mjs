@@ -3,6 +3,7 @@
 // fails when the committed output is stale.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { pages, hub, privacy, about, UPDATED } from './pages.mjs';
+import { SOURCES } from './sources.mjs';
 
 const ORIGIN = 'https://easypoker.cc';
 const OG_IMAGE = `${ORIGIN}/og.png`;
@@ -17,7 +18,8 @@ const bySlug = Object.fromEntries(pages.map((p) => [p.slug, p]));
 const GROUPS = [
   ['Chips without a chip set', ['virtual-poker-chips', 'poker-chip-app', 'online-poker-chips', 'poker-without-chips', 'best-poker-chip-apps']],
   ['Running a home game', ['how-to-host-a-poker-night', 'home-poker-blind-structure', 'poker-chip-calculator', 'poker-tournament-payouts', 'home-poker-house-rules']],
-  ['Rules and reference', ['texas-holdem-rules', 'poker-hand-rankings', 'side-pots', 'poker-terms-glossary']],
+  ['Rules and reference', ['texas-holdem-rules', 'omaha-poker-rules', 'poker-hand-rankings', 'side-pots', 'how-to-deal-poker', 'poker-terms-glossary']],
+  ['Strategy basics', ['texas-holdem-starting-hands', 'poker-positions', 'poker-outs-and-odds', 'pot-odds']],
 ];
 const grouped = () => {
   const placed = new Set(GROUPS.flatMap(([, s]) => s));
@@ -113,6 +115,17 @@ const crumbs = (items) => ({
   itemListElement: items.map(([name, item], i) => ({ '@type': 'ListItem', position: i + 1, name, item })),
 });
 
+function sourcesHtml(slug) {
+  const list = SOURCES[slug];
+  if (!list) return '';
+  return `
+        <section class="ep-sources" aria-labelledby="sources-title">
+            <h2 id="sources-title">Sources</h2>
+            <ol>${list.map(([name, u]) => `<li><a href="${u}" rel="noopener">${esc(name)}</a> <span>${esc(new URL(u).hostname.replace(/^www\./, ''))}</span></li>`).join('')}</ol>
+            <p>Checked ${UPDATED}. Odds and counts on this page are exact calculations from a standard 52-card deck unless stated otherwise.</p>
+        </section>`;
+}
+
 function renderGuide(p) {
   const canonical = url(p.slug);
   const schema = [
@@ -124,6 +137,7 @@ function renderGuide(p) {
       image: OG_IMAGE,
       dateModified: UPDATED,
       mainEntityOfPage: canonical,
+      ...(SOURCES[p.slug] ? { citation: SOURCES[p.slug].map(([name, u]) => ({ '@type': 'CreativeWork', name, url: u })) } : {}),
       author: { '@type': 'Organization', name: 'EasyPoker', url: `${ORIGIN}/` },
       publisher: { '@type': 'Organization', name: 'EasyPoker', url: `${ORIGIN}/` },
     },
@@ -157,6 +171,7 @@ ${p.faq.map(([q, a]) => `            <details><summary>${esc(q)}</summary><p>${e
     .join('');
   const { html: body, toc } = withAnchors(cards(p.body.trim()));
   const tocLinks = toc.map(([id, t]) => `<li><a href="#${id}">${esc(t)}</a></li>`).join('')
+    + (SOURCES[p.slug] ? '<li><a href="#sources-title">Sources</a></li>' : '')
     + (p.faq?.length ? '<li><a href="#faq-title">Frequently asked questions</a></li>' : '');
   return `${head({ title: p.title, description: p.description, canonical, schema })}
 <body class="ep-page ep-scope">${topbar}
@@ -174,7 +189,7 @@ ${p.faq.map(([q, a]) => `            <details><summary>${esc(q)}</summary><p>${e
         <div class="ep-doc-main">
         <article class="ep-prose">
 ${body}
-        </article>${cta}${faq}
+        </article>${sourcesHtml(p.slug)}${cta}${faq}
         <section class="ep-related" aria-labelledby="related-title">
             <h2 id="related-title">Related guides</h2>
             <ul>${related}</ul>
@@ -346,7 +361,8 @@ ${list}
 function renderLlmsFull() {
   const sections = pages.map((p) => {
     const faq = p.faq.map(([q, a]) => `### ${q}\n\n${a}`).join('\n\n');
-    return `# ${p.h1}\n\nSource: ${url(p.slug)}\nLast updated: ${UPDATED}\n\n${p.lede}\n\n${toMarkdown(p.body)}\n\n## Frequently asked questions\n\n${faq}`;
+    const refs = SOURCES[p.slug] ? `\n\n## Sources\n\n${SOURCES[p.slug].map(([n, u]) => `- [${n}](${u})`).join('\n')}` : '';
+    return `# ${p.h1}\n\nSource: ${url(p.slug)}\nLast updated: ${UPDATED}\n\n${p.lede}\n\n${toMarkdown(p.body)}${refs}\n\n## Frequently asked questions\n\n${faq}`;
   });
   return `${LLMS_INTRO}\n\n---\n\n# About EasyPoker\n\nSource: ${ORIGIN}/about\n\n${toMarkdown(about.body)}\n\n---\n\n${sections.join('\n\n---\n\n')}\n`;
 }

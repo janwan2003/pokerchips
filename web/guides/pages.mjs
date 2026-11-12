@@ -4,6 +4,7 @@
 // factual about what EasyPoker does, and useful on their own.
 
 import { more, about } from './pages-more.mjs';
+import { strategy } from './pages-strategy.mjs';
 
 export { about };
 
@@ -386,7 +387,7 @@ const basePages = [
   },
 ];
 
-export const pages = [...basePages, ...more];
+export const pages = [...basePages, ...more, ...strategy];
 
 export const hub = {
   slug: '',

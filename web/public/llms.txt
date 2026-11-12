@@ -29,6 +29,12 @@
 - [Home poker house rules](https://easypoker.cc/guides/home-poker-house-rules): A ready-to-share list of home poker house rules: acting in turn, string bets, misdeals, showing cards, re-buys and settling up, with the reason for each rule.
 - [Poker terms glossary](https://easypoker.cc/guides/poker-terms-glossary): Plain-English definitions of the poker terms you hear at a home game: blinds, button, flop, turn, river, kicker, all-in, side pot, nuts, tilt and more.
 - [Poker chip apps for home games, compared](https://easypoker.cc/guides/best-poker-chip-apps): Poker chip apps for live home games compared: EasyPoker, Chips of Fury, PartyPot and pokerchips.io, with platform, side pots and settle-up features.
+- [Poker outs and odds: the rule of 4 and 2](https://easypoker.cc/guides/poker-outs-and-odds): Count your outs and turn them into odds at the table: the rule of 4 and 2, an exact odds chart for common draws, and when the shortcut is wrong.
+- [Pot odds explained](https://easypoker.cc/guides/pot-odds): How to calculate pot odds in poker, convert them to the equity you need to call, and compare them with your draw. Worked examples with real numbers.
+- [Texas Hold'em starting hands](https://easypoker.cc/guides/texas-holdem-starting-hands): Which Texas Hold'em starting hands to play at a home game: a simple tier list, how position changes it, and the odds of being dealt each kind of hand.
+- [Poker positions explained](https://easypoker.cc/guides/poker-positions): Every seat at a poker table explained, from under the gun to the button: who acts first before and after the flop, and why late position wins more.
+- [Omaha poker rules](https://easypoker.cc/guides/omaha-poker-rules): Omaha poker rules for a home game: four hole cards, the use-exactly-two rule, pot-limit betting with a worked example, and how Omaha differs from Hold'em.
+- [How to deal poker](https://easypoker.cc/guides/how-to-deal-poker): How to deal poker at a home game: shuffling and cutting, dealing hole cards, burning before the flop, turn and river, and fixing common dealing mistakes.
 
 ## Optional
 

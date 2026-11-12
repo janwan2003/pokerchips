@@ -75,8 +75,9 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
   fails if they drift — re-copy). Host features live in a separate Host tab styled by
   `web/public/css/site.css` (all `ep-` prefixed).
 - SEO pages (`/guides/*`, `/about`, `/privacy`, `sitemap.xml`, `llms.txt`, `llms-full.txt`)
-  are generated: edit `web/guides/pages.mjs` or `web/guides/pages-more.mjs` (the
-  question-style pages written for AI answers), run `npm run guides`; `test/guides.test.js` fails if the output
+  are generated: edit `web/guides/pages.mjs`, `pages-more.mjs` or `pages-strategy.mjs`
+  (question-style pages written for AI answers; external citations per page live in
+  `web/guides/sources.mjs`, each checked against the claim it backs), run `npm run guides`; `test/guides.test.js` fails if the output
   is stale. The home page only links to them from a small footer below the fold — keep
   the home page itself focused on hosting/joining. Table pages are `noindex`.
 - Analytics: the Worker entry is `web/src/main.js`, which wraps `src/index.js`, writes

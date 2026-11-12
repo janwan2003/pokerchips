@@ -453,6 +453,12 @@ EasyPoker supports both: set fixed blinds for a cash game, or have the host rais
 - **Forgetting to raise them at all.** A tournament with flat blinds can last until 4 a.m. Set a timer.
 - **Blinds that don't match the chips.** If the small blind is 5, you need 5-value chips. Use the [chip calculator](https://easypoker.cc/guides/poker-chip-calculator) to match chip values to your blinds, or use virtual chips and skip the problem.
 
+## Sources
+
+- [Wikipedia: Blind (poker)](https://en.wikipedia.org/wiki/Blind_(poker))
+- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
+- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
+
 ## Frequently asked questions
 
 ### What are good blinds for a home poker game?
@@ -530,6 +536,12 @@ Splitting a pot is easy with [EasyPoker](https://easypoker.cc/): each winner tap
 - **"Three pair" does not exist.** With seven cards, only the best two pairs count.
 - **The cards speak.** At showdown, a hand is worth what it is, even if the player calls it wrong.
 
+## Sources
+
+- [Wikipedia: List of poker hands (ranking order and tie-breaking)](https://en.wikipedia.org/wiki/List_of_poker_hands)
+- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+
 ## Frequently asked questions
 
 ### What is the order of poker hands from best to worst?
@@ -606,6 +618,13 @@ A betting round ends when every remaining player has put in the same amount (or 
 
 With EasyPoker, everyone's stack is on their own phone. To bet or call, pick the amount and tap Bet: it leaves your stack and joins the pot that every phone shows. Checks and folds need no tap at all. At showdown the winner taps Take whole pot; for a split pot, each winner takes their share. The host changes the blinds between levels from the Host tab.
 
+## Sources
+
+- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
+- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
+
 ## Frequently asked questions
 
 ### How many cards do you get in Texas Hold'em?
@@ -681,6 +700,11 @@ Total 1,000, which matches 50 + 150 + 400 + 400. Always check the pots add up to
 
 [EasyPoker](https://easypoker.cc/) keeps one pot on the table and does not split it into side pots automatically. Work out the pots as above, then pay them out in order: the winner of each smaller pot taps Take and enters that pot's size, and the last winner taps Take whole pot for whatever is left. If anyone takes the wrong amount, the host can set the pot and the stacks directly, or restore the table to the moment before.
 
+## Sources
+
+- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+
 ## Frequently asked questions
 
 ### What is a side pot in poker?
@@ -750,6 +774,12 @@ Five minutes of rules saves an hour of arguments. Decide on re-buys, the minimum
 ## 7. Settle up
 
 At the end, write down each player's final stack before anyone leaves. If you play for stakes, convert chips back at the same rate as the buy-in and settle between yourselves. For tournaments, see [how to split a tournament prize pool](https://easypoker.cc/guides/poker-tournament-payouts). EasyPoker never handles money, but every stack and every action of the night stays on record for the host.
+
+## Sources
+
+- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
 
 ## Frequently asked questions
 
@@ -825,6 +855,11 @@ When a few players are left, they may agree to stop and split the remaining mone
 
 EasyPoker only tracks chips and never handles money; settle real stakes between yourselves, as allowed where you live.
 
+## Sources
+
+- [Wikipedia: Poker tournament (structures, re-buys, payouts)](https://en.wikipedia.org/wiki/Poker_tournament)
+- [Wikipedia: Independent Chip Model](https://en.wikipedia.org/wiki/Independent_Chip_Model)
+
 ## Frequently asked questions
 
 ### How many places should a home poker tournament pay?
@@ -895,6 +930,11 @@ Agreeing in advance what counts as a misdeal turns an argument into a reshuffle.
 - **Run it twice**: when players are all-in, deal the remaining board twice and split the pot by each result.
 - **Seven-deuce bonus**: winning a pot with 7-2 earns a small bonus from every player.
 - **Dealer's choice**: the dealer picks the variant (Hold'em, Omaha, etc.) for each orbit.
+
+## Sources
+
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Poker Tournament Directors Association, 2026 Rules v1.1 (Rule 21 odd chips, Rule 45 raise amounts, Rule 46 oversized chip, Rule 53 verbal declarations)](https://www.pokertda.com/view-poker-tda-rules/)
 
 ## Frequently asked questions
 
@@ -987,6 +1027,11 @@ Short, plain definitions of the words you will hear at a home poker game, from "
 
 Playing without a chip set? With [EasyPoker](https://easypoker.cc/), the blinds, stacks and pot are on every player's phone. See [how virtual poker chips work](https://easypoker.cc/guides/virtual-poker-chips).
 
+## Sources
+
+- [Wikipedia: Glossary of poker terms](https://en.wikipedia.org/wiki/Glossary_of_poker_terms)
+- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
+
 ## Frequently asked questions
 
 ### What does "the nuts" mean in poker?
@@ -1055,6 +1100,12 @@ You can try EasyPoker in about a minute at [EasyPoker](https://easypoker.cc/): c
 
 EasyPoker at easypoker.cc is an independent browser chip tracker. It is not the "Poker with Friends – EasyPoker" mobile app, which deals virtual cards and is a separate product from a different developer.
 
+## Sources
+
+- [Chips of Fury: Virtual Poker Chips (Chips Only Mode)](https://chipsoffury.com/virtual-poker-chips/)
+- [PartyPot: Is there a free app to replace poker chips?](https://partypotapp.com/faq/replace-poker-chips-free-app/)
+- [pokerchips.io home page](https://www.pokerchips.io/)
+
 ## Frequently asked questions
 
 ### What is the best free poker chip app?
@@ -1072,3 +1123,453 @@ Some do automatically. EasyPoker does not: you work the side pots out and each w
 ### Is easypoker.cc the same as the EasyPoker app?
 
 No. easypoker.cc is an independent browser chip tracker for games played with real cards. The "Poker with Friends – EasyPoker" app is a separate product.
+
+---
+
+# Poker outs and odds: the rule of 4 and 2
+
+Source: https://easypoker.cc/guides/poker-outs-and-odds
+Last updated: 2026-11-12
+
+Outs are the unseen cards that would make your hand. Multiply your outs by 4 on the flop (two cards to come) or by 2 on the turn (one card to come) for a quick percentage chance of hitting. A flush draw has 9 outs: about 36% on the flop and 18% on the turn.
+
+## How to count outs
+
+After the flop you have seen 5 cards (your 2 and the 3 on the board), so 47 are unseen. After the turn, 46 are unseen. An **out** is any of those cards that improves you to a hand you expect to win.
+
+- **Flush draw** (four of one suit): 13 cards of the suit minus the 4 you can see = **9 outs**.
+- **Open-ended straight draw** (e.g. 8-7-6-5): four cards at each end = **8 outs**.
+- **Gutshot** (inside straight draw, e.g. 9-8-6-5): **4 outs**.
+- **Pocket pair hoping for a set**: **2 outs**.
+- **Flush draw plus open-ended straight draw**: 9 + 8 minus the 2 cards counted twice = **15 outs**.
+
+Do not count an out twice, and discount outs that also help your opponent (a card that completes your straight but pairs the board may give someone a full house).
+
+## Exact odds chart
+
+The chance of hitting at least one out, calculated exactly: on the flop, 1 − (non-outs/47 × (non-outs − 1)/46); on the turn, outs/46.
+
+| Draw | Outs | Flop to river | Rule of 4 | Turn to river | Rule of 2 |
+|---|---|---|---|---|---|
+| Pocket pair to a set | 2 | 8.4% | 8% | 4.3% | 4% |
+| Gutshot | 4 | 16.5% | 16% | 8.7% | 8% |
+| Two overcards | 6 | 24.1% | 24% | 13.0% | 12% |
+| Open-ended straight | 8 | 31.5% | 32% | 17.4% | 16% |
+| Flush draw | 9 | 35.0% | 36% | 19.6% | 18% |
+| Flush + straight draw | 15 | 54.1% | 60% | 32.6% | 30% |
+
+## When the rule of 4 is wrong
+
+- **Many outs.** Above about 8 outs, ×4 overstates the chance: 15 outs is 54%, not 60%. Use (outs × 4) − (outs − 8) as a closer estimate.
+- **Only one card is guaranteed.** The ×4 figure assumes you see both the turn and the river. If someone can bet again on the turn, you usually only get one card for the price, so use ×2.
+- **Dirty outs.** If some outs also improve your opponent, do not count them.
+
+## Turning the percentage into a decision
+
+Odds alone do not say whether to call. Compare them with the [pot odds](https://easypoker.cc/guides/pot-odds): the share of the final pot that your call makes up. If your chance of hitting is higher than that share, calling is profitable in the long run.
+
+At a home game, the arithmetic is easier when the pot is an exact number in front of everyone. With [EasyPoker](https://easypoker.cc/) the pot and every bet show live on each phone, so you only have to count your outs.
+
+## Sources
+
+- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
+- [Wikipedia: Pot odds](https://en.wikipedia.org/wiki/Pot_odds)
+
+## Frequently asked questions
+
+### What is the rule of 4 and 2 in poker?
+
+Multiply your outs by 4 on the flop, or by 2 on the turn, to estimate your percentage chance of hitting by the river.
+
+### How many outs does a flush draw have?
+
+Nine. There are 13 cards of each suit and you can already see four of them.
+
+### What are the odds of hitting a flush draw?
+
+About 35% from the flop to the river and about 19.6% from the turn to the river.
+
+### What are the odds of an open-ended straight draw?
+
+About 31.5% from the flop to the river with 8 outs, and 17.4% from the turn.
+
+### What are the odds of flopping a set with a pocket pair?
+
+About 11.8%, or 1 time in 8.5. If you miss on the flop, two outs give about 8.4% to hit by the river.
+
+---
+
+# Pot odds explained
+
+Source: https://easypoker.cc/guides/pot-odds
+Last updated: 2026-11-12
+
+Pot odds compare the size of a call with the pot you could win. Divide the amount you must call by the total pot after your call: that is the share of the time you need to win for the call to break even. Calling 50 to win a pot that will be 200 needs 25%.
+
+## The formula
+
+**Equity needed = amount to call ÷ (pot before your call + amount to call)**
+
+"Pot before your call" includes your opponent's bet. The result is the minimum chance of winning that makes the call break even over many hands.
+
+## Worked example
+
+- The pot is 100. Your opponent bets 50, so the pot is now 150.
+- You must call 50. After your call the pot will be 200.
+- Equity needed: 50 ÷ 200 = **25%**.
+- Expressed as a ratio, the pot is offering you 150 to 50, or **3 to 1**.
+
+## Common bet sizes and the equity they demand
+
+| Opponent bets | Pot odds offered | Equity you need to call |
+|---|---|---|
+| Quarter pot | 5 to 1 | 16.7% |
+| Third of the pot | 4 to 1 | 20% |
+| Half pot | 3 to 1 | 25% |
+| Two thirds pot | 2.5 to 1 | 28.6% |
+| Full pot | 2 to 1 | 33.3% |
+| Twice the pot | 1.5 to 1 | 40% |
+
+## Putting pot odds and outs together
+
+Say you hold a flush draw on the turn. You have 9 outs and one card to come: 9 ÷ 46 = **19.6%** (see [outs and odds](https://easypoker.cc/guides/poker-outs-and-odds)).
+
+- Opponent bets a third of the pot: you need 20%. Almost exactly break-even.
+- Opponent bets half the pot: you need 25%. Calling loses chips in the long run, unless you expect to win more later.
+- Opponent bets a quarter of the pot: you need 16.7%. Calling is profitable.
+
+On the flop, if your opponent is all-in so you are sure to see both cards, the flush draw is 35% and you can call a bet up to about the size of the pot.
+
+## Implied odds
+
+Pot odds only count the chips already in the middle. **Implied odds** add what you expect to win on later streets if you hit. With deep stacks and an opponent who will pay you off, a draw can be worth calling even when the pot odds alone say no. The reverse, **reverse implied odds**, is when hitting your hand can still cost you, such as a small flush against a bigger one.
+
+## Pot odds at a home game
+
+The hardest part of pot odds at a live table is knowing the pot. With [EasyPoker](https://easypoker.cc/), the pot is shown as an exact number on every player's phone, so the formula above is one division.
+
+## Sources
+
+- [Wikipedia: Pot odds](https://en.wikipedia.org/wiki/Pot_odds)
+- [Wikipedia: Poker probability (five- and seven-card hand frequencies)](https://en.wikipedia.org/wiki/Poker_probability)
+
+## Frequently asked questions
+
+### How do you calculate pot odds?
+
+Divide the amount you have to call by the total pot after your call. Calling 50 into a pot of 150 gives 50 ÷ 200 = 25%.
+
+### What are good pot odds to call?
+
+Any time your chance of winning is higher than the equity the pot odds require. Facing a half-pot bet, you need 25%.
+
+### What is the difference between pot odds and implied odds?
+
+Pot odds use only the chips already in the pot. Implied odds also include chips you expect to win on later streets.
+
+### Should I call with a flush draw?
+
+On the turn, a flush draw wins about 19.6% of the time, so it is a break-even call against a bet of a third of the pot and a losing call against larger bets, before implied odds.
+
+---
+
+# Texas Hold'em starting hands
+
+Source: https://easypoker.cc/guides/texas-holdem-starting-hands
+Last updated: 2026-11-12
+
+There are 169 different starting hands in Hold'em. At a typical home game, play the strongest 15 to 25 percent of them: big pairs, big aces and suited broadway cards, more hands from late position and fewer from early position.
+
+## Starting hand facts
+
+| Fact | Number |
+|---|---|
+| Two-card combinations from 52 cards | 1,326 |
+| Distinct starting hands (ignoring suit order) | 169: 13 pairs, 78 suited, 78 offsuit |
+| Chance of any pocket pair | 78 / 1,326 = 1 in 17 (5.9%) |
+| Chance of a specific pair, e.g. aces | 6 / 1,326 = 1 in 221 (0.45%) |
+| Chance of two suited cards | 312 / 1,326 = 4 in 17 (23.5%) |
+| Chance of ace-king, suited or not | 16 / 1,326 (1.2%) |
+
+## A simple tier list
+
+This is a common, deliberately simple way to group hands for a full-ring home game, not a solver chart. "s" means suited, "o" offsuit.
+
+| Tier | Hands | How to play them |
+|---|---|---|
+| Premium | A♠ A♥, K♠ K♥, Q♠ Q♥, J♠ J♥, A♠ K♠, A♠ K♥ | Raise from any position; re-raise if someone raised first |
+| Strong | 10-10, 9-9, AQs, AJs, KQs, AQo | Raise from any position; call a single raise |
+| Playable | 8-8 to 2-2, ATs, KJs, QJs, J10s, 10-9s, AJo, KQo | Raise from middle and late position; small pairs hope to hit a set |
+| Late position only | Suited aces (A9s to A2s), suited connectors (98s to 54s), KTs, QTs, KJo, QJo | Open from the cutoff or button when nobody has raised |
+| Usually fold | Unsuited low cards, gappers like 9-5, weak aces offsuit (A8o and below) | Fold, except from the big blind when nobody raised |
+
+## Why position changes everything
+
+Players who act later see what everyone else did first. That makes marginal hands easier to play, so the later your [position](https://easypoker.cc/guides/poker-positions), the more hands you can open. A hand like K♣ J♦ is a fold under the gun at a full table and a raise on the button.
+
+## Home game adjustments
+
+- **Loose tables** (many players call pre-flop): play fewer weak aces and more suited and connected cards and small pairs, which make strong hands that win big multi-way pots.
+- **Tight tables** (most players fold): steal the blinds more often from late position.
+- **Short-handed** (five or fewer players): every hand goes up a tier, because fewer opponents hold something better.
+
+## Starting hands people overvalue
+
+- **Any ace.** A♦ 7♣ loses to every better ace and is hard to play after the flop.
+- **Any two suited cards.** Being suited adds only a few percent of equity; 9♥ 3♥ is still a bad hand.
+- **Small pairs out of position** facing a raise: you flop a set only about 1 time in 8.5.
+
+## Sources
+
+- [Wikipedia: Texas hold 'em starting hands (169 distinct hands, 1,326 combinations, pair frequency)](https://en.wikipedia.org/wiki/Texas_hold_%27em_starting_hands)
+- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
+
+## Frequently asked questions
+
+### How many starting hands are there in Texas Hold'em?
+
+169 distinct hands (13 pairs, 78 suited and 78 offsuit combinations of ranks), made from 1,326 possible two-card combinations.
+
+### What is the best starting hand in Hold'em?
+
+Pocket aces. You are dealt them 1 time in 221.
+
+### How often do you get a pocket pair?
+
+Once every 17 hands on average, or 5.9% of the time.
+
+### What percentage of hands should I play?
+
+At a full home table, roughly the best 15 to 25 percent, playing more from late position than early.
+
+### Is ace-king a pair?
+
+No, but it is one of the strongest starting hands because it makes top pair with the best kicker.
+
+---
+
+# Poker positions explained
+
+Source: https://easypoker.cc/guides/poker-positions
+Last updated: 2026-11-12
+
+Position is where you sit relative to the dealer button, and it decides when you act. The button acts last on every street after the flop, which is the biggest advantage at the table; the blinds and under the gun act with the least information.
+
+## The seats at a 9-player table
+
+Listed in the order they act before the flop.
+
+| Seat | Short name | Where it is | Group |
+|---|---|---|---|
+| Under the gun | UTG | Left of the big blind; first to act pre-flop | Early |
+| Under the gun +1 | UTG+1 | Next seat left | Early |
+| Middle position | MP | Next seat left | Middle |
+| Lojack | LJ | Three seats right of the button | Middle |
+| Hijack | HJ | Two seats right of the button | Late |
+| Cutoff | CO | Directly right of the button | Late |
+| Button | BTN | The dealer; last to act after the flop | Late |
+| Small blind | SB | Left of the button; posts the small blind | Blinds |
+| Big blind | BB | Two left of the button; last to act pre-flop | Blinds |
+
+With fewer players, remove seats from the early positions first. Six-handed, the seats are UTG, hijack, cutoff, button, small blind and big blind.
+
+## Who acts first?
+
+- **Before the flop:** under the gun acts first and the big blind acts last.
+- **On the flop, turn and river:** the first player still in the hand left of the button acts first (usually the small blind), and the button acts last.
+
+## Why acting last is worth chips
+
+- **Information.** You see whether opponents checked, bet or raised before you decide.
+- **Control of the pot size.** You can check behind to see a free card, or bet when others show weakness.
+- **Cheaper bluffs.** When everyone checks to you, a bet often wins the pot right away.
+
+That is why good players play more [starting hands](https://easypoker.cc/guides/texas-holdem-starting-hands) from the cutoff and button and fewer from early position.
+
+## The blinds: the worst seats
+
+The small and big blind have money in the pot before seeing cards and will act first on every later street. Defend the big blind with reasonable hands because you are getting a discount, but do not fall in love with weak hands out of position.
+
+## Common position mistakes
+
+- **Playing the same hands from every seat.** A hand that is a fine raise on the button is often a fold under the gun.
+- **Calling raises from the small blind** with marginal hands. You will be first to act for the rest of the hand.
+- **Forgetting that position is relative.** What matters after the flop is whether you act before or after the players still in the hand, not your seat name.
+
+## Keeping track of the button at home
+
+Use any object as the dealer button and move it one seat left after every hand; the blinds follow it. At a table run on [EasyPoker](https://easypoker.cc/), players post the blinds from their own phones, and the host sets the current blind level so everyone sees the same amounts.
+
+## Sources
+
+- [Wikipedia: Position (poker)](https://en.wikipedia.org/wiki/Position_(poker))
+- [Wikipedia: Blind (poker)](https://en.wikipedia.org/wiki/Blind_(poker))
+
+## Frequently asked questions
+
+### What is the best position in poker?
+
+The button, because it acts last on the flop, turn and river.
+
+### What does UTG mean in poker?
+
+Under the gun: the seat directly left of the big blind, which acts first before the flop.
+
+### Who acts first after the flop?
+
+The first player still in the hand to the left of the dealer button, usually the small blind.
+
+### What is the cutoff in poker?
+
+The seat directly to the right of the button, the second-best position at the table.
+
+### What is the hijack seat?
+
+The seat two to the right of the button, just before the cutoff.
+
+---
+
+# Omaha poker rules
+
+Source: https://easypoker.cc/guides/omaha-poker-rules
+Last updated: 2026-11-12
+
+Omaha is played like Texas Hold'em, with four hole cards instead of two. At showdown you must use exactly two of your hole cards and exactly three of the five board cards. It is usually played pot-limit, so the biggest raise allowed is the size of the pot.
+
+## Omaha in five rules
+
+- Each player gets **four hole cards** face down.
+- Blinds, the flop, turn and river, and the four betting rounds work exactly as in [Texas Hold'em](https://easypoker.cc/guides/texas-holdem-rules).
+- Your hand is made of **exactly two hole cards plus exactly three board cards**. Not one, not three, not four.
+- Hands rank the same as in Hold'em (see [hand rankings](https://easypoker.cc/guides/poker-hand-rankings)).
+- In Pot-Limit Omaha (PLO), the maximum bet or raise is the size of the pot.
+
+## The two-plus-three rule, with examples
+
+| Your hand | Board | What you have |
+|---|---|---|
+| A♥ K♣ 7♦ 2♠ | Q♥ J♥ 9♥ 4♥ 3♣ | No flush: you hold only one heart and must use two hole cards |
+| A♥ 6♥ K♣ 2♠ | Q♥ J♥ 9♥ 4♣ 3♣ | Ace-high flush: A♥ 6♥ plus Q♥ J♥ 9♥ |
+| K♠ K♣ 8♦ 3♥ | K♥ 9♣ 9♦ 5♠ 2♣ | Full house, kings full of nines |
+| Q♦ 7♣ 6♠ 2♥ | 9♥ 9♣ 9♦ 9♠ A♣ | Not four of a kind: only three board cards count, so you have trip nines with Q-7 |
+
+## Pot-limit betting, worked out
+
+A pot-sized raise is: **call first, then raise by the size of the pot after your call**.
+
+- The pot is 100. Your opponent bets 50, so the pot is 150.
+- You first call 50: the pot would be 200.
+- You may raise by up to 200 more, so your total bet is up to **250**.
+
+When nobody has bet yet, the maximum bet is simply the size of the pot.
+
+## How Omaha feels different from Hold'em
+
+- **Hands are stronger.** With six two-card combinations in every hand, big hands are common. Two pair rarely wins a multi-way pot.
+- **Draws are bigger.** Wrap straight draws can have 13 or more outs, so the favourite on the flop is often only a slight one.
+- **Pots grow fast** because pot-limit raises compound on every street.
+
+## Omaha at a home game
+
+Deal four cards each, so a full deck supports up to 10 players with room for burn cards. Pot-limit maths is the part people get wrong. With [EasyPoker](https://easypoker.cc/), the pot is always an exact number on every phone, which makes "pot" one easy look.
+
+## Sources
+
+- [Wikipedia: Omaha hold 'em (four hole cards, exactly two from hand and three from board)](https://en.wikipedia.org/wiki/Omaha_hold_%27em)
+- [Wikipedia: Betting in poker (limits, all-in and side pots, pot-limit)](https://en.wikipedia.org/wiki/Betting_in_poker)
+- [Wikipedia: List of poker hands (ranking order and tie-breaking)](https://en.wikipedia.org/wiki/List_of_poker_hands)
+
+## Frequently asked questions
+
+### How many cards do you get in Omaha?
+
+Four hole cards each, plus five community cards shared by all players.
+
+### Do you have to use two cards in Omaha?
+
+Yes. Your final hand must use exactly two of your four hole cards and exactly three of the five board cards.
+
+### Can you have a flush with one suited card in Omaha?
+
+No. You need two hole cards of the suit, plus three of that suit on the board.
+
+### How do you calculate a pot-size raise?
+
+Add the amount you need to call to the pot, then raise by that total. Facing a 50 bet into 100, the maximum total bet is 250.
+
+---
+
+# How to deal poker
+
+Source: https://easypoker.cc/guides/how-to-deal-poker
+Last updated: 2026-11-12
+
+Shuffle well, have the player on your right cut, then deal one card at a time clockwise starting with the player on your left. Burn one card face down before the flop, the turn and the river. Keep the deck low and the cards flat so nothing is exposed.
+
+## Before the deal
+
+- **Know whose deal it is.** In a home game the deal rotates: the player with the dealer button deals, and the button moves one seat left after each hand.
+- **Check the blinds are in.** The small blind and big blind post before any cards come out.
+- **Use two decks** with different backs if you can: one is shuffled while the other is dealt.
+
+## Shuffling and cutting
+
+A riffle shuffle splits the deck in two and interleaves the halves. Mathematicians Dave Bayer and Persi Diaconis showed in 1992 that about **seven riffle shuffles** are needed to mix a 52-card deck well; fewer leave noticeable order. A common home routine: riffle, riffle, strip (pull packets off the top), riffle, then cut.
+
+After shuffling, offer the deck to the player on your right to cut, or cut it yourself onto a cut card. Keep the bottom card hidden.
+
+## Dealing the hole cards
+
+- Start with the player directly to your left (the small blind).
+- Deal one card at a time, face down, clockwise around the table, ending with yourself.
+- Go round a second time so everyone has two cards (four for [Omaha](https://easypoker.cc/guides/omaha-poker-rules)).
+- Pitch the cards low and flat across the table so they do not flip over.
+
+## Burn and turn
+
+Before each set of community cards, discard the top card face down: the **burn card**. It protects against anyone having seen or marked the top card.
+
+| Street | Burn | Then deal |
+|---|---|---|
+| Flop | 1 card | 3 cards face up |
+| Turn | 1 card | 1 card face up |
+| River | 1 card | 1 card face up |
+
+Only deal the next street when the betting round is complete.
+
+## Dealing mistakes and how to fix them
+
+- **The first or second card is exposed:** misdeal; reshuffle and deal again.
+- **A card is exposed later in the deal:** finish dealing, replace the exposed card with the next card, and use the exposed card as the burn card.
+- **A player has the wrong number of cards:** misdeal, if no significant action has taken place.
+- **The flop came out before betting finished:** put the flop cards back into the deck, reshuffle the remaining stub, and deal a new flop without a new burn.
+
+Agree these before the night starts; our [house rules](https://easypoker.cc/guides/home-poker-house-rules) list includes them.
+
+## The dealer also runs the action
+
+In a home game the dealer usually also keeps the game moving: says whose turn it is, makes sure bets are complete, and pushes the pot to the winner. With [EasyPoker](https://easypoker.cc/), the pot is pushed with one tap by the winner, and every phone shows the stacks, so the dealer only has to deal.
+
+## Sources
+
+- [Robert's Rules of Poker, Bob Ciaffone (string raises, oversized chip, showdown, misdeals, ties, no-limit raises)](https://www.briggsoft.com/docs/pmavens/Rules_Roberts.htm)
+- [Wikipedia: Shuffling (riffle shuffles and the "seven shuffles" result of Bayer and Diaconis)](https://en.wikipedia.org/wiki/Shuffling)
+- [Wikipedia: Texas hold 'em (deal, betting rounds, showdown)](https://en.wikipedia.org/wiki/Texas_hold_%27em)
+
+## Frequently asked questions
+
+### Who deals first in poker?
+
+Any agreed method, such as everyone drawing a card with the highest card taking the button. After that, the deal moves one seat left each hand.
+
+### How many times should you shuffle a deck for poker?
+
+About seven riffle shuffles, the number Bayer and Diaconis found is needed to mix a 52-card deck well.
+
+### Why do you burn a card in poker?
+
+To protect against anyone having seen or marked the top card of the deck.
+
+### What happens if the dealer exposes a card?
+
+If it is the first or second card of the deal, it is a misdeal. Later, the exposed card is replaced and becomes the burn card.

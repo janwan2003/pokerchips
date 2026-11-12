@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pot Odds Explained: When to Call in Poker</title>
+    <meta name="description" content="How to calculate pot odds in poker, convert them to the equity you need to call, and compare them with your draw. Worked examples with real numbers.">
+    <link rel="canonical" href="https://easypoker.cc/guides/pot-odds">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="EasyPoker">
+    <meta property="og:title" content="Pot Odds Explained: When to Call in Poker">
+    <meta property="og:description" content="How to calculate pot odds in poker, convert them to the equity you need to call, and compare them with your draw. Worked examples with real numbers.">
+    <meta property="og:url" content="https://easypoker.cc/guides/pot-odds">
+    <meta property="og:image" content="https://easypoker.cc/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#11121d">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Inter:wght@400..700&display=swap">
+    <link rel="stylesheet" href="/css/site.css">
+    <link rel="stylesheet" href="/css/guides.css">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Pot odds explained","description":"How to calculate pot odds in poker, convert them to the equity you need to call, and compare them with your draw. Worked examples with real numbers.","image":"https://easypoker.cc/og.png","dateModified":"2026-11-12","mainEntityOfPage":"https://easypoker.cc/guides/pot-odds","citation":[{"@type":"CreativeWork","name":"Wikipedia: Pot odds","url":"https://en.wikipedia.org/wiki/Pot_odds"},{"@type":"CreativeWork","name":"Wikipedia: Poker probability (five- and seven-card hand frequencies)","url":"https://en.wikipedia.org/wiki/Poker_probability"}],"author":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"},"publisher":{"@type":"Organization","name":"EasyPoker","url":"https://easypoker.cc/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"EasyPoker","item":"https://easypoker.cc/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://easypoker.cc/guides/"},{"@type":"ListItem","position":3,"name":"Pot odds explained","item":"https://easypoker.cc/guides/pot-odds"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you calculate pot odds?","acceptedAnswer":{"@type":"Answer","text":"Divide the amount you have to call by the total pot after your call. Calling 50 into a pot of 150 gives 50 ÷ 200 = 25%."}},{"@type":"Question","name":"What are good pot odds to call?","acceptedAnswer":{"@type":"Answer","text":"Any time your chance of winning is higher than the equity the pot odds require. Facing a half-pot bet, you need 25%."}},{"@type":"Question","name":"What is the difference between pot odds and implied odds?","acceptedAnswer":{"@type":"Answer","text":"Pot odds use only the chips already in the pot. Implied odds also include chips you expect to win on later streets."}},{"@type":"Question","name":"Should I call with a flush draw?","acceptedAnswer":{"@type":"Answer","text":"On the turn, a flush draw wins about 19.6% of the time, so it is a break-even call against a bet of a third of the pot and a losing call against larger bets, before implied odds."}}]}</script>
+</head>
+<body class="ep-page ep-scope">
+    <header class="ep-doc-top"><div class="ep-doc-top-inner">
+        <a class="ep-brand" href="/"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker</a>
+        <nav class="ep-doc-nav" aria-label="Site"><a href="/guides/">Guides</a></nav>
+        <a class="ep-btn ep-btn-red ep-doc-top-cta" href="/">Start a free table</a>
+    </div></header>
+    <main class="ep-doc ep-doc-guide">
+        <header class="ep-doc-head">
+            <nav class="ep-crumbs" aria-label="Breadcrumb"><a href="/">EasyPoker</a><span aria-hidden="true">/</span><a href="/guides/">Guides</a></nav>
+            <h1>Pot odds explained</h1>
+            <p class="ep-doc-lede">Pot odds compare the size of a call with the pot you could win. Divide the amount you must call by the total pot after your call: that is the share of the time you need to win for the call to break even. Calling 50 to win a pot that will be 200 needs 25%.</p>
+            <p class="ep-doc-meta">Updated <time datetime="2026-11-12">2026-11-12</time></p>
+        </header>
+        <nav class="ep-toc" aria-label="On this page">
+            <details class="ep-toc-inline"><summary>On this page</summary><ol><li><a href="#the-formula">The formula</a></li><li><a href="#worked-example">Worked example</a></li><li><a href="#common-bet-sizes-and-the-equity-they-demand">Common bet sizes and the equity they demand</a></li><li><a href="#putting-pot-odds-and-outs-together">Putting pot odds and outs together</a></li><li><a href="#implied-odds">Implied odds</a></li><li><a href="#pot-odds-at-a-home-game">Pot odds at a home game</a></li><li><a href="#sources-title">Sources</a></li><li><a href="#faq-title">Frequently asked questions</a></li></ol></details>
+            <div class="ep-toc-side"><p class="ep-toc-h">On this page</p><ol><li><a href="#the-formula">The formula</a></li><li><a href="#worked-example">Worked example</a></li><li><a href="#common-bet-sizes-and-the-equity-they-demand">Common bet sizes and the equity they demand</a></li><li><a href="#putting-pot-odds-and-outs-together">Putting pot odds and outs together</a></li><li><a href="#implied-odds">Implied odds</a></li><li><a href="#pot-odds-at-a-home-game">Pot odds at a home game</a></li><li><a href="#sources-title">Sources</a></li><li><a href="#faq-title">Frequently asked questions</a></li></ol></div>
+        </nav>
+        <div class="ep-doc-main">
+        <article class="ep-prose">
+<h2 id="the-formula">The formula</h2>
+<p><strong>Equity needed = amount to call ÷ (pot before your call + amount to call)</strong></p>
+<p>"Pot before your call" includes your opponent's bet. The result is the minimum chance of winning that makes the call break even over many hands.</p>
+
+<h2 id="worked-example">Worked example</h2>
+<ol>
+  <li>The pot is 100. Your opponent bets 50, so the pot is now 150.</li>
+  <li>You must call 50. After your call the pot will be 200.</li>
+  <li>Equity needed: 50 ÷ 200 = <strong>25%</strong>.</li>
+  <li>Expressed as a ratio, the pot is offering you 150 to 50, or <strong>3 to 1</strong>.</li>
+</ol>
+
+<h2 id="common-bet-sizes-and-the-equity-they-demand">Common bet sizes and the equity they demand</h2>
+<div class="ep-table-wrap"><table>
+  <thead><tr><th>Opponent bets</th><th>Pot odds offered</th><th>Equity you need to call</th></tr></thead>
+  <tbody>
+    <tr><td>Quarter pot</td><td>5 to 1</td><td>16.7%</td></tr>
+    <tr><td>Third of the pot</td><td>4 to 1</td><td>20%</td></tr>
+    <tr><td>Half pot</td><td>3 to 1</td><td>25%</td></tr>
+    <tr><td>Two thirds pot</td><td>2.5 to 1</td><td>28.6%</td></tr>
+    <tr><td>Full pot</td><td>2 to 1</td><td>33.3%</td></tr>
+    <tr><td>Twice the pot</td><td>1.5 to 1</td><td>40%</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="putting-pot-odds-and-outs-together">Putting pot odds and outs together</h2>
+<p>Say you hold a flush draw on the turn. You have 9 outs and one card to come: 9 ÷ 46 = <strong>19.6%</strong> (see <a href="/guides/poker-outs-and-odds">outs and odds</a>).</p>
+<ul>
+  <li>Opponent bets a third of the pot: you need 20%. Almost exactly break-even.</li>
+  <li>Opponent bets half the pot: you need 25%. Calling loses chips in the long run, unless you expect to win more later.</li>
+  <li>Opponent bets a quarter of the pot: you need 16.7%. Calling is profitable.</li>
+</ul>
+<p>On the flop, if your opponent is all-in so you are sure to see both cards, the flush draw is 35% and you can call a bet up to about the size of the pot.</p>
+
+<h2 id="implied-odds">Implied odds</h2>
+<p>Pot odds only count the chips already in the middle. <strong>Implied odds</strong> add what you expect to win on later streets if you hit. With deep stacks and an opponent who will pay you off, a draw can be worth calling even when the pot odds alone say no. The reverse, <strong>reverse implied odds</strong>, is when hitting your hand can still cost you, such as a small flush against a bigger one.</p>
+
+<h2 id="pot-odds-at-a-home-game">Pot odds at a home game</h2>
+<p>The hardest part of pot odds at a live table is knowing the pot. With <a href="/">EasyPoker</a>, the pot is shown as an exact number on every player's phone, so the formula above is one division.</p>
+        </article>
+        <section class="ep-sources" aria-labelledby="sources-title">
+            <h2 id="sources-title">Sources</h2>
+            <ol><li><a href="https://en.wikipedia.org/wiki/Pot_odds" rel="noopener">Wikipedia: Pot odds</a> <span>en.wikipedia.org</span></li><li><a href="https://en.wikipedia.org/wiki/Poker_probability" rel="noopener">Wikipedia: Poker probability (five- and seven-card hand frequencies)</a> <span>en.wikipedia.org</span></li></ol>
+            <p>Checked 2026-11-12. Odds and counts on this page are exact calculations from a standard 52-card deck unless stated otherwise.</p>
+        </section>
+        <aside class="ep-cta">
+            <div class="ep-cta-copy">
+                <p class="ep-cta-title">Play tonight without a chip set</p>
+                <p>Host a table in your browser, share the link, and everyone bets from their own phone. Free, no app, no sign-up.</p>
+                <a class="ep-btn ep-btn-red ep-btn-lg" href="/">Start a free table</a>
+            </div>
+            <div class="ep-cta-stack" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#chip"/></svg><svg viewBox="0 0 48 48"><use href="#chip"/></svg><svg viewBox="0 0 48 48"><use href="#chip"/></svg></div>
+        </aside>
+        <section class="ep-faq" aria-labelledby="faq-title">
+            <h2 id="faq-title">Frequently asked questions</h2>
+            <details><summary>How do you calculate pot odds?</summary><p>Divide the amount you have to call by the total pot after your call. Calling 50 into a pot of 150 gives 50 ÷ 200 = 25%.</p></details>
+            <details><summary>What are good pot odds to call?</summary><p>Any time your chance of winning is higher than the equity the pot odds require. Facing a half-pot bet, you need 25%.</p></details>
+            <details><summary>What is the difference between pot odds and implied odds?</summary><p>Pot odds use only the chips already in the pot. Implied odds also include chips you expect to win on later streets.</p></details>
+            <details><summary>Should I call with a flush draw?</summary><p>On the turn, a flush draw wins about 19.6% of the time, so it is a break-even call against a bet of a third of the pot and a losing call against larger bets, before implied odds.</p></details>
+        </section>
+        <section class="ep-related" aria-labelledby="related-title">
+            <h2 id="related-title">Related guides</h2>
+            <ul><li><a href="/guides/poker-outs-and-odds"><strong>Poker outs and odds: the rule of 4 and 2</strong><span>Count your outs and turn them into odds at the table: the rule of 4 and 2, an exact odds chart for common draws, and when the shortcut is wrong.</span></a></li><li><a href="/guides/texas-holdem-rules"><strong>Texas Hold'em rules for a home game</strong><span>Texas Hold'em rules for a home game: blinds, the four betting rounds, what check, call, raise and fold mean, the showdown, and minimum raise sizes.</span></a></li><li><a href="/guides/side-pots"><strong>How side pots work in poker</strong><span>How side pots work when a player is all-in for less: build the main pot and each side pot step by step, who can win which, and how to pay them out.</span></a></li></ul>
+        </section>
+        </div>
+    </main>
+    <footer class="ep-doc-foot"><div class="ep-doc-foot-inner">
+        <nav class="ep-doc-foot-cols" aria-label="Guides"><div><p class="ep-doc-foot-h">Chips without a chip set</p><ul><li><a href="/guides/virtual-poker-chips">Virtual poker chips for your home game</a></li><li><a href="/guides/poker-chip-app">A poker chip app that runs in the browser</a></li><li><a href="/guides/online-poker-chips">Online poker chips for playing with friends</a></li><li><a href="/guides/poker-without-chips">How to play poker without chips</a></li><li><a href="/guides/best-poker-chip-apps">Poker chip apps for home games, compared</a></li></ul></div><div><p class="ep-doc-foot-h">Running a home game</p><ul><li><a href="/guides/how-to-host-a-poker-night">How to host a poker night</a></li><li><a href="/guides/home-poker-blind-structure">Home poker blind structure</a></li><li><a href="/guides/poker-chip-calculator">Poker chip calculator</a></li><li><a href="/guides/poker-tournament-payouts">How to split a home poker tournament prize pool</a></li><li><a href="/guides/home-poker-house-rules">Home poker house rules</a></li></ul></div><div><p class="ep-doc-foot-h">Rules and reference</p><ul><li><a href="/guides/texas-holdem-rules">Texas Hold'em rules for a home game</a></li><li><a href="/guides/omaha-poker-rules">Omaha poker rules</a></li><li><a href="/guides/poker-hand-rankings">Poker hand rankings, from best to worst</a></li><li><a href="/guides/side-pots">How side pots work in poker</a></li><li><a href="/guides/how-to-deal-poker">How to deal poker</a></li><li><a href="/guides/poker-terms-glossary">Poker terms glossary</a></li></ul></div><div><p class="ep-doc-foot-h">Strategy basics</p><ul><li><a href="/guides/texas-holdem-starting-hands">Texas Hold'em starting hands</a></li><li><a href="/guides/poker-positions">Poker positions explained</a></li><li><a href="/guides/poker-outs-and-odds">Poker outs and odds: the rule of 4 and 2</a></li><li><a href="/guides/pot-odds">Pot odds explained</a></li></ul></div><div><p class="ep-doc-foot-h">EasyPoker</p><ul><li><a href="/">Start a free table</a></li><li><a href="/guides/">All guides</a></li><li><a href="/about">About</a></li><li><a href="/privacy">Privacy</a></li></ul></div></nav>
+        <p class="ep-doc-foot-note"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#chip"/></svg>EasyPoker tracks chips for poker games you play with a real deck. It does not deal cards or handle money.</p>
+    </div></footer>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="chip" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#e94560"/><circle cx="24" cy="24" r="22" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="7.5 9.77" transform="rotate(-12 24 24)"/><circle cx="24" cy="24" r="14" fill="#c7364f"/><circle cx="24" cy="24" r="14" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.2" stroke-dasharray="2 2.4"/><path d="M24 15.5c-3.2 3.3-7 5.4-7 9 0 2.2 1.7 3.8 3.8 3.8 1 0 2-.4 2.6-1.1-.3 1.6-1 3-2.2 4h5.6c-1.2-1-1.9-2.4-2.2-4 .7.7 1.6 1.1 2.6 1.1 2.1 0 3.8-1.6 3.8-3.8 0-3.6-3.8-5.7-7-9z" fill="#fff"/></symbol>
+    </svg>
+</body>
+</html>
