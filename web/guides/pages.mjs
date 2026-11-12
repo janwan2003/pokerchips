@@ -419,6 +419,14 @@ export const privacy = {
   <li><strong>Cloudflare</strong> hosts the site and the tables and, like any web host, sees standard request information such as IP addresses. It also stores the usage statistics above.</li>
   <li><strong>Google Fonts</strong> serves the typefaces, so your browser requests them from Google.</li>
 </ul>
+<h2>The Android app</h2>
+<p>The EasyPoker app for Android adds two ways to play to what is described above:</p>
+<ul>
+  <li><strong>Online tables</strong> opened in the app are the same tables as on this site, stored the same way, and the app keeps the same name and host keys in its own storage on the phone.</li>
+  <li><strong>Games hosted on the phone</strong> ("Host on this phone") never leave it: player names and every action are saved only in the app's storage on that phone, and other players reach them directly over the local Wi-Fi. Export writes them to a file you choose; nothing is uploaded.</li>
+  <li><strong>Camera</strong>: used only while you scan a table's QR code. No picture is saved or sent anywhere.</li>
+</ul>
+<p>The app has no ads, no accounts and no tracking of its own.</p>
 <h2>Money</h2>
 <p>EasyPoker only tracks chip counts. It does not handle payments or real money of any kind.</p>
 `,

@@ -30,6 +30,18 @@ const ASSET_LINKS = [{
     package_name: 'com.pokerchips',
     sha256_cert_fingerprints: ['78:C4:58:75:D1:D1:C5:A5:4C:0C:F1:C0:0F:46:4C:16:C3:E8:AD:E5:84:14:A7:AF:0D:D0:E6:BB:D0:F3:D6:17'],
   },
+}, {
+  // The Google Play app. Play re-signs it with Google's app signing key: add that key's
+  // SHA-256 from Play Console > Setup > App signing here, or links will not open the app.
+  relation: ['delegate_permission/common.handle_all_urls'],
+  target: {
+    namespace: 'android_app',
+    package_name: 'cc.easypoker.app',
+    sha256_cert_fingerprints: [
+      // upload key (~/.config/easypoker/upload.jks): covers internal test builds installed directly
+      '1A:22:1E:9A:20:5C:BA:26:20:51:D5:3F:91:04:AF:5C:1A:23:F9:1D:4D:2F:F5:EB:32:4A:D1:04:93:FE:C3:29',
+    ],
+  },
 }];
 
 // Table pages are per-game and mostly "no such table": keep them out of search results.
