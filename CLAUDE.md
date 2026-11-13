@@ -87,6 +87,32 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
 - End-to-end check: `npx wrangler dev`, then drive two Playwright browser contexts
   (host + player) against it.
 
+### The usage ledger
+
+**Keep this table current.** Whenever a session touches usage, traffic or marketing,
+regenerate it and replace the recent rows:
+
+```bash
+cd web && npm run ledger            # read-only; counts only, never table codes or names
+```
+
+It needs `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in `web/.env` (gitignored); the
+token is `easypoker-ledger`, created 2026-11-13, *Account Analytics: Read* only. The same
+pair feeds `npm run stats`. Source is Analytics Engine, which keeps 3 months: once a day
+falls out of the API, keep its row here as recorded. Bots (including headless Playwright
+runs against production) are excluded. Web version only — the Android app reports nothing.
+
+Data starts 2026-11-12 10:02 UTC, when analytics was deployed. Last regenerated
+**2026-11-13** (that day partial).
+
+| date | tables created | players joined | tables in play | player actions | host actions | page views | visitors |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-12 | 2 | 6 | 2 | 182 | 0 | 160 | 67 |
+| 2026-11-13 | 0 | 4 | 1 | 260 | 0 | 39 | 34 |
+
+Totals: tables created 2, joins 10; tables with 2+ named players 1; tables played in the
+last 7 days 2.
+
 ## Layout
 
 - `game/GameManager.kt` — all game rules; every change goes through `record()`, which

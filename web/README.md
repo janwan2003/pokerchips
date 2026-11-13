@@ -32,6 +32,7 @@ browser from anywhere. No app, no sign-up.
   player action and host action, with table code, player name, country/region/city,
   referrer, device, network operator and a daily-rotating visitor hash. Column layout is
   at the top of `src/main.js`. Kept 3 months.
+- `npm run ledger [since-date]` prints the daily usage table kept in CLAUDE.md.
 - `npm run stats [days]` prints the usual reports (visitors per day, where from, referrers,
   pages, tables, players). It needs `CLOUDFLARE_ACCOUNT_ID` and a `CLOUDFLARE_API_TOKEN`
   with *Account Analytics: Read* in `web/.env` (gitignored).
