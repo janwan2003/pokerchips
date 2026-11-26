@@ -540,3 +540,13 @@ body.has-tabs .conn-status { top: 59px; }
 .ep-sitefoot a { color: var(--ep-text-3); text-decoration: none; }
 .ep-sitefoot a:hover { color: var(--ep-text-2); }
 @media (min-width: 880px) { .ep-sitefoot { padding: 0 32px 28px; } }
+
+/* ---------- Home FAQ: below the fold, quiet ---------- */
+.ep-faq { max-width: 1080px; margin: 0 auto; padding: 8px 16px 40px; display: grid; gap: 14px; }
+.ep-faq-title { font-family: var(--ep-display); font-size: 1.35rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1.2; }
+.ep-faq-lede { color: var(--ep-text-2); max-width: 60ch; }
+.ep-faq-list { display: grid; gap: 8px; max-width: 72ch; }
+.ep-faq-item { border-top: 1px solid var(--ep-surface-2); padding-top: 8px; }
+.ep-faq-item summary { cursor: pointer; font-weight: 600; color: var(--ep-text); padding: 4px 0; }
+.ep-faq-item p { color: var(--ep-text-2); padding: 4px 0 8px; }
+@media (min-width: 880px) { .ep-faq { padding: 8px 32px 48px; } }

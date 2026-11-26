@@ -7,8 +7,9 @@
     "guides": "node guides/build.mjs",
     "dev": "wrangler dev",
     "stats": "node scripts/stats.mjs",
-    "deploy": "node --test test/*.test.js && wrangler deploy",
-    "ledger": "node scripts/usage-ledger.mjs"
+    "deploy": "node --test test/*.test.js && wrangler deploy && node scripts/indexnow.mjs",
+    "ledger": "node scripts/usage-ledger.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "devDependencies": {
     "wrangler": "^4.40.0"

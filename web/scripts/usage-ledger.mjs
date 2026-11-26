@@ -8,7 +8,7 @@
 // column layout at the top of that file). Bots are excluded (blob8 = 'bot'), which also
 // drops headless Playwright runs such as test/e2e.mjs against production.
 // Read-only: every statement is a SELECT. Prints counts only, never table codes or names.
-// Needs CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN ("Account Analytics: Read") in
+// Needs EP_ANALYTICS_ACCOUNT_ID and EP_ANALYTICS_API_TOKEN ("Account Analytics: Read") in
 // web/.env or the environment, the same as scripts/stats.mjs.
 //
 // Analytics Engine keeps 3 months and may sample: counts use SUM(_sample_interval).
@@ -23,10 +23,10 @@ try {
   }
 } catch (_) { /* no .env */ }
 
-const account = process.env.CLOUDFLARE_ACCOUNT_ID;
-const token = process.env.CLOUDFLARE_API_TOKEN;
+const account = process.env.EP_ANALYTICS_ACCOUNT_ID;
+const token = process.env.EP_ANALYTICS_API_TOKEN;
 if (!account || !token) {
-  console.error('Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (Account Analytics: Read) in web/.env');
+  console.error('Set EP_ANALYTICS_ACCOUNT_ID and EP_ANALYTICS_API_TOKEN (Account Analytics: Read) in web/.env');
   process.exit(1);
 }
 

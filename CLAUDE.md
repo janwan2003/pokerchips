@@ -65,8 +65,13 @@ In a fresh cloud container there is no Android SDK. What worked on 2026-09-28:
 per table (see `web/README.md`). It shares no code with the app; `web/src/game.js` is a
 port of `GameManager.kt`, so a rule change in one should be mirrored in the other.
 
-- Deploy with `cd web && npm test && npx wrangler deploy` (wrangler is logged in via
-  OAuth on the owner's machine). Changing only `web/` needs no APK rebuild.
+- Deploy with `cd web && npm run deploy` (tests, `wrangler deploy`, then an IndexNow ping of
+  every sitemap URL; wrangler is logged in via OAuth on the owner's machine). Changing only
+  `web/` needs no APK rebuild. Never put `CLOUDFLARE_API_TOKEN` in `web/.env`: wrangler
+  auto-loads it and it overrides the OAuth login.
+- Search status (2026-11-26): Google Search Console verified by DNS TXT (keep the record);
+  Yandex accepts IndexNow; Bing rejects the IndexNow key (403 `UserForbiddedToAccessSite`)
+  until the site is added in Bing Webmaster Tools.
 - Same history rule: table journals live in Durable Object SQLite. Never delete the
   `v1` migration or rename the `Room` class, and only add journal fields with defaults.
 - The players' game view must stay identical to the app's player client:
@@ -96,7 +101,7 @@ regenerate it and replace the recent rows:
 cd web && npm run ledger            # read-only; counts only, never table codes or names
 ```
 
-It needs `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in `web/.env` (gitignored); the
+It needs `EP_ANALYTICS_ACCOUNT_ID` and `EP_ANALYTICS_API_TOKEN` in `web/.env` (gitignored); the
 token is `easypoker-ledger`, created 2026-11-13, *Account Analytics: Read* only. The same
 pair feeds `npm run stats`. Source is Analytics Engine, which keeps 3 months: once a day
 falls out of the API, keep its row here as recorded. Bots (including headless Playwright

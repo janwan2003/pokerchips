@@ -34,8 +34,10 @@ browser from anywhere. No app, no sign-up.
   at the top of `src/main.js`. Kept 3 months.
 - `npm run ledger [since-date]` prints the daily usage table kept in CLAUDE.md.
 - `npm run stats [days]` prints the usual reports (visitors per day, where from, referrers,
-  pages, tables, players). It needs `CLOUDFLARE_ACCOUNT_ID` and a `CLOUDFLARE_API_TOKEN`
-  with *Account Analytics: Read* in `web/.env` (gitignored).
+  pages, tables, players). It needs `EP_ANALYTICS_ACCOUNT_ID` and a `EP_ANALYTICS_API_TOKEN`
+  with *Account Analytics: Read* in `web/.env` (gitignored). Not the standard
+  `CLOUDFLARE_*` names: wrangler auto-loads `web/.env`, and a `CLOUDFLARE_API_TOKEN` there
+  overrides the OAuth login and makes `wrangler deploy` fail with "No access to the specified service".
 - Live request logs: Workers Observability (`"observability"` in `wrangler.jsonc`).
 
 ## Develop, test, deploy

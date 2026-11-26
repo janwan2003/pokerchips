@@ -4,7 +4,7 @@
 //   npm run stats -- 30      # last 30 days
 //   npm run stats -- 7 "SELECT ... FROM easypoker_events ..."   # your own query
 //
-// Needs CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (a token with "Account Analytics: Read"),
+// Needs EP_ANALYTICS_ACCOUNT_ID and EP_ANALYTICS_API_TOKEN (a token with "Account Analytics: Read"),
 // from the environment or web/.env. Column meanings are listed at the top of src/main.js.
 // Analytics Engine keeps data for 3 months and may sample at high volume: always count with
 // SUM(_sample_interval), never COUNT().
@@ -17,10 +17,10 @@ try {
   }
 } catch (_) { /* no .env */ }
 
-const account = process.env.CLOUDFLARE_ACCOUNT_ID;
-const token = process.env.CLOUDFLARE_API_TOKEN;
+const account = process.env.EP_ANALYTICS_ACCOUNT_ID;
+const token = process.env.EP_ANALYTICS_API_TOKEN;
 if (!account || !token) {
-  console.error('Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN (Account Analytics: Read) in web/.env');
+  console.error('Set EP_ANALYTICS_ACCOUNT_ID and EP_ANALYTICS_API_TOKEN (Account Analytics: Read) in web/.env');
   process.exit(1);
 }
 
