@@ -103,15 +103,28 @@ falls out of the API, keep its row here as recorded. Bots (including headless Pl
 runs against production) are excluded. Web version only — the Android app reports nothing.
 
 Data starts 2026-11-12 10:02 UTC, when analytics was deployed. Last regenerated
-**2026-11-13** (that day partial).
+**2026-11-26** (that day partial).
 
 | date | tables created | players joined | tables in play | player actions | host actions | page views | visitors |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-12 | 2 | 6 | 2 | 182 | 0 | 160 | 67 |
-| 2026-11-13 | 0 | 4 | 1 | 260 | 0 | 39 | 34 |
+| 2026-11-13 | 0 | 4 | 1 | 260 | 0 | 88 | 68 |
+| 2026-11-14 | 0 | 0 | 0 | 0 | 0 | 42 | 32 |
+| 2026-11-15 | 0 | 0 | 0 | 0 | 0 | 27 | 26 |
+| 2026-11-16 | 0 | 0 | 0 | 0 | 0 | 41 | 22 |
+| 2026-11-17 | 0 | 0 | 0 | 0 | 0 | 30 | 26 |
+| 2026-11-18 | 1 | 8 | 1 | 206 | 0 | 97 | 67 |
+| 2026-11-19 | 0 | 1 | 1 | 0 | 0 | 62 | 61 |
+| 2026-11-20 | 0 | 2 | 1 | 0 | 0 | 24 | 22 |
+| 2026-11-21 | 0 | 0 | 0 | 0 | 0 | 44 | 22 |
+| 2026-11-22 | 0 | 0 | 0 | 0 | 0 | 22 | 13 |
+| 2026-11-23 | 0 | 0 | 0 | 0 | 0 | 172 | 9 |
+| 2026-11-24 | 0 | 0 | 0 | 0 | 0 | 25 | 15 |
+| 2026-11-25 | 0 | 0 | 0 | 0 | 0 | 33 | 15 |
+| 2026-11-26 | 0 | 0 | 0 | 0 | 0 | 5 | 5 |
 
-Totals: tables created 2, joins 10; tables with 2+ named players 1; tables played in the
-last 7 days 2.
+Totals: tables created 3, joins 21; tables with 2+ named players 2; tables played in the
+last 7 days 1.
 
 ## Layout
 
