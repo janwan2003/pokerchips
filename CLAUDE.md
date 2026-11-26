@@ -69,9 +69,12 @@ port of `GameManager.kt`, so a rule change in one should be mirrored in the othe
   every sitemap URL; wrangler is logged in via OAuth on the owner's machine). Changing only
   `web/` needs no APK rebuild. Never put `CLOUDFLARE_API_TOKEN` in `web/.env`: wrangler
   auto-loads it and it overrides the OAuth login.
-- Search status (2026-11-26): Google Search Console verified by DNS TXT (keep the record);
-  Yandex accepts IndexNow; Bing rejects the IndexNow key (403 `UserForbiddedToAccessSite`)
-  until the site is added in Bing Webmaster Tools.
+- Search status (2026-11-26): Google Search Console verified by DNS TXT (keep the record):
+  16 pages indexed, 3 crawled-not-indexed, 135 impressions / 0 clicks in 28 days at average
+  position 49.8; sitemap resubmitted after showing "Couldn't fetch". Bing Webmaster Tools
+  verified by the `msvalidate.01` meta tag in `public/index.html` (keep it); sitemap read,
+  24 URLs. Yandex accepts IndexNow; Bing's IndexNow endpoint still answered 403 right after
+  verification.
 - Same history rule: table journals live in Durable Object SQLite. Never delete the
   `v1` migration or rename the `Room` class, and only add journal fields with defaults.
 - The players' game view must stay identical to the app's player client:
